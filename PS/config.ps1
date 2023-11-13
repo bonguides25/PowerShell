@@ -29,7 +29,7 @@ Start-Sleep -Second 1
 Write-Host "4. Turning off Quick Access..." -ForegroundColor Green
 $registryPath = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
 $regName = 'LaunchTo'
-$regValue = Get-ItemPropertyValue -Path $registryPath -Name $regName -ErrorAction:SilentlyContinue
+$regValue = Get-ItemPropertyValue -Path $registryPath -Name $regName -ErrorAction:SilentlyContinue | Out-Null
 
 If ($regValue -eq $Null) {
   New-ItemProperty -Path $registryPath -Name $regName -Value '1' -Type 'DWORD' -Force | Out-Null
@@ -60,7 +60,7 @@ $regValue = Get-ItemPropertyValue -Path $registryPath -Name $regName -ErrorActio
 If ($regValue -eq $Null) {
   New-ItemProperty -Path $registryPath -Name $regName -Value '1' -Type 'DWORD' -Force | Out-Null
 } else {
-    Set-Itemproperty -Path $registryPath -Name $regName -Value '1' -Type 'DWORD'
+    Set-Itemproperty -Path $registryPath -Name $regName -Value '1' -Type 'DWORD' | Out-Null
 }
 
 Set-Location "$env:userprofile\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup"
@@ -71,14 +71,39 @@ Start-Sleep -Second 1
 
 # Chocolatey
 Write-Host "7. Installing Chocolatey and apps.." -ForegroundColor Green
-Set-ExecutionPolicy Bypass -Scope Process -Force
+# Build a runspace
+$runspace = [runspacefactory]::CreateRunspace()
+$runspace.ApartmentState = 'STA'
+$runspace.ThreadOptions = 'ReuseThread'
+$runspace.Open()
+
+
+$scriptBlock = {
+    Set-ExecutionPolicy Bypass -Scope Process -Force
+    [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+    iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1')) | Out-Null
+
+    choco feature enable -n allowGlobalConfirmation
+    choco install oh-my-posh
+    choco install GoogleChrome
+    choco install VisualStudioCode
+}
+
+# Create a Powershell instance
+$PSIinstance = [powershell]::Create().AddScript($scriptBlock)
+$PSIinstance.Runspace = $runspace
+$PSIinstance.BeginInvoke()
+
+
+
+<# Set-ExecutionPolicy Bypass -Scope Process -Force
 [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
-iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1')) | Out-Null
 
 choco feature enable -n allowGlobalConfirmation
 choco install oh-my-posh
 choco install GoogleChrome
-choco install VisualStudioCode
+choco install VisualStudioCode #>
 
 $userpath = [System.Environment]::GetEnvironmentVariable("Path","User")
 $machinePath = [System.Environment]::GetEnvironmentVariable("Path","Machine")
