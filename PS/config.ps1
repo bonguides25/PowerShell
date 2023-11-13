@@ -91,7 +91,7 @@ Start-Sleep -Second 1
 
 $PSIinstance.Dispose()
 # 7. Installing the required application...
-Write-Host '7. Installing the required application...'
+Write-Host '7. Installing the required application...' -ForegroundColor Green
 $scriptBlock = {
 RefreshEnv
 Set-Location 'C:\ProgramData\chocolatey\bin'
@@ -123,3 +123,4 @@ $uri = 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/Temp/Windows%20PowerShell.lnk
 
 Write-Host "Completed..." -ForegroundColor Green
 Write-Host "Restarting..." -ForegroundColor Yellow
+Restart-Computer
