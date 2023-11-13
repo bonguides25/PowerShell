@@ -4,20 +4,20 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     break
 }
 
-Write-Host "1. Turning off UAC..."
+Write-Host "`n1. Turning off UAC..." -ForegroundColor Green
 Set-ItemProperty -Path REGISTRY::HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\System -Name ConsentPromptBehaviorAdmin -Value 0  | Out-Null
 powercfg -change -monitor-timeout-ac 0
 Start-Sleep -Second 1
 
 # Turn off News and Interests
-Write-Host "2. Turning off News and Interests..."
+Write-Host "2. Turning off News and Interests..." -ForegroundColor Green
 TASKKILL /IM explorer.exe /F | Out-Null
 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds" -Name "ShellFeedsTaskbarViewMode" -Type DWord -Value 2  | Out-Null
 Start-Process explorer.exe
 Start-Sleep -Second 1
 
 # Remove search highlight
-Write-Host "3. Turning off search highlight..."
+Write-Host "3. Turning off search highlight..." -ForegroundColor Green
 $registryPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search"
 $Name         = 'EnableDynamicContentInWSB'
 # $Value        = '0x00000000'
@@ -26,7 +26,7 @@ New-ItemProperty $registryPath -Name $Name -PropertyType DWORD -Value 0 | Out-Nu
 Start-Sleep -Second 1
 
 # LaunchTo This PC (disable Quick Access)
-Write-Host "4. Turning off Quick Access..."
+Write-Host "4. Turning off Quick Access..." -ForegroundColor Green
 $registryPath = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
 $regName = 'LaunchTo'
 $regValue = Get-ItemPropertyValue -Path $registryPath -Name $regName -ErrorAction:SilentlyContinue
@@ -39,7 +39,7 @@ If ($regValue -eq $Null) {
 Start-Sleep -Second 1
 
 # AutoCheckSelect
-Write-Host "5. Enabling checkbox select..."
+Write-Host "5. Enabling checkbox select..." -ForegroundColor Green
 $registryPath = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
 $regName = 'AutoCheckSelect'
 $regValue = Get-ItemPropertyValue -Path $registryPath -Name $regName -ErrorAction:SilentlyContinue
@@ -52,7 +52,7 @@ If ($regValue -eq $Null) {
 Start-Sleep -Second 1
 
 # Mapping a network drive
-Write-Host "6. Mapping a network drive..."
+Write-Host "6. Mapping a network drive..." -ForegroundColor Green
 $registryPath = 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System'
 $regName = 'EnableLinkedConnections'
 $regValue = Get-ItemPropertyValue -Path $registryPath -Name $regName -ErrorAction:SilentlyContinue | Out-Null
@@ -70,7 +70,7 @@ Add-Content .\mapper.bat -Value "net use H: `"`\`\10.10.2.101`\Shared`" /user:`"
 Start-Sleep -Second 1
 
 # Chocolatey
-Write-Host "7. Installing Chocolatey and apps.."
+Write-Host "7. Installing Chocolatey and apps.." -ForegroundColor Green
 Set-ExecutionPolicy Bypass -Scope Process -Force
 [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
 iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
@@ -85,7 +85,7 @@ $machinePath = [System.Environment]::GetEnvironmentVariable("Path","Machine")
 $env:Path = $userpath + ";" + $machinePath
 
 # PowerShell console customizations
-Write-Host "8. Customizing PowerShell console..."
+Write-Host "8. Customizing PowerShell console..." -ForegroundColor Green
 oh-my-posh font install JetBrainsMono
 
 $filePath = "$env:userprofile\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\Windows PowerShell.lnk"
@@ -94,5 +94,5 @@ $uri = 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/Temp/Windows%20PowerShell.lnk
 (New-Object Net.WebClient).DownloadFile($uri, $filePath)
 
 
-Write-Host "Restarting..."
+Write-Host "Restarting..." -ForegroundColor Yellow
 shutdown -r -t 5
