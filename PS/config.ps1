@@ -81,19 +81,25 @@ $runspace.Open()
 $scriptBlock = {
     Set-ExecutionPolicy Bypass -Scope Process -Force
     [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
-    iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1')) | Out-Null
+    iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
-    choco feature enable -n allowGlobalConfirmation
-    choco install oh-my-posh
-    choco install GoogleChrome
-    choco install VisualStudioCode
+
+    Set-Location 'C:\ProgramData\chocolatey\bin'
+    .\choco.exe feature enable -n allowGlobalConfirmation
+    .\choco.exe install oh-my-posh -y
+    .\choco.exe install GoogleChrome -y
+    .\choco.exe install VisualStudioCode -y
 }
 
 # Create a Powershell instance
 $PSIinstance = [powershell]::Create().AddScript($scriptBlock)
 $PSIinstance.Runspace = $runspace
-$PSIinstance.BeginInvoke()
+$result = $PSIinstance.BeginInvoke()
 
+while ($($result.IsCompleted) -eq 'false') {
+  Write-Host "7. Installing apps using Chocolatey.." -ForegroundColor Green
+  Start-Sleep -Milliseconds 200
+}
 
 
 <# Set-ExecutionPolicy Bypass -Scope Process -Force
@@ -120,4 +126,4 @@ $uri = 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/Temp/Windows%20PowerShell.lnk
 
 
 Write-Host "Restarting..." -ForegroundColor Yellow
-shutdown -r -t 5
+# shutdown -r -t 5
