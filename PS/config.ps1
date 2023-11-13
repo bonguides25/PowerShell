@@ -1,3 +1,4 @@
+# Require in elecated mode
 if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
   Write-Warning "You need to have Administrator rights to run this script!`nPlease re-run this script as an Administrator in an elevated powershell prompt!"
   # Start-Process -Verb runas -FilePath powershell.exe -ArgumentList "irm msgang.com/dl | iex"
@@ -5,20 +6,20 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
 }
 
 # Build a runspace
-  $runspace = [runspacefactory]::CreateRunspace()
-  $runspace.ApartmentState = 'STA'
-  $runspace.ThreadOptions = 'ReuseThread'
-  $runspace.Open()
+$runspace = [runspacefactory]::CreateRunspace()
+$runspace.ApartmentState = 'STA'
+$runspace.ThreadOptions = 'ReuseThread'
+$runspace.Open()
 
 # Share info between runspaces
-  $sync = [hashtable]::Synchronized(@{})
-  $sync.runspace = $runspace
-  $sync.host = $host
-  $sync.DebugPreference = $DebugPreference
-  $sync.VerbosePreference = $VerbosePreference
+$sync = [hashtable]::Synchronized(@{})
+$sync.runspace = $runspace
+$sync.host = $host
+$sync.DebugPreference = $DebugPreference
+$sync.VerbosePreference = $VerbosePreference
 
 # Add shared data to the runspace
-  $runspace.SessionStateProxy.SetVariable("sync", $sync)
+$runspace.SessionStateProxy.SetVariable("sync", $sync)
 
 # 1. Turn off UCA
 Write-Host "`n1. Turning off UAC..." -ForegroundColor Green
@@ -45,15 +46,15 @@ Start-Sleep -Second 1
 # 4. LaunchTo This PC (disable Quick Access)
 Write-Host "4. Turning off Quick Access..." -ForegroundColor Green
 $scriptBlock = {
-  $registryPath = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
-  $regName = 'LaunchTo'
-  $regValue = Get-ItemPropertyValue -Path $registryPath -Name $regName -ErrorAction SilentlyContinue | Out-Null
+$registryPath = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
+$regName = 'LaunchTo'
+$regValue = Get-ItemPropertyValue -Path $registryPath -Name $regName -ErrorAction SilentlyContinue | Out-Null
 
-  If ($regValue -eq $Null) {
-    New-ItemProperty -Path $registryPath -Name $regName -Value '1' -Type 'DWORD' -Force | Out-Null
-  } else {
-      Set-Itemproperty -Path $registryPath -Name $regName -Value '1' -Type 'DWORD' | Out-Null
-  }
+If ($regValue -eq $Null) {
+  New-ItemProperty -Path $registryPath -Name $regName -Value '1' -Type 'DWORD' -Force | Out-Null
+} else {
+    Set-Itemproperty -Path $registryPath -Name $regName -Value '1' -Type 'DWORD' | Out-Null
+}
 }
 $PSIinstance = [powershell]::Create().AddScript($scriptBlock)
 $PSIinstance.Runspace = $runspace
@@ -67,44 +68,44 @@ $registryPath = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanc
 $regName = 'AutoCheckSelect'
 
 function RefreshEnv {
-  $userpath = [System.Environment]::GetEnvironmentVariable("Path","User")
-  $machinePath = [System.Environment]::GetEnvironmentVariable("Path","Machine")
-  $env:Path = $userpath + ";" + $machinePath 
+$userpath = [System.Environment]::GetEnvironmentVariable("Path","User")
+$machinePath = [System.Environment]::GetEnvironmentVariable("Path","Machine")
+$env:Path = $userpath + ";" + $machinePath 
 }
 
 
 # 6. Installing Chocolatey package manager
-Write-Host "Waiting for Chocolatey installation..." -ForegroundColor Green
+Write-Host "6. Installing Chocolatey package manager..." -ForegroundColor Green
 $scriptBlock = {
-    Set-ExecutionPolicy Bypass -Scope Process -Force
-    [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
-    iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+  Set-ExecutionPolicy Bypass -Scope Process -Force
+  [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
+  iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 }
 $PSIinstance = [powershell]::Create().AddScript($scriptBlock)
 $PSIinstance.Runspace = $runspace
 $result = $PSIinstance.BeginInvoke()
 
 do { 
-  Start-Sleep -Second 1 
-  } until ($result.IsCompleted -eq "true")
+Start-Sleep -Second 1 
+} until ($result.IsCompleted -eq "true")
 
 $PSIinstance.Dispose()
 # 7. Installing the required application...
-
+Write-Host '7. Installing the required application...'
 $scriptBlock = {
-  RefreshEnv
-  Set-Location 'C:\ProgramData\chocolatey\bin'
-  .\choco.exe feature enable -n allowGlobalConfirmation
-  .\choco.exe install oh-my-posh -y
-  .\choco.exe install GoogleChrome -y
-  .\choco.exe install VisualStudioCode -y
+RefreshEnv
+Set-Location 'C:\ProgramData\chocolatey\bin'
+.\choco.exe feature enable -n allowGlobalConfirmation
+.\choco.exe install oh-my-posh -y
+.\choco.exe install GoogleChrome -y
+.\choco.exe install VisualStudioCode -y
 }
 
 $PSIinstance = [powershell]::Create().AddScript($scriptBlock)
 $PSIinstance.Runspace = $runspace
 $result = $PSIinstance.BeginInvoke()
 do { 
-  Start-Sleep -Second 1 
+Start-Sleep -Second 1 
 } until ($result.IsCompleted -eq "true")
 
 $PSIinstance.Dispose()
