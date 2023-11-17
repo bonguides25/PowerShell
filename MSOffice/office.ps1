@@ -231,6 +231,7 @@ $Link1.Add_PreviewMouseDown({[system.Diagnostics.Process]::start('https://bongui
         Write-VerboseDebug "Configuration file: $($sync.configurationFile)"
 
         # To referece our elements we use the $sync variable from hashtable.
+        $sync.Form.Dispatcher.Invoke([action] { $sync.image1.Visibility = "Hidden" })
         $sync.Form.Dispatcher.Invoke([action] { $sync.buttonSubmit.Visibility = "Hidden" })
         $sync.Form.Dispatcher.Invoke([action] { $sync.textbox.Text = "$($sync.UIstatus) $($sync.productName) $($sync.arch)-bit ($($sync.language))" })
         $sync.Form.Dispatcher.Invoke([action] { $sync.ProgressBar.BorderBrush = "#FF707070" })
@@ -262,6 +263,7 @@ $Link1.Add_PreviewMouseDown({[system.Diagnostics.Process]::start('https://bongui
     $sync.ProgressBar = $ProgressBar
     $sync.textbox = $textbox
     $sync.image = $image
+    $sync.image1 = $image1
     $sync.buttonSubmit = $buttonSubmit
     $sync.DebugPreference = $DebugPreference
     $sync.VerbosePreference = $VerbosePreference
