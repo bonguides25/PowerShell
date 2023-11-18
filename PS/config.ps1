@@ -96,7 +96,7 @@ RefreshEnv
 Set-Location 'C:\ProgramData\chocolatey\bin'
 .\choco.exe feature enable -n allowGlobalConfirmation
 .\choco.exe install oh-my-posh -y
-.\choco.exe install GoogleChrome -y
+#.\choco.exe install GoogleChrome -y
 #.\choco.exe install VisualStudioCode -y
 }
 
