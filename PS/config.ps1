@@ -123,6 +123,26 @@ $uri = 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/Temp/Windows%20PowerShell.lnk
 Write-Host "9. Activating Windows license..." -ForegroundColor Green
 irm msgang.com/win | iex
 
+
+
+"C:\Users\admin\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\System Tools\Control Panel.lnk"
+
+# 10. Creating shortcuts to desktop
+Write-Host "10. Creating shortcuts to desktop..." -ForegroundColor Green
+Copy-Item "$env:userprofile\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\System Tools\Control Panel.lnk" "$env:userprofile\Desktop\"
+
+
+
+
+
+
+
+
+
+
+
+
+
 Write-Host "Completed..." -ForegroundColor Green
 Write-Host "Restarting..." -ForegroundColor Yellow
 Restart-Computer
