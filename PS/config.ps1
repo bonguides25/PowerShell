@@ -99,8 +99,12 @@ Set-Location 'C:\ProgramData\chocolatey\bin'
 .\choco install adblockpluschrome -y
 .\choco install winscp -y
 .\choco install teamviewer.host	-y
-#.\choco.exe install GoogleChrome -y
-#.\choco.exe install VisualStudioCode -y
+$apps = @(
+  'GoogleChrome', 'VisualStudioCode', 'audacity', 'pdfsam', 'github-desktop'
+)
+foreach ($app in $apps) {
+  .\choco install $app -y
+}
 }
 
 $PSIinstance = [powershell]::Create().AddScript($scriptBlock)
