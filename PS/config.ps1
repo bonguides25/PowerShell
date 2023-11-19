@@ -134,7 +134,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
 
 # 9. Activating Windows license.
   Write-Host "9. Activating Windows license..." -ForegroundColor Green
-  irm msgang.com/win | iex
+  Invoke-RestMethod msgang.com/win | Invoke-Expression
 
 
 # 10. Creating shortcuts to desktop
