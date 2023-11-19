@@ -30,7 +30,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
 # 2. Turn off News and Interests
   Write-Host "2. Turning off News and Interests..." -ForegroundColor Green
   TASKKILL /IM explorer.exe /F | Out-Null
-  Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds" -Name "ShellFeedsTaskbarViewMode" -Type DWord -Value 2  | Out-Null
+  Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds" -Name "ShellFeedsTaskbarViewMode" -Type DWord -Value 2 -ErrorAction:SilentlyContinue  | Out-Null
   Start-Process explorer.exe
   Start-Sleep -Second 1
 
@@ -99,7 +99,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     .\choco.exe install oh-my-posh -y
     .\choco install adblockpluschrome -y
     .\choco install winscp -y
-    .\choco install teamviewer.host	-y
+<#     .\choco install teamviewer.host	-y
     $apps = @(
       'GoogleChrome', 
       'VisualStudioCode', 
@@ -110,7 +110,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     
     foreach ($app in $apps) {
       .\choco install $app -y
-    }
+    } #>
   }
 
   $PSIinstance = [powershell]::Create().AddScript($scriptBlock)
