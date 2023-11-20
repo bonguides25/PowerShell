@@ -142,7 +142,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
 
 # 11. Change to the Light theme
 
-  Start-Process -Filepath "C:\Windows\Resources\Themes\aero.theme"
+  Start-Process -Filepath "C:\Windows\Resources\Themes\light.theme"
   Start-Sleep -Seconds 3
   Get-Process -ProcessName 'SystemSettings' | Stop-Process
 
