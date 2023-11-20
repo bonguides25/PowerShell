@@ -141,7 +141,11 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
   Write-Host "10. Creating shortcuts to desktop..." -ForegroundColor Green
   Copy-Item "$env:userprofile\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\System Tools\Control Panel.lnk" "$env:userprofile\Desktop\"
 
+# 11. Change to the Light theme
 
+  Start-Process -Filepath "C:\Windows\Resources\Themes\light.theme"
+  timeout /t 3
+  taskkill /im "systemsettings.exe" /f
 
 
 
