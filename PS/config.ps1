@@ -97,8 +97,8 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     Set-Location 'C:\ProgramData\chocolatey\bin'
     .\choco.exe feature enable -n allowGlobalConfirmation
     .\choco.exe install oh-my-posh -y
-    .\choco install adblockpluschrome -y
-    .\choco install winscp -y
+    # .\choco install adblockpluschrome -y
+    # .\choco install winscp -y
 <#     .\choco install teamviewer.host	-y
     $apps = @(
       'GoogleChrome', 
@@ -133,9 +133,8 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
   (New-Object Net.WebClient).DownloadFile($uri, $filePath)
 
 # 9. Activating Windows license.
-  Write-Host "9. Activating Windows license..." -ForegroundColor Green
-  Invoke-RestMethod msgang.com/win | Invoke-Expression
-
+  # Write-Host "9. Activating Windows license..." -ForegroundColor Green
+  # Invoke-RestMethod msgang.com/win | Invoke-Expression
 
 # 10. Creating shortcuts to desktop
   Write-Host "10. Creating shortcuts to desktop..." -ForegroundColor Green
@@ -143,17 +142,9 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
 
 # 11. Change to the Light theme
 
-  Start-Process -Filepath "C:\Windows\Resources\Themes\light.theme"
-  timeout /t 3
-  taskkill /im "systemsettings.exe" /f
-
-
-
-
-
-
-
-
+  Start-Process -Filepath "C:\Windows\Resources\Themes\aero.theme"
+  Start-Sleep -Seconds 3
+  Get-Process -ProcessName 'SystemSettings' | Stop-Process
 
 
 
