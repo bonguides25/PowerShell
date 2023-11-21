@@ -98,7 +98,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     .\choco.exe feature enable -n allowGlobalConfirmation
     .\choco.exe install oh-my-posh -y
     # .\choco install adblockpluschrome -y
-    # .\choco install winscp -y
+    .\choco install winscp -y
 <#     .\choco install teamviewer.host	-y
     $apps = @(
       'GoogleChrome', 
