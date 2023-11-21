@@ -160,4 +160,4 @@ $edition = (Get-CimInstance Win32_OperatingSystem).Caption
 
 Write-Host "Completed..." -ForegroundColor Green
 Write-Host "Restarting..." -ForegroundColor Yellow
-#Restart-Computer
+Restart-Computer
