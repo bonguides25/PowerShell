@@ -99,9 +99,10 @@ $edition = (Get-CimInstance Win32_OperatingSystem).Caption
     Set-Location 'C:\ProgramData\chocolatey\bin'
     .\choco.exe feature enable -n allowGlobalConfirmation
     .\choco.exe install oh-my-posh -y
-    # .\choco install adblockpluschrome -y
-    .\choco install winscp -y
-    .\choco install microsoft-windows-terminal -y
+    .\choco.exe install GoogleChrome -y
+    .\choco.exe install adblockpluschrome -y
+    #.\choco install winscp -y
+    #.\choco install microsoft-windows-terminal -y
     .\choco install VisualStudioCode -y
 <#     .\choco install teamviewer.host	-y
     $apps = @(
