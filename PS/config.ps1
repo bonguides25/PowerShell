@@ -102,6 +102,7 @@ $edition = (Get-CimInstance Win32_OperatingSystem).Caption
     # .\choco install adblockpluschrome -y
     .\choco install winscp -y
     .\choco install microsoft-windows-terminal -y
+    .\choco install VisualStudioCode -y
 <#     .\choco install teamviewer.host	-y
     $apps = @(
       'GoogleChrome', 
