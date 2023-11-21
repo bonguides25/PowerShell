@@ -152,13 +152,27 @@ $edition = (Get-CimInstance Win32_OperatingSystem).Caption
   Get-Process -ProcessName 'SystemSettings' | Stop-Process
 
 # 12. Configure Terminal
-  Write-Host "12. Configure Terminal..." -ForegroundColor Green
-  $filePath = "$env:userprofile\Appdata\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
-  Remove-Item -Path $filePath -Force
-  $uri = 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/Temp/settings.json'
-  (New-Object Net.WebClient).DownloadFile($uri, $filePath)
+  #Write-Host "12. Configure Terminal..." -ForegroundColor Green
+  #$filePath = "$env:userprofile\Appdata\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
+  #Remove-Item -Path $filePath -Force
+  #$uri = 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/Temp/settings.json'
+  #(New-Object Net.WebClient).DownloadFile($uri, $filePath)
 
+irm bonguides.com/winget | iex
 
+$wpath = "C:\Program Files\WindowsApps"
+$winget = Get-ChildItem $wpath -Recurse -File -ErrorAction SilentlyContinue | `
+Where-Object { $_.name -like "AppInstallerCLI.exe" -or $_.name -like "WinGet.exe" } | `
+Select-Object -ExpandProperty fullname -ErrorAction SilentlyContinue
+
+If ($winget.count -gt 1){ $winget = $winget[-1] }
+$wingetPath = [string]((Get-Item $winget).Directory.FullName)
+
+$id = 'Microsoft.WindowsTerminal'
+
+If (-not (Test-Path -Path $testPath)) {
+    & "$wingetPath\winget.exe" install $id --exact --silent --scope machine --accept-source-agreements --accept-package-agreements
+}
 
 
 Write-Host "Completed..." -ForegroundColor Green
