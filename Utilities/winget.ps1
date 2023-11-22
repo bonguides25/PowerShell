@@ -1,38 +1,3 @@
-<# 
-Version:        1.0
-Date :          26/2/2023
-Website:        https://bonguides.com
-Script by:      https://github.com/bonguides25
-#>
-
-if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
-    Write-Warning "You need to have Administrator rights to run this script!`nPlease re-run this script as an Administrator in an elevated powershell prompt!"
-    break
-}
-
-if ((Get-ExecutionPolicy) -notmatch "RemoteSigned") {
-   Set-ExecutionPolicy -ExecutionPolicy Bypass Process -Force
-}
-
-# Create temporary directory
-$null = New-Item -Path $env:temp\temp -ItemType Directory -Force
-$path = "$env:temp\temp" | Set-Location
-
-#Install C++ Runtime framework packages for Desktop Bridge
-$ProgressPreference='Silent'
-$url = 'https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx'
-(New-Object Net.WebClient).DownloadFile($url, "$path\Microsoft.VCLibs.x64.14.00.Desktop.appx")
-Add-AppxPackage -Path Microsoft.VCLibs.x64.14.00.Desktop.appx -ErrorAction SilentlyContinue | Out-Null
-
-#Download and extract Nuget
-Write-Host
-Write-Host Installing ...  -ForegroundColor Green
-$ProgressPreference='Silent'
-$url = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
-(New-Object Net.WebClient).DownloadFile($url, "$path\nuget.exe")
-.\nuget.exe install Microsoft.UI.Xaml -Version 2.7 | Out-Null
-Add-AppxPackage -Path "$path\Microsoft.UI.Xaml.2.7.0\tools\AppX\x64\Release\Microsoft.UI.Xaml.2.7.appx" -ErrorAction:SilentlyContinue | Out-Null
-
 #Download winget and license file
 function getLink($match) {
     $uri = "https://api.github.com/repos/microsoft/winget-cli/releases/latest"
