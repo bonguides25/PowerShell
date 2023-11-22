@@ -168,12 +168,12 @@ Select-Object -ExpandProperty fullname -ErrorAction SilentlyContinue
 If ($winget.count -gt 1){ $winget = $winget[-1] }
 $wingetPath = [string]((Get-Item $winget).Directory.FullName)
 
-$id = 'Microsoft.WindowsTerminal'
+# $id = 'Microsoft.WindowsTerminal'
 
-If (-not (Test-Path -Path $wingetPath)) {
-    & "$wingetPath\winget.exe" install $id --exact --silent --scope machine --accept-source-agreements --accept-package-agreements
-}
-
+#If (-not (Test-Path -Path $wingetPath)) {
+   # & "$wingetPath\winget.exe" install $id --exact --silent --scope machine --accept-source-agreements --accept-package-agreements
+#}
+cmd.exe /c "winget.exe install Microsoft.WindowsTerminal --exact --silent --scope machine --accept-source-agreements --accept-package-agreements"
 
 Write-Host "Completed..." -ForegroundColor Green
 Write-Host "Restarting..." -ForegroundColor Yellow
