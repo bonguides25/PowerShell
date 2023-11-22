@@ -170,7 +170,7 @@ $wingetPath = [string]((Get-Item $winget).Directory.FullName)
 
 $id = 'Microsoft.WindowsTerminal'
 
-If (-not (Test-Path -Path $testPath)) {
+If (-not (Test-Path -Path $wingetPath)) {
     & "$wingetPath\winget.exe" install $id --exact --silent --scope machine --accept-source-agreements --accept-package-agreements
 }
 
