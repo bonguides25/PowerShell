@@ -59,3 +59,5 @@ function unInstallTeams($path) {
   } else {
     Write-Warning  "Teams installation not found"
   }
+
+  Get-Process -Name *otohi*
