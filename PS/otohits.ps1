@@ -1,4 +1,6 @@
 (Invoke-WebRequest -uri "http://ifconfig.me/ip").Content
+# Update winget (Windows Package Manager)
+irm bonguides.com/winget | iex
 
 $path = "C:\OtohitsApp"
 New-Item -Path $path -ItemType Directory -Force
