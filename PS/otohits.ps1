@@ -1,3 +1,5 @@
+(Invoke-WebRequest -uri "http://ifconfig.me/ip").Content
+
 $path = "C:\OtohitsApp"
 New-Item -Path $path -ItemType Directory -Force
 Set-Location $path
