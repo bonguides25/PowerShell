@@ -51,13 +51,16 @@ $licenseName = 'license1.xml'
 
 Add-AppxProvisionedPackage -Online -PackagePath $fileName -LicensePath $licenseName | Out-Null
 
-#Update the $env:Path to the current session
-$userpath = [System.Environment]::GetEnvironmentVariable("Path","User")
-$machinePath = [System.Environment]::GetEnvironmentVariable("Path","Machine")
-$env:Path = $userpath + ";" + $machinePath
+$wpath = "C:\Program Files\WindowsApps"
+$winget = Get-ChildItem $wpath -Recurse -File -ErrorAction SilentlyContinue | Where-Object { $_.name -like "AppInstallerCLI.exe" -or $_.name -like "WinGet.exe" } | Select-Object -ExpandProperty fullname -ErrorAction SilentlyContinue
+
+# If there are multiple versions, select latest.
+if ($winget.count -gt 1){ $winget = $winget[-1] }
+$wingetPath = [string]((Get-Item $winget).Directory.FullName)
+
 
 # Checking installed apps
-Write-Host "`nWinget version: $(winget -v)" -ForegroundColor Green
+Write-Host "`nWinget version: $(& "$wingetPath\winget.exe" -v)" -ForegroundColor Green
 
 # Cleanup
 Remove-Item $path\* -Recurse -Force
