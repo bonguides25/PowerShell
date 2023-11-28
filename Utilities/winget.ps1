@@ -50,10 +50,7 @@ $licenseName = 'license1.xml'
 Add-AppxProvisionedPackage -Online -PackagePath $fileName -LicensePath $licenseName | Out-Null
 
 # Checking installed apps
-Write-Host "`nInstalled packages:" -ForegroundColor Green
-$packages = @("DesktopAppInstaller")
-$report = ForEach ($package in $packages){Get-AppxProvisionedPackage -Online | Where-Object {$_.DisplayName -like "*$package*"} | select DisplayName,Version}
-$report | format-table
+Write-Host "`nWinget version: $(winget -v)" -ForegroundColor Green
 
 # Cleanup
 Remove-Item $path\* -Recurse -Force
