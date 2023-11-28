@@ -51,6 +51,11 @@ $licenseName = 'license1.xml'
 
 Add-AppxProvisionedPackage -Online -PackagePath $fileName -LicensePath $licenseName | Out-Null
 
+#Update the $env:Path to the current session
+$userpath = [System.Environment]::GetEnvironmentVariable("Path","User")
+$machinePath = [System.Environment]::GetEnvironmentVariable("Path","Machine")
+$env:Path = $userpath + ";" + $machinePath
+
 # Checking installed apps
 Write-Host "`nWinget version: $(winget -v)" -ForegroundColor Green
 
