@@ -50,7 +50,7 @@ $licenseName = 'license1.xml'
 Add-AppxProvisionedPackage -Online -PackagePath $fileName -LicensePath $licenseName | Out-Null
 
 # Checking installed apps
-Write-Host '`nInstalled packages:'
+Write-Host "`nInstalled packages:"
 $packages = @("DesktopAppInstaller")
 $report = ForEach ($package in $packages){Get-AppxProvisionedPackage -Online | Where-Object {$_.DisplayName -like "*$package*"} | select DisplayName,Version}
 $report | format-table
