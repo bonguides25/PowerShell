@@ -6,7 +6,7 @@ $clearCache = $clearCache.ToUpper()
 $uninstall= Read-Host "Do you want to uninstall Teams completely (Y/N)?"
 $uninstall= $uninstall.ToUpper()
 
-
+# Clear Microsoft Teams cache
 if ($clearCache -eq "Y"){
     Write-Host "Stopping Teams Process" -ForegroundColor Yellow
 
@@ -37,12 +37,15 @@ if ($clearCache -eq "Y"){
     }
 }
 
+# Uninstall all Microsoft Teams apps
 if ($uninstall -eq "Y"){
 
+    # Removing Teams Machine-wide
     Write-Host "Removing Teams Machine-wide Installer" -ForegroundColor Yellow
     $MachineWide = Get-WmiObject -Class Win32_Product | Where-Object{$_.Name -eq "Teams Machine-Wide Installer"}
     $MachineWide.Uninstall()
 
+    # Remove Teams App (Classic)
     function unInstallTeams($path) {
         $clientInstaller = "$($path)\Update.exe"
         try {
@@ -68,6 +71,7 @@ if ($uninstall -eq "Y"){
         Write-Warning  "Teams installation not found"
     }
 
+    # Update Windows Package Manager then remove Teams free and Teams app (New)
     $winget = Get-AppxProvisionedPackage -Online | Where-Object {$_.DisplayName -eq 'Microsoft.DesktopAppInstaller'}
     If ([Version]$winGet.Version -lt "2022.506.16.0") {
         Write-Host "Updating Windows Package Manager..." -ForegroundColor Yellow
