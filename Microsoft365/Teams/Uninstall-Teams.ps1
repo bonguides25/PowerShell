@@ -82,3 +82,9 @@ if ($uninstall -eq "Y"){
     & $winget uninstall Microsoft.Teams --exact --silent --force
     & $winget uninstall MicrosoftTeams_8wekyb3d8bbwe --exact --silent --force
 }
+
+
+
+
+
+
