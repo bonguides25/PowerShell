@@ -13,6 +13,7 @@ Invoke-Item $path
 
 .\nssm.exe install OtohitsApp "C:\OtohitsApp\OtohitsApp.exe"
 Get-Service 'OtohitsApp' | Start-Service
+Set-Service -Name OtohitsApp -StartupType Automatic
 
 <# $WshShell = New-Object -comObject WScript.Shell
 $Shortcut = $WshShell.CreateShortcut("C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup\OtohitsApp.lnk")
