@@ -12,7 +12,7 @@ $request = [System.Net.WebRequest]::Create($url)
 $response = $request.GetResponse()
 $tagUrl = $response.ResponseUri.OriginalString
 $version = $tagUrl.split('/')[-1].Trim('v')
-$fileName = "Microsoft.WindowsTerminal_Win10_$($version)_8wekyb3d8bbwe.msixbundle"
+$fileName = "Microsoft.WindowsTerminal_$($version)_8wekyb3d8bbwe.msixbundle"
 $downloadUrl = $tagUrl.Replace('tag', 'download') + '/' + $fileName
 (New-Object Net.WebClient).DownloadFile($downloadUrl, "$($env:temp)/$($fileName)")
 
