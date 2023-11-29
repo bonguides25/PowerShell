@@ -1,5 +1,4 @@
-# Clearing Teams Cache
-# Uninstall Teams
+# Clearing Teams Cache and Uninstall Teams
 
 $clearCache = Read-Host "Do you want to delete the Teams Cache (Y/N)?"
 $clearCache = $clearCache.ToUpper()
@@ -15,7 +14,8 @@ if ($clearCache -eq "Y"){
         Get-Process | where {$_.ProcessName -like '*teams*'} | Stop-Process -Force -ErrorAction SilentlyContinue
         Start-Sleep -Seconds 3
         Write-Host "Teams Process Sucessfully Stopped" -ForegroundColor Green
-    }catch{
+    }
+    catch{
         Write-Output $_
     }
     
@@ -31,7 +31,8 @@ if ($clearCache -eq "Y"){
         Get-ChildItem -Path $env:APPDATA\"Microsoft\teams\Local Storage" -Recurse -ErrorAction SilentlyContinue| Remove-Item -Confirm:$false -Recurse
         Get-ChildItem -Path $env:APPDATA\"Microsoft\teams\tmp" -Recurse -ErrorAction SilentlyContinue| Remove-Item -Confirm:$false -Recurse
         Write-Host "Teams Disk Cache Cleaned" -ForegroundColor Green
-    }catch{
+    }
+    catch{
         Write-Output $_
     }
 }
@@ -79,12 +80,6 @@ if ($uninstall -eq "Y"){
     If ($winget.count -gt 1){ $winget = $winget[-1] }
 
     Write-Host "Removing Teams apps..." -ForegroundColor Yellow
-    & $winget uninstall Microsoft.Teams --exact --silent --force
-    & $winget uninstall MicrosoftTeams_8wekyb3d8bbwe --exact --silent --force
+    & $winget uninstall Microsoft.Teams --exact --silent --force --accept-source-agreements
+    & $winget uninstall MicrosoftTeams_8wekyb3d8bbwe --exact --silent --force --accept-source-agreements
 }
-
-
-
-
-
-
