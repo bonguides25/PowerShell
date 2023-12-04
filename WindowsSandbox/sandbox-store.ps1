@@ -57,17 +57,17 @@ if ((Get-ChildItem "*StorePurchaseApp*")) {
 Write-Host "Adding Store Purchase App..." -ForegroundColor Green
 
 Add-AppxProvisionedPackage -Online -PackagePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*StorePurchaseApp*') -and ($_.Name -like '*AppxBundle*') })" -LicensePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*StorePurchaseApp*') -and ($_.Name -like '*xml*') })"
-}
+} | Out-null
 
 if ((Get-ChildItem "*DesktopAppInstaller*")) {    
 Write-Host "Adding App Installer..."
 Add-AppxProvisionedPackage -Online -PackagePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*DesktopAppInstaller*') -and ($_.Name -like '*AppxBundle*') })" -LicensePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*DesktopAppInstaller*') -and ($_.Name -like '*xml*') })"
-}
+} | Out-null
 
 if ((Get-ChildItem "*XboxIdentityProvider*")) {    
 Write-Host "Adding XboxIdentityProvider..." -ForegroundColor Green
 Add-AppxProvisionedPackage -Online -PackagePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*XboxIdentityProvider*') -and ($_.Name -like '*AppxBundle*') })" -LicensePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*XboxIdentityProvider*') -and ($_.Name -like '*xml*') })"
-}
+} | Out-null
 
 # Checking installed apps
 $packages = @("Microsoft.VCLibs","DesktopAppInstaller","WindowsStore","Microsoft.NET.Native")
