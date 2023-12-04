@@ -30,4 +30,4 @@ $downloadUrl = $tagUrl.Replace('tag', 'download') + '/' + $fileName
 (New-Object Net.WebClient).DownloadFile($downloadUrl, "$env:temp\WindowsTerminal.msixbundle")
 
 #Install Windows Terminal
-Add-AppxPackage -Path ".\WindowsTerminal.msixbundle"
+Add-AppxPackage -Path \WindowsTerminal.msixbundle
