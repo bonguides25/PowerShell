@@ -52,7 +52,7 @@ foreach ($depen in $depens) {
 }
 
 Write-Host "Adding Microsoft Store..." -ForegroundColor Green
-Add-AppxProvisionedPackage -Online -PackagePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*WindowsStore*') -and ($_.Name -like '*AppxBundle*') })" -LicensePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*WindowsStore*') -and ($_.Name -like '*xml*') })" | Out-null
+Add-AppxProvisionedPackage -Online -PackagePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*WindowsStore*') -and ($_.Name -like '*AppxBundle*') })" -LicensePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*WindowsStore*') -and ($_.Name -like '*xml*') })"
 
 if ((Get-ChildItem "*StorePurchaseApp*")) {    
 Write-Host "Adding Store Purchase App..." -ForegroundColor Green
