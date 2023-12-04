@@ -22,7 +22,7 @@ $uri = "https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/bonben365.com/Zip/microsoftst
 (New-Object Net.WebClient).DownloadFile($uri, "$env:temp\temp\microsoftstore-win-ltsc.zip")
 
 # Extract downloaded file then run the script
-Expand-Archive .\microsoftstore-win-ltsc.zip -Force -ErrorAction:SilentlyContinue | Out-null
+Expand-Archive .\microsoftstore-win-ltsc.zip -Force -ErrorAction:SilentlyContinue
 Set-Location "$env:temp\temp\microsoftstore-win-ltsc"
 
 if ([System.Environment]::Is64BitOperatingSystem -like "True") {
