@@ -7,7 +7,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
 #Install and update Desktop framework packages
 $progressPreference = 'silentlyContinue'
 Set-Location $env:temp
-Write-Host "Installing dependencies..."
+Write-Host "`nInstalling dependencies..."
 Invoke-WebRequest -Uri 'https://aka.ms/getwinget' -OutFile 'Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
 Invoke-WebRequest -Uri 'https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx' -OutFile 'Microsoft.VCLibs.x64.14.00.Desktop.appx'
 Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.7.3/Microsoft.UI.Xaml.2.7.x64.appx' -OutFile 'Microsoft.UI.Xaml.2.7.x64.appx'
@@ -19,7 +19,7 @@ Add-AppxPackage Microsoft.UI.Xaml.2.8.x64.appx
 Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
 
 #Download and install Windows Terminal
-Write-Host "Instaling Microsoft Windows Terminal..."
+Write-Host "Instaling Microsoft Windows Terminal...`n"
 $url = 'https://github.com/microsoft/terminal/releases/latest'
 $request = [System.Net.WebRequest]::Create($url)
 $response = $request.GetResponse()
