@@ -14,5 +14,4 @@ foreach ($sku in $skus) {
     }
     $output += $skuDetails
 }
-
-$output
+$output | Format-Table
