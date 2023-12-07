@@ -234,4 +234,4 @@ else
     Write-Host "No mailbox found" -ForegroundColor Red
 }
 
-CloseConnection
+# CloseConnection
