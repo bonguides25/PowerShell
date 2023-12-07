@@ -95,7 +95,6 @@ if($InstallMain.IsPresent)
     exit
 }
 
-
 InstallDeps
 InstallMain
 InstallBeta
