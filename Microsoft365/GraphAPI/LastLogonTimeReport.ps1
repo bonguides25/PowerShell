@@ -19,7 +19,9 @@ Function ConnectModules
 
     Disconnect-MgGraph -ErrorAction SilentlyContinue | Out-Null
     Disconnect-ExchangeOnline -Confirm:$false
+
     Write-Progress -Activity "Connecting modules(Microsoft Graph and Exchange Online module)..."
+    
     try{
         if($TenantId -ne "" -and $ClientId -ne "" -and $CertificateThumbprint -ne "")
         {
