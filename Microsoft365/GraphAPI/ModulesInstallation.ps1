@@ -1,9 +1,16 @@
+Param
+(
+    [switch]$InstallMain,
+    [switch]$InstallBeta
+)
+
 # Required running with elevated right.
 if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
     Write-Warning "You need to have Administrator rights to run this script!`nPlease re-run this script as an Administrator in an elevated powershell prompt!"
     break
  }
 
+Function InstallDeps {
 # Configure Execution Policy
 if ((Get-ExecutionPolicy) -notmatch "RemoteSigned") {
     Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine -Force
@@ -31,7 +38,9 @@ if ($testPath -match 'false') {
     Write-Host "`nInstalling NuGet Provider..."
     Install-PackageProvider -Name NuGet -Force | Out-Null
 }
+}
 
+Function InstallMain {
 $MsGraphModule =  Get-Module Microsoft.Graph -ListAvailable
 if($null -eq $MsGraphModule)
 { 
@@ -49,7 +58,9 @@ if($null -eq $MsGraphModule)
         Exit 
     } 
 }
+}
 
+Function InstallBeta {
 $MsGraphBetaModule =  Get-Module Microsoft.Graph.Beta -ListAvailable
 if($null -eq $MsGraphBetaModule)
 { 
@@ -67,3 +78,26 @@ if($null -eq $MsGraphBetaModule)
         Exit 
     } 
 }
+}
+
+
+
+if(($InstallMain.IsPresent)
+{
+    InstallDeps
+    InstallMain
+    exit
+}
+
+if(($InstallMain.IsPresent)
+{
+    InstallDeps
+    InstallBeta
+    exit
+}
+
+
+InstallDeps
+InstallMain
+InstallBeta
+
