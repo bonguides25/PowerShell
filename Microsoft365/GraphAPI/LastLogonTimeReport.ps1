@@ -14,44 +14,9 @@ Param
 )
 Function ConnectModules 
 {
-    $MsGraphBetaModule =  Get-Module Microsoft.Graph.Beta -ListAvailable
-    if($null -eq $MsGraphBetaModule)
-    { 
-        Write-host "Important: Microsoft Graph Beta module is unavailable. It is mandatory to have this module installed in the system to run the script successfully." 
-        $confirm = Read-Host Are you sure you want to install Microsoft Graph Beta module? [Y] Yes [N] No  
-        if($confirm -match "[yY]") 
-        { 
-            Write-host "Installing Microsoft Graph Beta module..."
-            Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Force
-            Install-PackageProvider -Name NuGet -Force | Out-Null
-            Install-Module PowerShellGet -Force
-            Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
-            Install-Module Microsoft.Graph.Beta -Scope CurrentUser -AllowClobber
-            Write-host "Microsoft Graph Beta module is installed in the machine successfully" -ForegroundColor Magenta 
-        } 
-        else
-        { 
-            Write-host "Exiting. `nNote: Microsoft Graph Beta module must be available in your system to run the script" -ForegroundColor Red
-            Exit 
-        } 
-    }
-    $ExchangeOnlineModule =  Get-Module ExchangeOnlineManagement -ListAvailable
-    if($null -eq $ExchangeOnlineModule)
-    { 
-        Write-host "Important: Exchange Online module is unavailable. It is mandatory to have this module installed in the system to run the script successfully." 
-        $confirm = Read-Host Are you sure you want to install Exchange Online module? [Y] Yes [N] No  
-        if($confirm -match "[yY]") 
-        { 
-            Write-host "Installing Exchange Online module..."
-            Install-Module -Name ExchangeOnlineManagement -Scope CurrentUser
-            Write-host "Exchange Online Module is installed in the machine successfully" -ForegroundColor Magenta 
-        } 
-        else
-        { 
-            Write-host "Exiting. `nNote: Exchange Online module must be available in your system to run the script" 
-            Exit 
-        } 
-    }
+    Invoke-RestMethod https://raw.githubusercontent.com/bonguides25/PowerShell/main/Microsoft365/GraphAPI/ModulesInstallation.ps1 | Invoke-Expression
+    Invoke-RestMethod https://raw.githubusercontent.com/bonguides25/PowerShell/main/Microsoft365/ExchangeOnline/ModulesInstallation.ps1 | Invoke-Expression
+
     Disconnect-MgGraph -ErrorAction SilentlyContinue | Out-Null
     Disconnect-ExchangeOnline -Confirm:$false
     Write-Progress -Activity "Connecting modules(Microsoft Graph and Exchange Online module)..."
