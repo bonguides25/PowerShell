@@ -189,19 +189,8 @@ Function ProcessMailBox
 }
 
 #Get friendly name of license plan from external file
-try{
-    $FriendlyNameHash = Get-Content -Raw -Path .\LicenseFriendlyName.txt -ErrorAction SilentlyContinue -ErrorVariable FileError | ConvertFrom-StringData
-    if($FileError -ne $null)
-    {
-        Write-Host $FileError -ForegroundColor Red
-        Exit
-    }
-}
-catch
-{
-    Write-Host $_.Exception.Message -ForegroundColor Red
-    Exit
-}
+$FriendlyNameHash = Invoke-RestMethod -Method GET -Uri "https://raw.githubusercontent.com/bonguides25/PowerShell/main/Microsoft365/Files/LicenseFriendlyName.txt" | ConvertFrom-StringData
+
 #Module functions
 ConnectModules
 Write-Host "`nNote: If you encounter module related conflicts, run the script in a fresh PowerShell window." -ForegroundColor Yellow
