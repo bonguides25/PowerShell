@@ -81,7 +81,6 @@ if($null -eq $MsGraphBetaModule)
 }
 
 
-
 if($InstallMain.IsPresent)
 {
     InstallDeps
