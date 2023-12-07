@@ -15,7 +15,7 @@ Param
 Function ConnectModules 
 {
     $MsGraphBetaModule =  Get-Module Microsoft.Graph.Beta -ListAvailable
-    if($MsGraphBetaModule -eq $null)
+    if($null -eq $MsGraphBetaModule)
     { 
         Write-host "Important: Microsoft Graph Beta module is unavailable. It is mandatory to have this module installed in the system to run the script successfully." 
         $confirm = Read-Host Are you sure you want to install Microsoft Graph Beta module? [Y] Yes [N] No  
@@ -36,7 +36,7 @@ Function ConnectModules
         } 
     }
     $ExchangeOnlineModule =  Get-Module ExchangeOnlineManagement -ListAvailable
-    if($ExchangeOnlineModule -eq $null)
+    if($null -eq $ExchangeOnlineModule)
     { 
         Write-host "Important: Exchange Online module is unavailable. It is mandatory to have this module installed in the system to run the script successfully." 
         $confirm = Read-Host Are you sure you want to install Exchange Online module? [Y] Yes [N] No  
