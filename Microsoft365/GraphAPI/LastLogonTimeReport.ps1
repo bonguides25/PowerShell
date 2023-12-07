@@ -21,7 +21,7 @@ Function ConnectModules
     Disconnect-ExchangeOnline -Confirm:$false
 
     Write-Progress -Activity "Connecting modules(Microsoft Graph and Exchange Online module)..."
-    
+
     try{
         if($TenantId -ne "" -and $ClientId -ne "" -and $CertificateThumbprint -ne "")
         {
@@ -60,7 +60,7 @@ Function ConnectModules
 }
 Function CloseConnection
 {
-    Disconnect-MgGraph|Out-Null
+    Disconnect-MgGraph | Out-Null
     Disconnect-ExchangeOnline -Confirm:$false
 }
 Function ProcessMailBox
