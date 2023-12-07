@@ -82,14 +82,14 @@ if($null -eq $MsGraphBetaModule)
 
 
 
-if(($InstallMain.IsPresent)
+if($InstallMain.IsPresent)
 {
     InstallDeps
     InstallMain
     exit
 }
 
-if(($InstallMain.IsPresent)
+if($InstallMain.IsPresent)
 {
     InstallDeps
     InstallBeta
