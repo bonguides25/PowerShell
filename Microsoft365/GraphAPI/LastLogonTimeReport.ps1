@@ -240,7 +240,7 @@ if([string]$MBNamesFile -ne "")
 #Get all mailboxes from Office 365
 else
 {
-    Get-ExoMailbox -ResultSize Unlimited -PropertySets All | Where{$_.DisplayName -notlike "Discovery Search Mailbox"} | ForEach-Object {
+    Get-ExoMailbox -ResultSize Unlimited -PropertySets All | Where-Object{$_.DisplayName -notlike "Discovery Search Mailbox"} | ForEach-Object {
         $DisplayName = $_.DisplayName
         $UPN = $_.UserPrincipalName
         $LastLogonTime = (Get-ExoMailboxStatistics -Identity $UPN -Properties LastLogonTime).LastLogonTime
