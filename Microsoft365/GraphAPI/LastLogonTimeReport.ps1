@@ -203,53 +203,16 @@ $ExportCSV = ".\LastLogonTimeReport_$((Get-Date -format yyyy-MMM-dd-ddd` hh-mm-s
 $MailBoxUserCount = 1
 $OutputCount = 0
 
-#Check for input file
-if([string]$MBNamesFile -ne "") 
-{ 
-    #We have an input file, read it into memory 
-    $Mailboxes = @()
-    try{
-        $InputFile = Import-Csv -Path $MBNamesFile -Header "MBIdentity"
-    }
-    catch
-    {
-        Write-Host $_.Exception.Message -ForegroundColor Red
-        CloseConnection
-        Exit
-    }
-    Foreach($item in $InputFile.MBIdentity)
-    {
-        $Mailbox = Get-ExoMailBox -Identity $item -PropertySets All -ErrorAction SilentlyContinue
-        if($Mailbox -ne $null)
-        {
-            $DisplayName = $Mailbox.DisplayName
-            $UPN = $Mailbox.UserPrincipalName
-            $LastLogonTime = (Get-ExoMailboxStatistics -Identity $UPN -Properties LastLogonTime).LastLogonTime
-            $MailBoxType = $Mailbox.RecipientTypeDetails
-            $CreatedDateTime = $Mailbox.WhenCreated
-            $AccountEnabled = (Get-MgBetaUser -UserId $UPN).AccountEnabled
-            ProcessMailBox
-        } 
-        else
-        {
-            Write-Host $item not found -ForegroundColor Red
-        }   
-    }
+Get-ExoMailbox -ResultSize Unlimited -PropertySets All | Where-Object{$_.DisplayName -notlike "DiscoverySearchMailbox*"} | ForEach-Object {
+    $DisplayName = $_.DisplayName
+    $UPN = $_.UserPrincipalName
+    $LastLogonTime = (Get-ExoMailboxStatistics -Identity $UPN -Properties LastLogonTime).LastLogonTime
+    $MailBoxType = $_.RecipientTypeDetails
+    $CreatedDateTime = $_.WhenCreated
+    $AccountEnabled = (Get-MgBetaUser -UserId $UPN).AccountEnabled
+    ProcessMailBox
 }
 
-#Get all mailboxes from Office 365
-else
-{
-    Get-ExoMailbox -ResultSize Unlimited -PropertySets All | Where-Object{$_.DisplayName -notlike "Discovery Search Mailbox"} | ForEach-Object {
-        $DisplayName = $_.DisplayName
-        $UPN = $_.UserPrincipalName
-        $LastLogonTime = (Get-ExoMailboxStatistics -Identity $UPN -Properties LastLogonTime).LastLogonTime
-        $MailBoxType = $_.RecipientTypeDetails
-        $CreatedDateTime = $_.WhenCreated
-        $AccountEnabled = (Get-MgBetaUser -UserId $UPN).AccountEnabled
-        ProcessMailBox
-    }
-}
 #Open output file after execution
 Write-Host `nScript executed successfully
 if((Test-Path -Path $ExportCSV) -eq "True")
