@@ -23,7 +23,7 @@ Function ConnectModules
         { 
             Write-host "Installing Microsoft Graph Beta module..."
             Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Force
-            Install-PackageProvider -Name NuGet -Force
+            Install-PackageProvider -Name NuGet -Force | Out-Null
             Install-Module PowerShellGet -Force
             Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
             Install-Module Microsoft.Graph.Beta -Scope CurrentUser -AllowClobber
