@@ -22,6 +22,10 @@ Function ConnectModules
         if($confirm -match "[yY]") 
         { 
             Write-host "Installing Microsoft Graph Beta module..."
+            Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Force
+            Install-PackageProvider -Name NuGet -Force
+            Install-Module PowerShellGet -Force
+            Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
             Install-Module Microsoft.Graph.Beta -Scope CurrentUser -AllowClobber
             Write-host "Microsoft Graph Beta module is installed in the machine successfully" -ForegroundColor Magenta 
         } 
