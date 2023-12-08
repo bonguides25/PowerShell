@@ -21,39 +21,9 @@ Function ConnectModules
 
     Write-Progress -Activity "Connecting modules(Microsoft Graph and Exchange Online module)..."
 
-    try{
-        if($TenantId -ne "" -and $ClientId -ne "" -and $CertificateThumbprint -ne "")
-        {
-            Connect-MgGraph  -TenantId $TenantId -ClientId $ClientId -CertificateThumbprint $CertificateThumbprint -ErrorAction SilentlyContinue -ErrorVariable ConnectionError|Out-Null
-            if($ConnectionError -ne $null)
-            {    
-                Write-Host $ConnectionError -Foregroundcolor Red
-                Exit
-            }
-            $Scopes = (Get-MgContext).Scopes
-            if($Scopes -notcontains "Directory.Read.All" -and $Scopes -notcontains "Directory.ReadWrite.All")
-            {
-                Write-Host "Note: Your application required the following graph application permissions: Directory.Read.All" -ForegroundColor Yellow
-                Exit
-            }
-            Connect-ExchangeOnline -AppId $ClientId -CertificateThumbprint $CertificateThumbprint  -Organization (Get-MgDomain | Where-Object {$_.isInitial}).Id -ShowBanner:$false
-        }
-        else
-        {
-            Connect-MgGraph -Scopes "Directory.Read.All"  -ErrorAction SilentlyContinue -Errorvariable ConnectionError |Out-Null
-            if($ConnectionError -ne $null)
-            {
-                Write-Host $ConnectionError -Foregroundcolor Red
-                Exit
-            }
-            Connect-ExchangeOnline -UserPrincipalName (Get-MgContext).Account -ShowBanner:$false
-        }
-    }
-    catch
-    {
-        Write-Host $_.Exception.message -ForegroundColor Red
-        Exit
-    }
+    Connect-MgGraph -Scopes "Directory.Read.All"  -ErrorAction SilentlyContinue -Errorvariable ConnectionError | Out-Null
+    Connect-ExchangeOnline -UserPrincipalName (Get-MgContext).Account -ShowBanner:$false
+
     Write-Host "Microsoft Graph Beta Powershell module is connected successfully" -ForegroundColor Green
     Write-Host "Exchange Online module is connected successfully" -ForegroundColor Green
 }
