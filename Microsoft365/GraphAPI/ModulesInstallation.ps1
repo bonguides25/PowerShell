@@ -107,20 +107,20 @@ if($null -eq $MsGraphBetaModule)
 }
 
 
-if($InstallMain.IsPresent)
+if($InstallMainBasic.IsPresent)
 {
-    InstallMain
+    InstallMainBasic
     exit
 }
 
-if($InstallBeta.IsPresent)
+if($InstallBetaBasic.IsPresent)
 {
-    InstallBeta
+    InstallBetaBasic
     exit
 }
 
-# InstallMain
-# InstallBeta
+# InstallMainAll
+# InstallBetaAll
 
 Write-host "You've select nothing." -ForegroundColor Magenta 
 
