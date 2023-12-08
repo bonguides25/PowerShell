@@ -22,14 +22,14 @@ if ((Get-ExecutionPolicy) -notmatch "RemoteSigned") {
 $PSGetCurrentVersion = (Get-PackageProvider -Name 'PowerShellGet').Version
 $PSGetLatestVersion = (Find-Module PowerShellGet).Version
 if ($PSGetCurrentVersion -lt $PSGetLatestVersion) {
-    Write-Host "`nUpdating PowerShellGet Module from $PSGetCurrentVersion to $PSGetLatestVersion..."
+    Write-Host "Updating PowerShellGet Module from $PSGetCurrentVersion to $PSGetLatestVersion..."
     Install-Module -Name 'PowerShellGet' -Force
 }
 
 # We're installing from the PowerShell Gallery so make sure that it's trusted.
 $InstallationPolicy = (Get-PSRepository -Name PSGallery).InstallationPolicy
 if ($InstallationPolicy -match "Untrusted") {
-   Write-host "`nConfiguring the PowerShell Gallery Repository..."
+   Write-host "Configuring the PowerShell Gallery Repository..."
    Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
 }
 
@@ -37,7 +37,7 @@ if ($InstallationPolicy -match "Untrusted") {
 $nuGetPath = "C:\Program Files\PackageManagement\ProviderAssemblies\nuget\*\Microsoft.PackageManagement.NuGetProvider.dll"
 $testPath = Test-Path -Path $nuGetPath
 if ($testPath -match 'false') {
-    Write-Host "`nInstalling NuGet Provider..."
+    Write-Host "Installing NuGet Provider..."
     Install-PackageProvider -Name NuGet -Force | Out-Null
 }
 }
