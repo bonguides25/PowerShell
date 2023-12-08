@@ -63,6 +63,28 @@ if($null -eq $MsGraphModule)
 }
 }
 
+Function InstallBetaBasic {
+$MsGraphBetaModule =  Get-Module Microsoft.Graph.Beta -ListAvailable
+if($null -eq $MsGraphBetaModule)
+{ 
+    Write-host "Important: Microsoft Graph Beta module is unavailable. It is mandatory to have this module installed in the system to run the script successfully." 
+    $confirm = Read-Host Are you sure you want to install Microsoft Graph Beta module? [Y] Yes [N] No  
+    if($confirm -match "[yY]") 
+    { 
+        Write-host "Installing Microsoft Graph Beta module..."
+        InstallDeps
+        Install-Module Microsoft.Graph.Beta.Users -Scope CurrentUser -AllowClobber
+        Install-Module Microsoft.Graph.Authentication -Scope CurrentUser -AllowClobber
+        Write-host "Microsoft Graph Beta module is installed in the machine successfully" -ForegroundColor Magenta 
+    } 
+    else
+    { 
+        Write-host "Exiting. `nNote: Microsoft Graph Beta module must be available in your system to run the script" -ForegroundColor Red
+        Exit 
+    } 
+}
+}
+
 Function InstallBetaAll {
 $MsGraphBetaModule =  Get-Module Microsoft.Graph.Beta -ListAvailable
 if($null -eq $MsGraphBetaModule)
