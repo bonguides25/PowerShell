@@ -89,7 +89,7 @@ if($InstallMain.IsPresent)
     exit
 }
 
-if($InstallMain.IsPresent)
+if($InstallBeta.IsPresent)
 {
     InstallBeta
     exit
