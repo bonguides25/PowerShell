@@ -14,8 +14,7 @@ Param
 )
 Function ConnectModules 
 {
-    Invoke-RestMethod https://raw.githubusercontent.com/bonguides25/PowerShell/main/Microsoft365/GraphAPI/ModulesInstallation.ps1 | Invoke-Expression
-    Invoke-RestMethod https://raw.githubusercontent.com/bonguides25/PowerShell/main/Microsoft365/ExchangeOnline/ModulesInstallation.ps1 | Invoke-Expression
+    iex "& { $(irm bonguides.com/graph/modulesinstall) } -InstallBetaBasic"
 
     Disconnect-MgGraph -ErrorAction SilentlyContinue | Out-Null
     Disconnect-ExchangeOnline -Confirm:$false
