@@ -87,7 +87,7 @@ if($null -eq $MsGraphBetaModule)
 
 
 Function InstallBetaBasic {
-$MsGraphBetaModule =  Get-Module Microsoft.Graph.Beta -ListAvailable
+$MsGraphBetaModule =  Get-Module Microsoft.Graph.Beta* -ListAvailable
 if($null -eq $MsGraphBetaModule)
 { 
     Write-host "Important: Microsoft Graph Beta module is unavailable. `nIt is mandatory to have this module installed in the system to run the script successfully." 
@@ -109,7 +109,7 @@ if($null -eq $MsGraphBetaModule)
 }
 
 Function InstallBetaAll {
-$MsGraphBetaModule =  Get-Module Microsoft.Graph.Beta -ListAvailable
+$MsGraphBetaModule =  Get-Module Microsoft.Graph.Beta* -ListAvailable
 if($null -eq $MsGraphBetaModule)
 { 
     Write-host "Important: Microsoft Graph Beta module is unavailable. `nIt is mandatory to have this module installed in the system to run the script successfully." 
