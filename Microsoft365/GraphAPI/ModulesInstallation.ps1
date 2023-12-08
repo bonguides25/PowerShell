@@ -46,7 +46,7 @@ Function InstallMainAll {
 $MsGraphModule =  Get-Module Microsoft.Graph -ListAvailable
 if($null -eq $MsGraphModule)
 { 
-    Write-host "Important: Microsoft Graph module is unavailable. It is mandatory to have this module installed in the system to run the script successfully." 
+    Write-host "Important: Microsoft Graph module is unavailable. `nIt is mandatory to have this module installed in the system to run the script successfully." 
     $confirm = Read-Host Are you sure you want to install Microsoft Graph module? [Y] Yes [N] No  
     if($confirm -match "[yY]") 
     { 
@@ -67,7 +67,7 @@ Function InstallBetaBasic {
 $MsGraphBetaModule =  Get-Module Microsoft.Graph.Beta -ListAvailable
 if($null -eq $MsGraphBetaModule)
 { 
-    Write-host "Important: Microsoft Graph Beta module is unavailable. It is mandatory to have this module installed in the system to run the script successfully." 
+    Write-host "Important: Microsoft Graph Beta module is unavailable. `nIt is mandatory to have this module installed in the system to run the script successfully." 
     $confirm = Read-Host Are you sure you want to install Microsoft Graph Beta module? [Y] Yes [N] No  
     if($confirm -match "[yY]") 
     { 
