@@ -84,11 +84,7 @@ Function ProcessMailBox
             return
         }
     }
-    #UserMailboxOnly
-    if(($UserMailboxOnly.IsPresent) -and ($MailBoxType -ne "UserMailbox"))
-    {
-        return
-    }
+    
     #Never Logged In user
     if(($ReturnNeverLoggedInMB.IsPresent) -and ($LastLogonTime -ne "Never Logged In"))
     {
@@ -153,7 +149,6 @@ Get-ExoMailbox -ResultSize Unlimited -PropertySets All | Where-Object{$_.Display
 Write-Host `nScript executed successfully
 if((Test-Path -Path $ExportCSV) -eq "True")
 {
-   
     Write-Host "Exported report has " -NoNewline
     Write-Host "$OutputCount mailboxe(s)" -ForegroundColor Green
     $Prompt = New-Object -ComObject wscript.shell
