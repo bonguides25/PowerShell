@@ -49,6 +49,7 @@ if($null -eq $MsGraphModule)
     if($confirm -match "[yY]") 
     { 
         Write-host "Installing Microsoft Graph module..."
+        InstallDeps
         Install-Module Microsoft.Graph -Scope CurrentUser
         Write-host "Microsoft Graph module is installed in the machine successfully" -ForegroundColor Magenta 
     } 
@@ -69,6 +70,7 @@ if($null -eq $MsGraphBetaModule)
     if($confirm -match "[yY]") 
     { 
         Write-host "Installing Microsoft Graph Beta module..."
+        InstallDeps
         Install-Module Microsoft.Graph.Beta -Scope CurrentUser -AllowClobber
         Write-host "Microsoft Graph Beta module is installed in the machine successfully" -ForegroundColor Magenta 
     } 
@@ -83,19 +85,16 @@ if($null -eq $MsGraphBetaModule)
 
 if($InstallMain.IsPresent)
 {
-    InstallDeps
     InstallMain
     exit
 }
 
 if($InstallMain.IsPresent)
 {
-    InstallDeps
     InstallBeta
     exit
 }
 
-InstallDeps
 InstallMain
 InstallBeta
 
