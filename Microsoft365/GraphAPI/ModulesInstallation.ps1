@@ -95,6 +95,7 @@ if($InstallBeta.IsPresent)
     exit
 }
 
-InstallMain
-InstallBeta
+# InstallMain
+# InstallBeta
 
+Write-host "You've select nothing." -ForegroundColor Magenta 
