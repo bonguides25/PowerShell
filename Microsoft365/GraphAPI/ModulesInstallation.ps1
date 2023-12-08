@@ -1,7 +1,9 @@
 Param
 (
-    [switch]$InstallMain,
-    [switch]$InstallBeta
+    [switch]$InstallMainBasic,
+    [switch]$InstallMainAll,
+    [switch]$InstallBetaBasic,
+    [switch]$InstallBetaAll
 )
 
 # Required running with elevated right.
@@ -40,7 +42,7 @@ if ($testPath -match 'false') {
 }
 }
 
-Function InstallMain {
+Function InstallMainAll {
 $MsGraphModule =  Get-Module Microsoft.Graph -ListAvailable
 if($null -eq $MsGraphModule)
 { 
@@ -61,7 +63,7 @@ if($null -eq $MsGraphModule)
 }
 }
 
-Function InstallBeta {
+Function InstallBetaAll {
 $MsGraphBetaModule =  Get-Module Microsoft.Graph.Beta -ListAvailable
 if($null -eq $MsGraphBetaModule)
 { 
