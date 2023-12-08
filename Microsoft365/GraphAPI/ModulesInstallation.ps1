@@ -63,6 +63,29 @@ if($null -eq $MsGraphModule)
 }
 }
 
+Function InstallMainBasic {
+$MsGraphBetaModule =  Get-Module Microsoft.Graph -ListAvailable
+if($null -eq $MsGraphBetaModule)
+{ 
+    Write-host "Important: Microsoft Graph module is unavailable. `nIt is mandatory to have this module installed in the system to run the script successfully." 
+    $confirm = Read-Host Are you sure you want to install Microsoft Graph module? [Y] Yes [N] No  
+    if($confirm -match "[yY]") 
+    { 
+        Write-host "Installing Microsoft Graph module..."
+        InstallDeps
+        Install-Module Microsoft.Graph.Users -Scope CurrentUser -AllowClobber
+        Install-Module Microsoft.Graph.Authentication -Scope CurrentUser -AllowClobber
+        Write-host "Microsoft Graph module is installed in the machine successfully" -ForegroundColor Magenta 
+    } 
+    else
+    { 
+        Write-host "Exiting. `nNote: Microsoft Graph module must be available in your system to run the script" -ForegroundColor Red
+        Exit 
+    } 
+}
+}
+
+
 Function InstallBetaBasic {
 $MsGraphBetaModule =  Get-Module Microsoft.Graph.Beta -ListAvailable
 if($null -eq $MsGraphBetaModule)
@@ -89,7 +112,7 @@ Function InstallBetaAll {
 $MsGraphBetaModule =  Get-Module Microsoft.Graph.Beta -ListAvailable
 if($null -eq $MsGraphBetaModule)
 { 
-    Write-host "Important: Microsoft Graph Beta module is unavailable. It is mandatory to have this module installed in the system to run the script successfully." 
+    Write-host "Important: Microsoft Graph Beta module is unavailable. `nIt is mandatory to have this module installed in the system to run the script successfully." 
     $confirm = Read-Host Are you sure you want to install Microsoft Graph Beta module? [Y] Yes [N] No  
     if($confirm -match "[yY]") 
     { 
@@ -106,7 +129,6 @@ if($null -eq $MsGraphBetaModule)
 }
 }
 
-
 if($InstallMainBasic.IsPresent)
 {
     InstallMainBasic
@@ -119,8 +141,7 @@ if($InstallBetaBasic.IsPresent)
     exit
 }
 
-# InstallMainAll
-# InstallBetaAll
+InstallMainAll
+InstallBetaAll
 
-Write-host "You've select nothing." -ForegroundColor Magenta 
 
