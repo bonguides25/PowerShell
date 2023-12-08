@@ -99,3 +99,4 @@ if($InstallBeta.IsPresent)
 # InstallBeta
 
 Write-host "You've select nothing." -ForegroundColor Magenta 
+
