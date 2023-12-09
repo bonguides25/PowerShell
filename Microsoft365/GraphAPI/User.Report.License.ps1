@@ -26,7 +26,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
 
     Disconnect-MgGraph -ErrorAction:SilentlyContinue | Out-Null
 
-    Write-Host "Conncting to Microsoft Graph PowerShell..." -ForegroundColor Yellow
+    Write-Host "Connecting to Microsoft Graph PowerShell..." -ForegroundColor Yellow
     Connect-MgGraph -Scopes "Directory.Read.All" | Out-Null
     $users  = Get-MgBetaUser -All
 
