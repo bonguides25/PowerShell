@@ -132,16 +132,13 @@ if($null -eq $MsGraphBetaModule)
 if($InstallMainBasic.IsPresent)
 {
     InstallMainBasic
-    exit
-}
-
-if($InstallBetaBasic.IsPresent)
-{
+} elseif ($InstallBetaBasic.IsPresent) {
     InstallBetaBasic
-    exit
+} else {
+    InstallMainAll
+    InstallBetaAll
 }
 
-InstallMainAll
-InstallBetaAll
+
 
 
