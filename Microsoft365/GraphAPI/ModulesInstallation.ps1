@@ -29,7 +29,7 @@ Function InstallDeps {
 
     # Configure Execution Policy
         if ((Get-ExecutionPolicy) -notmatch "RemoteSigned") {
-            Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine -Force
+            Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine -Force -ErrorAction:SilentlyContinue | Out-Host
         }
 
     # Update the NuGet Provider if needed.
