@@ -17,7 +17,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     break
 }
 
-# Install the required Microsoft Graph PowerShell SDK modules
+# Check installed required modules then Install the Microsoft Graph PowerShell SDK modules if needed
     Invoke-Expression "& { $(Invoke-RestMethod bonguides.com/graph/modulesinstall) } -InstallBetaBasic"
 
 # Get last login time report for list of users including account status and license assignment
