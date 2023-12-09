@@ -16,6 +16,8 @@ Invoke-Expression "& { $(Invoke-RestMethod bonguides.com/graph/modulesinstall) }
 $uri = "https://bonguides.com/files/LicenseFriendlyName.txt"
 $FriendlyNameHash = Invoke-RestMethod -Method GET -Uri $uri | ConvertFrom-StringData
 
+Connect-MgGraph -Scopes "Directory.Read.All" | Out-Null
+
 $users  = Get-MgBetaUser -All
 $Result = @()
 #Get licenses assigned to mailboxes
