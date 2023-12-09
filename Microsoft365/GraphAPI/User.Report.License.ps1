@@ -17,7 +17,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
 }
 
 # Install the required Microsoft Graph PowerShell SDK modules
-    Invoke-Expression "& { $(Invoke-RestMethod bonguides.com/graph/modulesinstall) } -InstallBetaBasic"
+    iex "& { $(irm bonguides.com/graph/modulesinstall) } -InstallBetaBasic"
 
 # Get last login time report for list of users including account status and license assignment
     $result = @()
@@ -25,6 +25,8 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     $friendlyNameHash = Invoke-RestMethod -Method GET -Uri $uri | ConvertFrom-StringData
 
     Disconnect-MgGraph -ErrorAction:SilentlyContinue | Out-Null
+
+    Write-Host "Conncting to Microsoft Graph PowerShell..." -ForegroundColor Yellow
     Connect-MgGraph -Scopes "Directory.Read.All" | Out-Null
     $users  = Get-MgBetaUser -All
 
