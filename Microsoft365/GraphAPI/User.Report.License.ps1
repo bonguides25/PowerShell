@@ -24,6 +24,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     $uri = "https://bonguides.com/files/LicenseFriendlyName.txt"
     $friendlyNameHash = Invoke-RestMethod -Method GET -Uri $uri | ConvertFrom-StringData
 
+    Disconnect-MgGraph | Out-Null
     Connect-MgGraph -Scopes "Directory.Read.All" | Out-Null
     $users  = Get-MgBetaUser -All
 
