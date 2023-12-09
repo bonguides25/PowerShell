@@ -1,5 +1,6 @@
 iex "& { $(irm bonguides.com/graph/modulesinstall) } -InstallBetaBasic"
 
+Connect-MgGraph -Scopes "Directory.Read.All" -ErrorAction SilentlyContinue -Errorvariable ConnectionError | Out-Null
 
 $uri = "https://bonguides.com/files/LicenseFriendlyName.txt"
 

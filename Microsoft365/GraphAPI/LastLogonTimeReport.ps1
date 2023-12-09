@@ -21,7 +21,7 @@ Function ConnectModules
 
     Write-Progress -Activity "Connecting modules(Microsoft Graph and Exchange Online module)..."
 
-    Connect-MgGraph -Scopes "Directory.Read.All"  -ErrorAction SilentlyContinue -Errorvariable ConnectionError | Out-Null
+    Connect-MgGraph -Scopes "Directory.Read.All" -ErrorAction SilentlyContinue -Errorvariable ConnectionError | Out-Null
     Connect-ExchangeOnline -UserPrincipalName (Get-MgContext).Account -ShowBanner:$false
 
     Write-Host "Microsoft Graph Beta Powershell module is connected successfully" -ForegroundColor Green
