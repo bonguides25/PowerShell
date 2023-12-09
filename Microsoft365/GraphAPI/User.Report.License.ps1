@@ -19,7 +19,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
 # Install the required Microsoft Graph PowerShell SDK modules
     iex "& { $(irm bonguides.com/graph/modulesinstall) } -InstallBetaBasic"
 
-# Get last login time report for list of users including account status and license assignment
+# Get user report with license assigments and account status
     $result = @()
     $uri = "https://bonguides.com/files/LicenseFriendlyName.txt"
     $friendlyNameHash = Invoke-RestMethod -Method GET -Uri $uri | ConvertFrom-StringData
@@ -30,7 +30,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     Connect-MgGraph -Scopes "Directory.Read.All" | Out-Null
     $users  = Get-MgBetaUser -All
 
-    # Get licenses assigned to mailboxes
+    # Get licenses assigned to user accounts
     $i = 1
     foreach ($user in $users) {
         Write-Host "($i/$($users.Count)) Processing: $($user.UserPrincipalName) - $($user.DisplayName)" -ForegroundColor Green
@@ -51,6 +51,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
             }
         }
 
+        # Creating the custom report
         $result += [PSCustomObject]@{
             'DisplayName' = $user.DisplayName
             'UserPrincipalName' = $user.UserPrincipalName
