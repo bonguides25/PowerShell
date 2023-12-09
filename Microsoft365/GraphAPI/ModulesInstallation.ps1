@@ -24,9 +24,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
 Function InstallDeps {
 
     # Configure Execution Policy
-        if ((Get-ExecutionPolicy) -notmatch "RemoteSigned") {
-            Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine -Force -ErrorAction:SilentlyContinue | Out-Host
-        }
+        Set-ExecutionPolicy Bypass -Scope Process -Force | Out-Null
 
     # Update the NuGet Provider if needed.
         $nuGetPath = "C:\Program Files\PackageManagement\ProviderAssemblies\nuget\*\Microsoft.PackageManagement.NuGetProvider.dll"
