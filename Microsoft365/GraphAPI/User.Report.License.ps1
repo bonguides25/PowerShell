@@ -16,10 +16,10 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     break
 }
 
-# Check installed required modules then Install the Microsoft Graph PowerShell SDK modules if needed
+# Install the required Microsoft Graph PowerShell SDK modules
     Invoke-Expression "& { $(Invoke-RestMethod bonguides.com/graph/modulesinstall) } -InstallBetaBasic"
 
-# Get user report with license assigments and account status
+# Get last login time report for list of users including account status and license assignment
     $result = @()
     $uri = "https://bonguides.com/files/LicenseFriendlyName.txt"
     $friendlyNameHash = Invoke-RestMethod -Method GET -Uri $uri | ConvertFrom-StringData
@@ -27,13 +27,12 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     Connect-MgGraph -Scopes "Directory.Read.All" | Out-Null
     $users  = Get-MgBetaUser -All
 
-    # Get licenses assigned to user accounts
+    # Get licenses assigned to mailboxes
     $i = 1
     foreach ($user in $users) {
-        Write-Progress -Activity "   ($i/$($users.Count)) Processing: $($user.UserPrincipalName) - $($user.DisplayName)"
+        Write-Host "($i/$($users.Count)) Processing: $($user.UserPrincipalName) - $($user.DisplayName)" -ForegroundColor Green
         $licenses = (Get-MgBetaUserLicenseDetail -UserId $user.id).SkuPartNumber
         $assignedLicense = @()
-        
         # Convert license plan to friendly name
         if($licenses.count -eq 0){
             $assignedLicense = "Unlicensed"
@@ -48,8 +47,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
                 $assignedLicense += $NamePrint
             }
         }
-        
-        # Creating report object
+
         $result += [PSCustomObject]@{
             'DisplayName' = $user.DisplayName
             'UserPrincipalName' = $user.UserPrincipalName
@@ -58,6 +56,8 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
         }
         $i++
     }
+
+    Write-Host "`nDone. Generating report..." -ForegroundColor Yellow
 
     # Output options to console, graphical grid view or export to CSV file.
         $result | Sort-Object assignedlicenses -Descending 
