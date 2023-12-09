@@ -54,10 +54,10 @@ Function InstallMainAll {
 
     $MsGraphModule =  Get-Module Microsoft.Graph -ListAvailable
     if($null -eq $MsGraphModule) {
-        Write-host "Important: Microsoft Graph module is unavailable. `nIt is mandatory to have this module installed in the system to run the script successfully." 
+        Write-host "Important: Microsoft Graph module is unavailable. `nIt is mandatory to have this module installed in the system to run the script successfully." -ForegroundColor Yellow
         $confirm = Read-Host Are you sure you want to install Microsoft Graph module? [Y] Yes [N] No  
         if($confirm -match "[yY]") { 
-            Write-host "Installing Microsoft Graph module..."
+            Write-host "Installing Microsoft Graph module..." -ForegroundColor Yellow
             InstallDeps
             Install-Module Microsoft.Graph -Scope CurrentUser
             Write-host "Microsoft Graph module is installed in the machine successfully" -ForegroundColor Magenta 
@@ -71,10 +71,10 @@ Function InstallMainAll {
 Function InstallMainBasic {
     $MsGraphBetaModule =  Get-Module Microsoft.Graph -ListAvailable
     if($null -eq $MsGraphBetaModule){ 
-        Write-host "Important: Microsoft Graph module is unavailable. `nIt is mandatory to have this module installed in the system to run the script successfully." 
+        Write-host "Important: Microsoft Graph module is unavailable. `nIt is mandatory to have this module installed in the system to run the script successfully." -ForegroundColor Yellow
         $confirm = Read-Host Are you sure you want to install Microsoft Graph module? [Y] Yes [N] No  
         if($confirm -match "[yY]") { 
-            Write-host "Installing Microsoft Graph module..."
+            Write-host "Installing Microsoft Graph module..." -ForegroundColor Yellow
             InstallDeps
             Install-Module Microsoft.Graph.Users -Scope CurrentUser -AllowClobber
             Install-Module Microsoft.Graph.Authentication -Scope CurrentUser -AllowClobber
@@ -89,11 +89,11 @@ Function InstallMainBasic {
 Function InstallBetaBasic {
     $MsGraphBetaModule =  Get-Module Microsoft.Graph.Beta* -ListAvailable
     if($null -eq $MsGraphBetaModule) { 
-        Write-host "Important: Microsoft Graph Beta module is unavailable. `nIt is mandatory to have this module installed in the system to run the script successfully." 
+        Write-host "Important: Microsoft Graph Beta module is unavailable. `nIt is mandatory to have this module installed in the system to run the script successfully." -ForegroundColor Yellow
         $confirm = Read-Host Are you sure you want to install Microsoft Graph Beta module? [Y] Yes [N] No  
         if($confirm -match "[yY]") 
         { 
-            Write-host "Installing Microsoft Graph Beta module..."
+            Write-host "Installing Microsoft Graph Beta module..." -ForegroundColor Yellow
             InstallDeps
             Install-Module Microsoft.Graph.Beta.Users -Scope CurrentUser -AllowClobber
             Install-Module Microsoft.Graph.Authentication -Scope CurrentUser -AllowClobber
@@ -108,11 +108,11 @@ Function InstallBetaBasic {
 Function InstallBetaAll {
     $MsGraphBetaModule =  Get-Module Microsoft.Graph.Beta* -ListAvailable
     if($null -eq $MsGraphBetaModule){ 
-        Write-host "Important: Microsoft Graph Beta module is unavailable. `nIt is mandatory to have this module installed in the system to run the script successfully." 
+        Write-host "Important: Microsoft Graph Beta module is unavailable. `nIt is mandatory to have this module installed in the system to run the script successfully." -ForegroundColor Yellow
         $confirm = Read-Host Are you sure you want to install Microsoft Graph Beta module? [Y] Yes [N] No  
         if($confirm -match "[yY]") 
         { 
-            Write-host "Installing Microsoft Graph Beta module..."
+            Write-host "Installing Microsoft Graph Beta module..." -ForegroundColor Yellow
             InstallDeps
             Install-Module Microsoft.Graph.Beta -Scope CurrentUser -AllowClobber
             Write-host "Microsoft Graph Beta module is installed in the machine successfully" -ForegroundColor Magenta 
