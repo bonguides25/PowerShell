@@ -1,168 +1,54 @@
+<#=============================================================================================
+Script by    : Leo Nguyen
+Website      : www.bonguides.com
+Telegram     : https://t.me/bonguides
+Discord      : https://discord.gg/fUVjuqexJg
+YouTube      : https://www.youtube.com/@BonGuides
+Description  : Export Microsoft 365 users' last logon time report using PowerShell
 
-Param
-(
-    [string]$MBNamesFile,
-    [int]$InactiveDays,
-    [switch]$UserMailboxOnly,
-    [switch]$ReturnNeverLoggedInMB,
-    [switch]$SigninAllowedUsersOnly,
-    [switch]$LicensedUsersOnly,
-    [switch]$AdminsOnly,
-    [string]$TenantId,
-    [string]$ClientId,
-    [string]$CertificateThumbprint
-)
-Function ConnectModules 
-{
-    iex "& { $(irm bonguides.com/graph/modulesinstall) } -InstallBetaBasic"
+Script Highlights:
+~~~~~~~~~~~~~~~~~
+#. Single script allows you to generate last login reports.
+============================================================================================#>
 
-    Disconnect-MgGraph -ErrorAction SilentlyContinue | Out-Null
-    Disconnect-ExchangeOnline -Confirm:$false
+Invoke-Expression "& { $(Invoke-RestMethod bonguides.com/graph/modulesinstall) } -InstallBetaBasic"
 
-    Write-Progress -Activity "Connecting modules(Microsoft Graph and Exchange Online module)..."
+$uri = "https://bonguides.com/files/LicenseFriendlyName.txt"
+$FriendlyNameHash = Invoke-RestMethod -Method GET -Uri $uri | ConvertFrom-StringData
 
-    Connect-MgGraph -Scopes "Directory.Read.All" -ErrorAction SilentlyContinue -Errorvariable ConnectionError | Out-Null
-    Connect-ExchangeOnline -UserPrincipalName (Get-MgContext).Account -ShowBanner:$false
-
-    Write-Host "Microsoft Graph Beta Powershell module is connected successfully" -ForegroundColor Green
-    Write-Host "Exchange Online module is connected successfully" -ForegroundColor Green
-}
-Function CloseConnection
-{
-    Disconnect-MgGraph | Out-Null
-    Disconnect-ExchangeOnline -Confirm:$false
-}
-Function ProcessMailBox
-{
-    Write-Progress -Activity "`n     Processing mailbox: $Script:MailBoxUserCount - $DisplayName"
-    $Script:MailBoxUserCount++
-    if($AccountEnabled -eq $True)
-    {
-        $SigninStatus = "Allowed"
-    }
-    else
-    {
-        $SigninStatus = "Blocked"
-    }
-
-    #Retrieve lastlogon time and then calculate Inactive days
-    if($LastLogonTime -eq $null)
-    {
-        $LastLogonTime = "Never Logged In"
-        $InactiveDaysOfUser = "-"
-    }
-    else
-    {
-        $InactiveDaysOfUser = (New-TimeSpan -Start $LastLogonTime).Days
-    }
-
-    #Get licenses assigned to mailboxes
-    $Licenses = (Get-MgBetaUserLicenseDetail -UserId $UPN).SkuPartNumber
+$users  = Get-MgBetaUser -All
+$Result = @()
+#Get licenses assigned to mailboxes
+$i = 1
+foreach ($user in $users) {
+    Write-Progress -Activity "   ($i/$($users.Count)) Processing: $($user.UserPrincipalName) - $($user.DisplayName)"
+    $Licenses = (Get-MgBetaUserLicenseDetail -UserId $user.id).SkuPartNumber
     $AssignedLicense = @()
     #Convert license plan to friendly name
-    if($Licenses.count -eq 0)
-    {
-        $AssignedLicense = "No License Assigned"
-    }
-    else
-    {
-        foreach($License in $Licenses)
-        {
+    if($Licenses.count -eq 0){
+        $AssignedLicense = "Unlicensed"
+    } else {
+        foreach($License in $Licenses){
             $EasyName = $FriendlyNameHash[$License]
-            if(!($EasyName))
-            {$NamePrint = $License}
-            else
-            {$NamePrint = $EasyName}
+            if(!($EasyName)){
+                $NamePrint = $License
+            } else {
+                $NamePrint = $EasyName
+            }
             $AssignedLicense += $NamePrint
         }
     }
-    #Inactive days based filter
-    if($InactiveDaysOfUser -ne "-")
-    {
-        if(($InactiveDays -ne "") -and ($InactiveDays -gt $InactiveDaysOfUser))
-        {
-            return
-        }
+
+    $Result += [PSCustomObject]@{
+        'DisplayName' = $user.DisplayName
+        'UserPrincipalName' = $user.UserPrincipalName
+        'Enabled' = $user.accountEnabled
+        'AssignedLicenses'=(@($AssignedLicense)-join ',')
     }
-    
-    #Never Logged In user
-    if(($ReturnNeverLoggedInMB.IsPresent) -and ($LastLogonTime -ne "Never Logged In"))
-    {
-        return
-    }
-    #Signin Allowed Users
-    if($SigninAllowedUsersOnly.IsPresent -and $AccountEnabled -eq $False)
-    {
-        
-        return
-    }
-    #Licensed Users ony
-    if($LicensedUsersOnly -and $Licenses.Count -eq 0)
-    {
-        return
-    }
-    #Get roles assigned to user
-    $Roles = @()
-    $Roles = Get-MgBetaUserTransitiveMemberOf -UserId $UPN |Select-Object -ExpandProperty AdditionalProperties
-    $Roles=$Roles|?{$_.'@odata.type' -eq '#microsoft.graph.directoryRole'} 
-    if($Roles.count -eq 0) 
-    { 
-        $RolesAssigned = "No roles" 
-    } 
-    else 
-    { 
-        $RolesAssigned = @($Roles.displayName) -join ',' 
-    } 
-    #Admins only
-    if($AdminsOnly.IsPresent -and $RolesAssigned -eq 'No roles')
-    {
-        return
-    }
-    #Export result to CSV file
-    $Script:OutputCount++
-    $Result = [PSCustomObject]@{'UserPrincipalName'=$UPN;'DisplayName'=$DisplayName;'SigninStatus' = $SigninStatus ;'LastLogonTime'=$LastLogonTime;'CreationTime'=$_.WhenCreated;'InactiveDays'=$InactiveDaysOfUser;'MailboxType'=$MailBoxType; 'AssignedLicenses'=(@($AssignedLicense)-join ',');'Roles'=$RolesAssigned}
-    $Result | Export-Csv -Path $ExportCSV -Notype -Append
+    $i++
 }
 
-#Get friendly name of license plan from external file
-$FriendlyNameHash = Invoke-RestMethod -Method GET -Uri "https://raw.githubusercontent.com/bonguides25/PowerShell/main/Microsoft365/Files/LicenseFriendlyName.txt" | ConvertFrom-StringData
-
-#Module functions
-ConnectModules
-Write-Host "`nNote: If you encounter module related conflicts, run the script in a fresh PowerShell window." -ForegroundColor Yellow
-#Set output file
-$ExportCSV = ".\LastLogonTimeReport_$((Get-Date -format yyyy-MMM-dd-ddd` hh-mm-ss` tt).ToString()).csv"
-$MailBoxUserCount = 1
-$OutputCount = 0
-
-Get-ExoMailbox -ResultSize Unlimited -PropertySets All | Where-Object{$_.DisplayName -notlike "DiscoverySearchMailbox*"} | ForEach-Object {
-    $DisplayName = $_.DisplayName
-    $UPN = $_.UserPrincipalName
-    $LastLogonTime = (Get-ExoMailboxStatistics -Identity $UPN -Properties LastLogonTime).LastLogonTime
-    $MailBoxType = $_.RecipientTypeDetails
-    $CreatedDateTime = $_.WhenCreated
-    $AccountEnabled = (Get-MgBetaUser -UserId $UPN).AccountEnabled
-    ProcessMailBox
-}
-
-#Open output file after execution
-Write-Host `nScript executed successfully
-if((Test-Path -Path $ExportCSV) -eq "True")
-{
-    Write-Host "Exported report has " -NoNewline
-    Write-Host "$OutputCount mailboxe(s)" -ForegroundColor Green
-    $Prompt = New-Object -ComObject wscript.shell
-    $UserInput = $Prompt.popup("Do you want to open output file?",` 0,"Open Output File",4)
-    if ($UserInput -eq 6)
-    {
-        Invoke-Item "$ExportCSV"
-    }
-    Write-Host `n "The Output file availble in:" -NoNewline -ForegroundColor Yellow; Write-Host "$ExportCSV" `n 
-    
-}
-else
-{
-    Write-Host "No mailbox found" -ForegroundColor Red
-}
-
-# CloseConnection
+# Output options to console, graphical grid view or export to CSV file.
+$Result | Sort-Object AssignedLicenses -Descending
+# $result | Out-GridView
+# $result | Export-CSV "C:\Result.csv" -NoTypeInformation -Encoding UTF8
