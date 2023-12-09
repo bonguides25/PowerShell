@@ -4,11 +4,7 @@ Website      : www.bonguides.com
 Telegram     : https://t.me/bonguides
 Discord      : https://discord.gg/fUVjuqexJg
 YouTube      : https://www.youtube.com/@BonGuides
-Description  : Export Microsoft 365 users' last logon time report using PowerShell
-
-Script Highlights:
-~~~~~~~~~~~~~~~~~
-#. Microsoft Graph PowerShell SDK detection then install.
+Description  : Install Microsoft Graph PowerShell SDK
 ============================================================================================#>
 
 Param (
