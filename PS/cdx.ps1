@@ -36,7 +36,12 @@ foreach ($item in $items) {
     Start-Sleep -Seconds 1
 }
 
-Start-Sleep 10
+Start-Sleep 3
+
+$users = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "startsWith(DisplayName, 'Account')" -OrderBy UserPrincipalName
+while ($users.Count -lt 6){
+Start-Sleep 1
+}
 
 Write-Host "`nAssign licenses and add members to group." -ForegroundColor Green
 $users = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "startsWith(DisplayName, 'Account')" -OrderBy UserPrincipalName
@@ -104,22 +109,31 @@ Start-Sleep 5
 Write-Host "`nDone. Generating report..." -ForegroundColor Yellow
 $result | Sort-Object assignedlicenses -Descending | Format-Table
 
-Write-Host "`nList of members (sg-CloudPCUsers):" -ForegroundColor Cyan
-Get-MgGroupMember -GroupId $groupId | select AdditionalProperties
+# Retrieve the group based on the specified group ID or display name
+$groupId = (Get-MgGroup -ConsistencyLevel eventual -Count groupCount -Search '"DisplayName:sg-CloudPCUsers"').Id
 
+$members = Get-MgGroupMember -GroupId $groupId -All
 
-Write-Host "`nList of devices (Cloud PCs):" -ForegroundColor Green
-Start-Sleep 60
+# Initialize an array to store user information
+$users = @()
 
-Get-MgDevice
+# Iterate through each group member and retrieve user details
+foreach ($member in $members) {
+    $user = Get-MgUser -UserId $member.Id -ErrorAction SilentlyContinue
 
-Start-Sleep 60
+    # Add user information to the array
+    $Objects = [PSCustomObject][ordered]@{
+        Group             = "sg-CloudPCUsers"
+        Name              = $user.DisplayName
+        UserPrincipalName = $user.UserPrincipalName
+    }
 
-Get-MgDevice
+    # Add the ordered custom object to the array
+    $users += $Objects
+}
 
-Start-Sleep 60
-
-Get-MgDevice
+# Export user information
+$users
 
 Write-Host "Done." -ForegroundColor Green
 Write-Host "Disconnecting from Microsoft Graph.`n" -ForegroundColor Green
