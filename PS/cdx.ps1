@@ -36,10 +36,6 @@ $groupId = (Get-MgGroup -ConsistencyLevel eventual -Count groupCount -Search '"D
 $sku1 = (Get-MgSubscribedSku | Where-Object {$_.SkuPartNumber -match 'CPC_E_2C_8GB_256GB'}).SkuId
 $sku2 = (Get-MgSubscribedSku | Where-Object {$_.SkuPartNumber -match 'CPC_E_2C_4GB_128GB​'}).SkuId
 
-while ($users.Count -lt 6) {
-    Start-Sleep 1
-}
-
 $i = 1
 foreach ($user in $users) {
     Write-Host "($i/$($users.Count) Processing account: $($user.UserPrincipalName)" -ForegroundColor Green
