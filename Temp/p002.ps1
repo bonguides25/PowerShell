@@ -30,7 +30,7 @@ if ($UseWinget.IsPresent) {
     )
 
     $apps | ForEach-Object {
-        Write-Host "`nInstalling $_ ..." -ForegroundColor Green
+        Write-Host "Installing $_ ..." -ForegroundColor Green
         winget install $_ --silent --accept-source-agreements --accept-package-agreements
     }
 }
