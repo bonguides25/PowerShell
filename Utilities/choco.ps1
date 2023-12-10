@@ -20,18 +20,16 @@ $runspace.Open()
 $sync = [hashtable]::Synchronized(@{})
 $sync.runspace = $runspace
 $sync.host = $host
-$sync.DebugPreference = $DebugPreference
-$sync.VerbosePreference = $VerbosePreference
 
 # Add shared data to the runspace
 $runspace.SessionStateProxy.SetVariable("sync", $sync)
 
-Write-Host "Installing Chocolatey Package Manager..." -ForegroundColor Green
 $scriptBlock = {
   Set-ExecutionPolicy Bypass -Scope Process -Force
   [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
   iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 }
+
 $PSIinstance = [powershell]::Create().AddScript($scriptBlock)
 $PSIinstance.Runspace = $runspace
 $result = $PSIinstance.BeginInvoke()
