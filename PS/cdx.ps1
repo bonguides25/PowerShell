@@ -1,9 +1,9 @@
-
+Clear-Host
 Write-Host "`nDisconnecting from Microsoft Graph...." -ForegroundColor Yellow
 Disconnect-Graph
 Start-Sleep -Seconds 2
 Disconnect-Graph
-
+Clear-Host
 $scopes = @('Directory.ReadWrite.All','User.ReadWrite.All')
 Connect-MgGraph -Scopes $scopes
 
