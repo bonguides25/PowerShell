@@ -40,10 +40,13 @@ while ($users.Count -lt 6) {
     Start-Sleep 1
 }
 
+$i = 1
 foreach ($user in $users) {
-    Set-MgUserLicense -UserId $($user.Id) -Addlicenses @{SkuId = $sku1} -RemoveLicenses @()
-    Set-MgUserLicense -UserId $($user.Id) -Addlicenses @{SkuId = $sku2} -RemoveLicenses @()
-    New-MgGroupMember -GroupId $groupId -DirectoryObjectId $($user.Id)
+    Write-Host "($i/$($users.Count) Processing account: $($user.UserPrincipalName)" -ForegroundColor Green
+    Set-MgUserLicense -UserId $($user.Id) -Addlicenses @{SkuId = $sku1} -RemoveLicenses @() | Out-Null
+    Set-MgUserLicense -UserId $($user.Id) -Addlicenses @{SkuId = $sku2} -RemoveLicenses @() | Out-Null
+    New-MgGroupMember -GroupId $groupId -DirectoryObjectId $($user.Id) | Out-Null
+    $i++
 }
 
 Write-Host "List of members:" -ForegroundColor Green
