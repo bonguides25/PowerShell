@@ -9,11 +9,11 @@ param (
 
 if($UseChoco.IsPresent) {
     $apps = @('telegram', 'firefox','winscp', 'zoom', 'vscode', 'github-desktop')
-    Write-Host "`nInstalling Chocolatey (choco)..." -ForegroundColor Cyan
+    Write-Host "Installing Chocolatey (choco)..." -ForegroundColor Green
     iex "& { $(irm bonguides.com/choco) } -HideOutput"
     choco feature enable -n allowGlobalConfirmation
     $apps | ForEach-Object {
-        Write-Host "`nInstalling $_ ..." -ForegroundColor Green
+        Write-Host "Installing $_ ..." -ForegroundColor Green
         choco install $_ -y | Out-Null
     }
 }
