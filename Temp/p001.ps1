@@ -12,7 +12,7 @@ $apps = @('telegram', 'firefox','winscp', 'zoom', 'vscode', 'github-desktop')
 
 $apps | ForEach-Object {
     Write-Host
-    Write-Host "($i/$($apps.Count))Installing $_..." -ForegroundColor Green
+    Write-Host "($i/$($apps.Count)) Installing $_..." -ForegroundColor Green
     choco install $_ -y | Out-Null
     $i++
 }
