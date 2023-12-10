@@ -7,7 +7,7 @@ YouTube      : https://www.youtube.com/@BonGuides
 Description  : Install Microsoft Graph PowerShell SDK
 ============================================================================================#>
 
-Param (
+param (
     [switch]$InstallMainBasic,
     [switch]$InstallMainAll,
     [switch]$InstallBetaBasic,
