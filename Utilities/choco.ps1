@@ -11,7 +11,8 @@ Script Highlights:
 ============================================================================================#>
 
 param (
-    [switch]$HideOutput
+    [switch]$HideOutput,
+    [switch]$ShowOutput
 )
 
 function InstallChocoHide {
@@ -60,6 +61,10 @@ function InstallChocoShow {
 if ($HideOutput.IsPresent) {
     InstallChocoHide
 }
+
+if ($ShowOutput.IsPresent) {
+    InstallChocoShow
+}
     
-InstallChocoShow
+
 
