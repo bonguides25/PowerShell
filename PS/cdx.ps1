@@ -75,7 +75,7 @@ $sku2 = (Get-MgSubscribedSku | Where-Object {$_.SkuPartNumber -match 'CPC_E_2C_4
         }
     
     Write-Host "`nDone. Generating report..." -ForegroundColor Yellow
-    $result | Sort-Object assignedlicenses -Descending
+    $result | Sort-Object assignedlicenses -Descending | Format-Table
 
 $i = 1
 foreach ($user in $users) {
