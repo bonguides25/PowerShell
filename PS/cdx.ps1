@@ -30,7 +30,7 @@ Connect-MgGraph -Scopes $scopes
 
 Start-Sleep 5
 
-Write-Host "Assign licenses and add members to group." -ForegroundColor Green
+Write-Host "`nAssign licenses and add members to group." -ForegroundColor Green
 $users = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "startsWith(DisplayName, 'Account')" -OrderBy UserPrincipalName
 $groupId = (Get-MgGroup -ConsistencyLevel eventual -Count groupCount -Search '"DisplayName:sg-CloudPCUsers"').Id
 $sku1 = (Get-MgSubscribedSku | Where-Object {$_.SkuPartNumber -match 'CPC_E_2C_8GB_256GB'}).SkuId
