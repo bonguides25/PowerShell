@@ -2,13 +2,12 @@
 Set-ExecutionPolicy Bypass -Scope Process -Force
 iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 
-Write-Host "`nInstalling apps using Chocolatey (choco)..." -ForegroundColor Green
+$apps = @('telegram', 'firefox','winscp', 'zoom', 'vscode', 'github-desktop')
 choco feature enable -n allowGlobalConfirmation
-choco install Telegram -y
-choco install firefox -y
-choco install winscp -y
-choco install zoom -y
-choco install vscode -y
-choco install github-desktop -y
+
+$apps | ForEach-Object {
+    Write-Host "`nInstalling $_ using Chocolatey (choco)..." -ForegroundColor Green
+    choco install $_ -y | Out-Null
+}
 
 Write-Host "`nDone." -ForegroundColor Green
