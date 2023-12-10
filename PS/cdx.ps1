@@ -9,7 +9,7 @@ $scopes = @('Directory.ReadWrite.All','User.ReadWrite.All')
 Connect-MgGraph -Scopes $scopes
 
 # Creating users in bulk
-
+    Write-Host "`nCreating user accounts..." -ForegroundColor Yellow 
     $domain = Get-MgDomain | select -ExpandProperty Id
     $items = @(1..6)
     foreach ($item in $items) {
@@ -24,7 +24,7 @@ Connect-MgGraph -Scopes $scopes
                 Password = 'Nttg$ti74fnff[gr4]'
             }
         }
-        Write-Host "($item/$($items.Count)) Creating $($params.UserPrincipalName)"
+        Write-Host "($item/$($items.Count)) Creating $($params.UserPrincipalName)"  -ForegroundColor Yellow 
         New-MgUser -BodyParameter $params | Out-Null
     }
 
@@ -35,6 +35,17 @@ $users = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "startsW
 $groupId = (Get-MgGroup -ConsistencyLevel eventual -Count groupCount -Search '"DisplayName:sg-CloudPCUsers"').Id
 $sku1 = (Get-MgSubscribedSku | Where-Object {$_.SkuPartNumber -match 'CPC_E_2C_8GB_256GB'}).SkuId
 $sku2 = (Get-MgSubscribedSku | Where-Object {$_.SkuPartNumber -match 'CPC_E_2C_4GB_128GB​'}).SkuId
+
+$i = 1
+foreach ($user in $users) {
+    Write-Host "($i/$($users.Count)) Processing account: $($user.UserPrincipalName)" -ForegroundColor Green
+    Set-MgUserLicense -UserId $($user.Id) -Addlicenses @{SkuId = $sku1} -RemoveLicenses @() | Out-Null
+    Set-MgUserLicense -UserId $($user.Id) -Addlicenses @{SkuId = $sku2} -RemoveLicenses @() | Out-Null
+    New-MgGroupMember -GroupId $groupId -DirectoryObjectId $($user.Id) | Out-Null
+    $i++
+}
+
+Start-Sleep 5
 
 # Get user report with license assigments and account status
     $result = @()
@@ -77,32 +88,23 @@ $sku2 = (Get-MgSubscribedSku | Where-Object {$_.SkuPartNumber -match 'CPC_E_2C_4
     Write-Host "`nDone. Generating report..." -ForegroundColor Yellow
     $result | Sort-Object assignedlicenses -Descending | Format-Table
 
-$i = 1
-foreach ($user in $users) {
-    Write-Host "($i/$($users.Count)) Processing account: $($user.UserPrincipalName)" -ForegroundColor Green
-    Set-MgUserLicense -UserId $($user.Id) -Addlicenses @{SkuId = $sku1} -RemoveLicenses @() | Out-Null
-    Set-MgUserLicense -UserId $($user.Id) -Addlicenses @{SkuId = $sku2} -RemoveLicenses @() | Out-Null
-    New-MgGroupMember -GroupId $groupId -DirectoryObjectId $($user.Id) | Out-Null
-    $i++
-}
-
-Write-Host "List of members:" -ForegroundColor Green
+Write-Host "`nList of members:" -ForegroundColor Green
 Get-MgGroupMember -GroupId $groupId | select AdditionalProperties
+
+Start-Sleep 30
+
+Get-MgDevice
+
+Start-Sleep 30
+
+Get-MgDevice
+
+Start-Sleep 30
+
+Get-MgDevice
 
 Write-Host "Done." -ForegroundColor Green
 Write-Host "Disconnecting from Microsoft Graph.`n" -ForegroundColor Green
-
-Start-Sleep 30
-
-Get-MgDevice
-
-Start-Sleep 30
-
-Get-MgDevice
-
-Start-Sleep 30
-
-Get-MgDevice
 
 Disconnect-Graph
 
