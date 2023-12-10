@@ -3,8 +3,8 @@ Script by    : Leo Nguyen
 Website      : www.bonguides.com
 ============================================================================================#>
 
-Set-ExecutionPolicy Bypass -Scope Process -Force
-iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+Write-Host "`nInstalling Chocolatey Package Manager..." -ForegroundColor Green
+iex "& { $(irm bonguides.com/choco) } -HideOutput"
 
 $apps = @('telegram', 'firefox','winscp', 'zoom', 'vscode', 'github-desktop')
 choco feature enable -n allowGlobalConfirmation
