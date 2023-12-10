@@ -16,26 +16,27 @@ Domain: $((Get-MgDomain).Id)
 " -ForegroundColor Yellow
 
 # Creating users in bulk
-    Write-Host "`nCreating user accounts..." -ForegroundColor Yellow 
-    $domain = Get-MgDomain | select -ExpandProperty Id
-    $items = @(1..6)
-    foreach ($item in $items) {
-        $params = @{
-            AccountEnabled = $true
-            DisplayName = "Account$item"
-            UserPrincipalName = "account$item@$domain"
-            MailNickname = "account$item"
-            UsageLocation = 'US'
-            PasswordProfile = @{
-                ForceChangePasswordNextSignIn = $false
-                Password = 'Nttg$ti74fnff[gr4]'
-            }
+Write-Host "Creating user accounts..." -ForegroundColor Yellow 
+$domain = Get-MgDomain | select -ExpandProperty Id
+$items = @(1..6)
+foreach ($item in $items) {
+    $params = @{
+        AccountEnabled = $true
+        DisplayName = "Account$item"
+        UserPrincipalName = "account$item@$domain"
+        MailNickname = "account$item"
+        UsageLocation = 'US'
+        PasswordProfile = @{
+            ForceChangePasswordNextSignIn = $false
+            Password = 'Nttg$ti74fnff[gr4]'
         }
-        Write-Host "($item/$($items.Count)) Creating $($params.UserPrincipalName)"  -ForegroundColor Yellow 
-        New-MgUser -BodyParameter $params | Out-Null
     }
+    Write-Host "($item/$($items.Count)) Creating $($params.UserPrincipalName)"  -ForegroundColor Yellow 
+    New-MgUser -BodyParameter $params | Out-Null
+    Start-Sleep -Seconds 1
+}
 
-Start-Sleep 5
+Start-Sleep 10
 
 Write-Host "`nAssign licenses and add members to group." -ForegroundColor Green
 $users = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "startsWith(DisplayName, 'Account')" -OrderBy UserPrincipalName
@@ -45,11 +46,19 @@ $sku2 = (Get-MgSubscribedSku | Where-Object {$_.SkuPartNumber -match 'CPC_E_2C_4
 
 $i = 1
 foreach ($user in $users) {
-    Write-Host "($i/$($users.Count)) Processing account: $($user.UserPrincipalName)" -ForegroundColor Green
+    Write-Host "($i/$($users.Count)) Assign licenses to account: $($user.UserPrincipalName)" -ForegroundColor Green
     Set-MgUserLicense -UserId $($user.Id) -Addlicenses @{SkuId = $sku1} -RemoveLicenses @() | Out-Null
     Set-MgUserLicense -UserId $($user.Id) -Addlicenses @{SkuId = $sku2} -RemoveLicenses @() | Out-Null
+    $i++
+    Start-Sleep 1
+}
+
+$i = 1
+foreach ($user in $users) {
+    Write-Host "($i/$($users.Count)) Adding account to group: $($user.UserPrincipalName)" -ForegroundColor Green
     New-MgGroupMember -GroupId $groupId -DirectoryObjectId $($user.Id) | Out-Null
     $i++
+    Start-Sleep 1
 }
 
 Start-Sleep 5
@@ -92,8 +101,8 @@ Start-Sleep 5
         $i++
         }
     
-    Write-Host "`nDone. Generating report..." -ForegroundColor Yellow
-    $result | Sort-Object assignedlicenses -Descending | Format-Table
+Write-Host "Done. Generating report..." -ForegroundColor Yellow
+$result | Sort-Object assignedlicenses -Descending | Format-Table
 
 Write-Host "`nList of members (sg-CloudPCUsers):" -ForegroundColor Green
 Get-MgGroupMember -GroupId $groupId | select AdditionalProperties
