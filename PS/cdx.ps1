@@ -92,6 +92,18 @@ Get-MgGroupMember -GroupId $groupId | select AdditionalProperties
 Write-Host "Done." -ForegroundColor Green
 Write-Host "Disconnecting from Microsoft Graph.`n" -ForegroundColor Green
 
+Start-Sleep 30
+
+Get-MgDevice
+
+Start-Sleep 30
+
+Get-MgDevice
+
+Start-Sleep 30
+
+Get-MgDevice
+
 Disconnect-Graph
 
 
