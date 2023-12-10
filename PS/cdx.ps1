@@ -4,7 +4,6 @@ Disconnect-Graph
 Start-Sleep -Seconds 2
 Disconnect-Graph
 
-
 $scopes = @('Directory.ReadWrite.All','User.ReadWrite.All')
 Connect-MgGraph -Scopes $scopes
 
