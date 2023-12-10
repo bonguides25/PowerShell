@@ -1,11 +1,19 @@
 
-Write-Host "Disconnecting from Microsoft Graph...." -ForegroundColor Yellow
+Write-Host "`nDisconnecting from Microsoft Graph...." -ForegroundColor Yellow
 Disconnect-Graph
 Start-Sleep -Seconds 2
 Disconnect-Graph
 
 $scopes = @('Directory.ReadWrite.All','User.ReadWrite.All')
 Connect-MgGraph -Scopes $scopes
+
+$tenantInfo = Get-MgOrganization
+Write-Host "
+Tenant Information:
+Tenant: $($tenantInfo.DisplayName)
+Id    : $($tenantInfo.Id)
+Domain: $((Get-MgDomain).Id)
+" -ForegroundColor Yellow
 
 # Creating users in bulk
     Write-Host "`nCreating user accounts..." -ForegroundColor Yellow 
@@ -87,18 +95,20 @@ Start-Sleep 5
     Write-Host "`nDone. Generating report..." -ForegroundColor Yellow
     $result | Sort-Object assignedlicenses -Descending | Format-Table
 
-Write-Host "`nList of members:" -ForegroundColor Green
+Write-Host "`nList of members (sg-CloudPCUsers):" -ForegroundColor Green
 Get-MgGroupMember -GroupId $groupId | select AdditionalProperties
 
-Start-Sleep 30
+
+Write-Host "`nList of devices (Cloud PCs):" -ForegroundColor Green
+Start-Sleep 60
 
 Get-MgDevice
 
-Start-Sleep 30
+Start-Sleep 60
 
 Get-MgDevice
 
-Start-Sleep 30
+Start-Sleep 60
 
 Get-MgDevice
 
