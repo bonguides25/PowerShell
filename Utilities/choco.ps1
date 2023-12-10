@@ -47,7 +47,6 @@ function InstallChocoHide {
         $PSIinstance.Dispose()
 
         Write-Host "Choco version: $(choco --version)"
-        exit
 }
 
 function InstallChocoShow {
