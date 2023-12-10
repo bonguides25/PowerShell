@@ -3,7 +3,7 @@ Script by    : Leo Nguyen
 Website      : www.bonguides.com
 ============================================================================================#>
 
-Write-Host "`nInstalling Chocolatey Package Manager ..."
+Write-Host "`nInstalling Chocolatey Package Manager ..." -ForegroundColor Yellow
 iex "& { $(irm bonguides.com/choco) } -HideOutput"
 choco feature enable -n allowGlobalConfirmation
 
