@@ -52,7 +52,7 @@ foreach ($user in $users) {
     $i++
     Start-Sleep 1
 }
-
+Write-Host
 $i = 1
 foreach ($user in $users) {
     Write-Host "($i/$($users.Count)) Adding account to group: $($user.UserPrincipalName)" -ForegroundColor Green
@@ -101,10 +101,10 @@ Start-Sleep 5
         $i++
         }
     
-Write-Host "Done. Generating report..." -ForegroundColor Yellow
+Write-Host "`nDone. Generating report..." -ForegroundColor Yellow
 $result | Sort-Object assignedlicenses -Descending | Format-Table
 
-Write-Host "`nList of members (sg-CloudPCUsers):" -ForegroundColor Green
+Write-Host "`nList of members (sg-CloudPCUsers):" -ForegroundColor Cyan
 Get-MgGroupMember -GroupId $groupId | select AdditionalProperties
 
 
