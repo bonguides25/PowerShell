@@ -24,8 +24,8 @@ Connect-MgGraph -Scopes $scopes
                 Password = 'Nttg$ti74fnff[gr4]'
             }
         }
-        Write-Progress -Activity "Creating $($params.UserPrincipalName)" -Status "Created: $item of $($items.Count)"
-        New-MgUser -BodyParameter $params
+        Write-Host "($item/$($items.Count)) Creating $($params.UserPrincipalName)"
+        New-MgUser -BodyParameter $params | Out-Null
     }
 
 Start-Sleep 5
@@ -38,7 +38,7 @@ $sku2 = (Get-MgSubscribedSku | Where-Object {$_.SkuPartNumber -match 'CPC_E_2C_4
 
 $i = 1
 foreach ($user in $users) {
-    Write-Host "($i/$($users.Count) Processing account: $($user.UserPrincipalName)" -ForegroundColor Green
+    Write-Host "($i/$($users.Count)) Processing account: $($user.UserPrincipalName)" -ForegroundColor Green
     Set-MgUserLicense -UserId $($user.Id) -Addlicenses @{SkuId = $sku1} -RemoveLicenses @() | Out-Null
     Set-MgUserLicense -UserId $($user.Id) -Addlicenses @{SkuId = $sku2} -RemoveLicenses @() | Out-Null
     New-MgGroupMember -GroupId $groupId -DirectoryObjectId $($user.Id) | Out-Null
