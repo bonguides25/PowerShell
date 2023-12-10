@@ -1,7 +1,7 @@
 
 Write-Host "Disconnecting from Microsoft Graph...." -ForegroundColor Yellow
 Disconnect-Graph
-Start-Sleep -Seconds 1
+Start-Sleep -Seconds 2
 Disconnect-Graph
 
 
