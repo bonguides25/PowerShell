@@ -39,3 +39,5 @@ do {
 } until ($result.IsCompleted -eq "true")
 
 $PSIinstance.Dispose()
+
+Write-Host "Choco version: $(choco --version)"
