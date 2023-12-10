@@ -9,8 +9,10 @@ choco feature enable -n allowGlobalConfirmation
 
 $i = 1
 $apps = @('telegram', 'firefox','winscp', 'zoom', 'vscode', 'github-desktop')
+
 $apps | ForEach-Object {
-    Write-Host "`n($i/$($apps.Count))Installing $_..." -ForegroundColor Green
+    Write-Host
+    Write-Host "($i/$($apps.Count))Installing $_..." -ForegroundColor Green
     choco install $_ -y | Out-Null
     $i++
 }
