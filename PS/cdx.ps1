@@ -36,6 +36,47 @@ $groupId = (Get-MgGroup -ConsistencyLevel eventual -Count groupCount -Search '"D
 $sku1 = (Get-MgSubscribedSku | Where-Object {$_.SkuPartNumber -match 'CPC_E_2C_8GB_256GB'}).SkuId
 $sku2 = (Get-MgSubscribedSku | Where-Object {$_.SkuPartNumber -match 'CPC_E_2C_4GB_128GB​'}).SkuId
 
+# Get user report with license assigments and account status
+    $result = @()
+    $uri = "https://bonguides.com/files/LicenseFriendlyName.txt"
+    $friendlyNameHash = Invoke-RestMethod -Method GET -Uri $uri | ConvertFrom-StringData
+
+    $users  = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "startsWith(DisplayName, 'Account')" -OrderBy UserPrincipalName
+
+    # Get licenses assigned to user accounts
+    $i = 1
+    foreach ($user in $users) {
+        Write-Host "($i/$($users.Count)) Processing: $($user.UserPrincipalName) - $($user.DisplayName)" -ForegroundColor Green
+        $licenses = (Get-MgBetaUserLicenseDetail -UserId $user.id).SkuPartNumber
+        $assignedLicense = @()
+    # Convert license plan to friendly name
+        if($licenses.count -eq 0){
+            $assignedLicense = "Unlicensed"
+        } else {
+        
+        foreach($License in $licenses){
+            $EasyName = $friendlyNameHash[$License]
+            if(!($EasyName)){
+                $NamePrint = $License
+            } else {
+                $NamePrint = $EasyName
+        }
+        $assignedLicense += $NamePrint
+    }
+    }
+
+    # Creating the custom report
+        $result += [PSCustomObject]@{
+            'DisplayName' = $user.DisplayName
+            'UserPrincipalName' = $user.UserPrincipalName
+            'Assignedlicenses'=(@($assignedLicense)-join ',')
+        }
+        $i++
+        }
+    
+    Write-Host "`nDone. Generating report..." -ForegroundColor Yellow
+    $result | Sort-Object assignedlicenses -Descending
+
 $i = 1
 foreach ($user in $users) {
     Write-Host "($i/$($users.Count)) Processing account: $($user.UserPrincipalName)" -ForegroundColor Green
