@@ -49,7 +49,8 @@ foreach ($user in $users) {
 Write-Host "List of members:" -ForegroundColor Green
 Get-MgGroupMember -GroupId $groupId | select AdditionalProperties
 
-Write-Host "`nDone." -ForegroundColor Green
+Write-Host "Done." -ForegroundColor Green
+Write-Host "Disconnecting from Microsoft Graph.`n" -ForegroundColor Green
 
 Disconnect-Graph
 
