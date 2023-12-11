@@ -38,6 +38,9 @@ foreach ($item in $items) {
 
 Start-Sleep 10
 
+Write-Host "`nLicense Information:" -ForegroundColor Green
+irm https://bonguides.com/pw/lictranslator | iex
+
 $users = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "startsWith(DisplayName, 'Account')" -OrderBy UserPrincipalName
 while ($users.Count -lt 6){
 Start-Sleep 1
