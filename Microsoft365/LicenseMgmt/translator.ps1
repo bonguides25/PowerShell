@@ -32,7 +32,7 @@ if($OutCSV.IsPresent) {
     # $result | Out-GridView
     $filePath = "$env:userprofile\desktop\Result-$(Get-Date -Format yyyy-mm-dd-hh-mm-ss).csv"
     $result | Export-CSV $filePath -NoTypeInformation -Encoding UTF8
-    Write-Host "The report is saved to: $filePath `n" -ForegroundColor Cyan
+    Write-Host "`nThe report is saved to: $filePath `n" -ForegroundColor Cyan
     Invoke-Item "$env:userprofile\desktop"
 } elseif ($OutGridView.IsPresent) {
     $output | Out-GridView
