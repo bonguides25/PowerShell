@@ -72,3 +72,34 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
         Write-Host "The report is saved to: $filePath `n" -ForegroundColor Cyan
 
     Invoke-Item "$env:userprofile\desktop"
+
+Function ProcessMailBox
+{
+    #Get roles assigned to user
+    $Roles = @()
+    $Roles = Get-MgBetaUserTransitiveMemberOf -UserId $UPN |Select-Object -ExpandProperty AdditionalProperties
+    $Roles = $Roles | Where-Object{$_.'@odata.type' -eq '#microsoft.graph.directoryRole'} 
+    if($Roles.count -eq 0) 
+    { 
+        $RolesAssigned = "No roles" 
+    } 
+    else 
+    { 
+        $RolesAssigned = @($Roles.displayName) -join ',' 
+    } 
+
+
+    # Creating the custom report
+    $result += [PSCustomObject]@{
+        'DisplayName' = $user.DisplayName
+        'UserPrincipalName' = $user.UserPrincipalName
+        'Enabled' = $user.accountEnabled
+        'Roles' = $RolesAssigned
+        'Assignedlicenses'=(@($assignedLicense)-join ',')
+    }
+    $i++
+
+
+#Module functions
+ConnectModules
+CloseConnection
