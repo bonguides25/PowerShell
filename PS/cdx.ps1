@@ -36,11 +36,12 @@ foreach ($item in $items) {
     Start-Sleep -Seconds 1
 }
 
-Start-Sleep 3
+Start-Sleep 10
 
 $users = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "startsWith(DisplayName, 'Account')" -OrderBy UserPrincipalName
 while ($users.Count -lt 6){
 Start-Sleep 1
+$users = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "startsWith(DisplayName, 'Account')" -OrderBy UserPrincipalName
 }
 
 Write-Host "`nAssign licenses and add members to group." -ForegroundColor Green
