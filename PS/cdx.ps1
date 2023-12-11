@@ -76,9 +76,10 @@ Start-Sleep 5
     $users  = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "startsWith(DisplayName, 'Account')" -OrderBy UserPrincipalName
 
     # Get licenses assigned to user accounts
+    Write-Host
     $i = 1
     foreach ($user in $users) {
-        Write-Host "($i/$($users.Count)) Processing: $($user.UserPrincipalName) - $($user.DisplayName)" -ForegroundColor Green
+        Write-Host "($i/$($users.Count)) Processing: $($user.UserPrincipalName) - $($user.DisplayName)" -ForegroundColor Cyan
         $licenses = (Get-MgBetaUserLicenseDetail -UserId $user.id).SkuPartNumber
         $assignedLicense = @()
     # Convert license plan to friendly name
