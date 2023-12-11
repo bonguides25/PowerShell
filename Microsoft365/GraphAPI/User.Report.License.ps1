@@ -71,3 +71,5 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
         $filePath = "$env:TEMP\temp\Result-$(Get-Date -Format yyyy-mm-dd-hh-mm-ss).csv"
         $result | Export-CSV $filePath -NoTypeInformation -Encoding UTF8
         Write-Host "The report is saved to: $filePath `n" -ForegroundColor Cyan
+
+    Invoke-Item "$env:TEMP\temp"
