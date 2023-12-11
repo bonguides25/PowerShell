@@ -14,8 +14,8 @@ Script Highlights:
 param (
     [switch]$InstallMainBasic,
     [switch]$InstallMainAll,
-    [switch]$InstallBetaBasic,
-    [switch]$InstallBetaAll
+    [switch]$OutCSV,
+    [switch]$OutGridView
 )
 
 if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
@@ -25,10 +25,16 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
 }
 
 
-    # Output options to console, graphical grid view or export to CSV file.
-        # $result | Sort-Object assignedlicenses -Descending 
-        # $result | Out-GridView
-        New-Item -Path "$env:TEMP\temp" -ItemType Directory -Force | Out-Null
-        $filePath = "$env:TEMP\temp\Result-$(Get-Date -Format yyyy-mm-dd-hh-mm-ss).csv"
-        $result | Export-CSV $filePath -NoTypeInformation -Encoding UTF8
-        Write-Host "The report is saved to: $filePath `n" -ForegroundColor Cyan
+# Output options to console, graphical grid view or export to CSV file.
+if($OutCSV.IsPresent) {
+    # $result | Sort-Object assignedlicenses -Descending 
+    # $result | Out-GridView
+    $filePath = "$env:userprofile\desktop\Result-$(Get-Date -Format yyyy-mm-dd-hh-mm-ss).csv"
+    $result | Export-CSV $filePath -NoTypeInformation -Encoding UTF8
+    Write-Host "`nThe report is saved to: $filePath `n" -ForegroundColor Cyan
+    Invoke-Item "$env:userprofile\desktop"
+} elseif ($OutGridView.IsPresent) {
+    $output | Out-GridView
+} else {
+    $output | Format-Table
+}
