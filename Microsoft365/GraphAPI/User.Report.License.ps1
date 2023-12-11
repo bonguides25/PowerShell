@@ -67,9 +67,8 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     # Output options to console, graphical grid view or export to CSV file.
         # $result | Sort-Object assignedlicenses -Descending 
         # $result | Out-GridView
-        New-Item -Path "$env:TEMP\temp" -ItemType Directory -Force | Out-Null
-        $filePath = "$env:TEMP\temp\Result-$(Get-Date -Format yyyy-mm-dd-hh-mm-ss).csv"
+        $filePath = "$env:userprofile\desktop\Result-$(Get-Date -Format yyyy-mm-dd-hh-mm-ss).csv"
         $result | Export-CSV $filePath -NoTypeInformation -Encoding UTF8
         Write-Host "The report is saved to: $filePath `n" -ForegroundColor Cyan
 
-    Invoke-Item "$env:TEMP\temp"
+    Invoke-Item "$env:userprofile\desktop"
