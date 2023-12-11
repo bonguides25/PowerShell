@@ -24,6 +24,9 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     break
 }
 
+# Install the required Microsoft Graph PowerShell SDK modules
+    Set-ExecutionPolicy Bypass -Scope Process -Force | Out-Null
+    iex "& { $(irm bonguides.com/graph/modulesinstall) } -InstallMainBasic"
 
 # Output options to console, graphical grid view or export to CSV file.
 if($OutCSV.IsPresent) {
