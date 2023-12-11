@@ -27,7 +27,6 @@ foreach ($sku in $skus) {
     $output += $skuDetails
 }
 
-
 if($OutCSV.IsPresent) {
     # $result | Sort-Object assignedlicenses -Descending 
     # $result | Out-GridView
