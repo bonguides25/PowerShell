@@ -60,7 +60,7 @@ foreach ($user in $users) {
 Write-Host
 $i = 1
 foreach ($user in $users) {
-    Write-Host "($i/$($users.Count)) Adding account to group: $($user.UserPrincipalName)" -ForegroundColor Green
+    Write-Host "($i/$($users.Count)) Adding account to group: $($user.UserPrincipalName)" -ForegroundColor Pink
     New-MgGroupMember -GroupId $groupId -DirectoryObjectId $($user.Id) | Out-Null
     $i++
     Start-Sleep 1
