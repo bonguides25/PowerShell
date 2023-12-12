@@ -240,7 +240,7 @@ $appName =  "testapp"
         # scriptContent = [System.Text.Encoding]::ASCII.GetBytes("c2NyaXB0Q29udGVudA==")
         scriptContent = [System.Text.Encoding]::ASCII.GetBytes("$scriptContent")
         runAsAccount = "system"
-        enforceSignatureCheck = $true
+        enforceSignatureCheck = $false
         fileName = "all.ps1"
         roleScopeTagIds = @(
         )
