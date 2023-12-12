@@ -18,7 +18,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
 
 # Install the required Microsoft Graph PowerShell SDK modules
     Set-ExecutionPolicy Bypass -Scope Process -Force | Out-Null
-    iex "& { $(irm bonguides.com/graph/modulesinstall) } -InstallBetaBasic"
+    iex "& { $(irm bonguides.com/graph/modulesinstall) } -InstallBasic"
 
 # Get user report with license assigments and account status
     $result = @()

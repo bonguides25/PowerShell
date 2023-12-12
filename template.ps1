@@ -12,8 +12,8 @@ Script Highlights:
 ============================================================================================#>
 
 param (
-    [switch]$InstallMainBasic,
-    [switch]$InstallMainAll,
+    [switch]$InstallBasic,
+    [switch]$InstallnAll,
     [switch]$OutCSV,
     [switch]$OutGridView
 )

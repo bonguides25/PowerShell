@@ -8,10 +8,8 @@ Description  : Install Microsoft Graph PowerShell SDK
 ============================================================================================#>
 
 param (
-    [switch]$InstallMainBasic,
-    [switch]$InstallMainAll,
-    [switch]$InstallBetaBasic,
-    [switch]$InstallBetaAll
+    [switch]$InstallBasic,
+    [switch]$InstallAll
 )
 
 # Required running with elevated right.
