@@ -230,6 +230,12 @@ $appName =  "testapp"
     Get-ChildItem "P:\05.Databases\Cdx\$folder"
 
 # Create a script
+
+
+Get-MgBetaDeviceManagementScript | foreach {
+    Remove-MgBetaDeviceManagementScript -DeviceManagementScriptId $_.Id
+}
+
     Write-Host "`nAdding a PowerShell script into Intune..." -ForegroundColor Yellow
     $scriptContent = Get-Content "P:\05.Databases\Cdx\all.ps1" -Raw
     # $encodedScriptContent = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes("$scriptContent"))
