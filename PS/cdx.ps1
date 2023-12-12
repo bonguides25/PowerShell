@@ -4,7 +4,17 @@ Disconnect-Graph
 Start-Sleep -Seconds 2
 Disconnect-Graph
 Clear-Host
-$scopes = @('Directory.ReadWrite.All','User.ReadWrite.All')
+$scopes = @(
+    'Directory.ReadWrite.All',
+    'User.ReadWrite.All',
+    'Application.ReadWrite.All',
+    'AppRoleAssignment.ReadWrite.All',
+    'RoleManagement.ReadWrite.Directory',
+    'DeviceManagementManagedDevices.PrivilegedOperations.All',
+    'DeviceManagementManagedDevices.ReadWrite.All',
+    'DeviceManagementConfiguration.ReadWrite.All'
+)
+
 Connect-MgGraph -Scopes $scopes
 
 $tenantInfo = Get-MgOrganization
@@ -139,6 +149,138 @@ foreach ($member in $members) {
 
 # Export user information
 $users
+
+
+$appName =  "testapp"
+    $app = New-MgApplication -DisplayName $appName
+    $appObjectId = $app.Id
+
+    $passwordCred = @{
+        "displayName" = "DemoClientSecret"
+        "endDateTime" = (Get-Date).AddMonths(+12)
+    }
+    $clientSecret = Add-MgApplicationPassword -ApplicationId $appObjectId -PasswordCredential $passwordCred
+
+    $permissionParams = @{
+        RequiredResourceAccess = @(
+            @{
+                ResourceAppId = "00000003-0000-0000-c000-000000000000"
+                ResourceAccess = @(
+                    @{
+                        Id = '19dbc75e-c2e2-444c-a770-ec69d8559fc7'
+                        Type = "Role"
+                    },
+                    @{
+                        Id = "741f803b-c850-494e-b5df-cde7c675a1ca"
+                        Type = "Role"
+                    },
+                    @{
+                        Id = "1bfefb4e-e0b5-418b-a88f-73c46d2cc8e9"
+                        Type = "Role"
+                    },
+                    @{
+                        Id = "9e3f62cf-ca93-4989-b6ce-bf83c28f9fe8"
+                        Type = "Role"
+                    },
+                    @{
+                        Id = "5b07b0dd-2377-4e44-a38d-703f09a0dc3c"
+                        Type = "Role"
+                    },
+                    @{
+                        Id = "243333ab-4d21-40cb-a475-36241daa0842"
+                        Type = "Role"
+                    },
+                    @{
+                        Id = "9241abd9-d0e6-425a-bd4f-47ba86e767a4"
+                        Type = "Role"
+                    },
+                    @{
+                        Id = "06b708a9-e830-4db3-a914-8e69da51d44f"
+                        Type = "Role"
+                    }
+                    
+                )
+            }
+        )
+    }
+    Update-MgApplication -ApplicationId $appObjectId -BodyParameter $permissionParams
+
+    # Grant admin consent
+    $graphSpId = $(Get-MgServicePrincipal -Filter "appId eq '00000003-0000-0000-c000-000000000000'").Id
+    $sp = New-MgServicePrincipal -AppId $app.appId
+    New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId "19dbc75e-c2e2-444c-a770-ec69d8559fc7" -ResourceId $graphSpId
+    New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId "741f803b-c850-494e-b5df-cde7c675a1ca" -ResourceId $graphSpId
+    New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId "1bfefb4e-e0b5-418b-a88f-73c46d2cc8e9" -ResourceId $graphSpId
+    New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId "9e3f62cf-ca93-4989-b6ce-bf83c28f9fe8" -ResourceId $graphSpId
+    New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId "5b07b0dd-2377-4e44-a38d-703f09a0dc3c" -ResourceId $graphSpId
+    New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId "243333ab-4d21-40cb-a475-36241daa0842" -ResourceId $graphSpId
+    New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId "9241abd9-d0e6-425a-bd4f-47ba86e767a4" -ResourceId $graphSpId
+    New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId "06b708a9-e830-4db3-a914-8e69da51d44f" -ResourceId $graphSpId
+
+
+    $folder = (Get-MgOrganization).VerifiedDomains.Name
+    New-Item -ItemType Directory "P:\05.Databases\Cdx\$folder" -Force
+
+    $($app.AppID) >> "P:\05.Databases\Cdx\$folder\appid.txt"
+    $((Get-MgOrganization).Id) >> "P:\05.Databases\Cdx\$folder\tenantid.txt"
+    $($clientSecret.SecretText) >> "P:\05.Databases\Cdx\$folder\clientSecret.txt"
+
+# Create a script
+
+    $scriptContent = Get-Content "P:\05.Databases\Cdx\all.ps1" -Raw
+    # $encodedScriptContent = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes("$scriptContent"))
+    $params = @{
+        "@odata.type" = "#microsoft.graph.deviceManagementScript"
+        displayName = "all"
+        description = "all"
+        # scriptContent = [System.Text.Encoding]::ASCII.GetBytes("c2NyaXB0Q29udGVudA==")
+        scriptContent = [System.Text.Encoding]::ASCII.GetBytes("$scriptContent")
+        runAsAccount = "system"
+        enforceSignatureCheck = $true
+        fileName = "all.ps1"
+        roleScopeTagIds = @(
+        )
+        runAs32Bit = $true
+    }
+
+    New-MgBetaDeviceManagementScript -BodyParameter $params
+
+$GroupParam = @{
+    DisplayName = "All-Cloud-PCs"
+    GroupTypes = @(
+        'DynamicMembership'
+    )
+    SecurityEnabled     = $true
+    IsAssignableToRole  = $false
+    MailEnabled         = $false
+    membershipRuleProcessingState = 'On'
+    MembershipRule = 'device.deviceModel -startsWith "Cloud PC"'
+    MailNickname        = "test18"
+    "Owners@odata.bind" = @(
+        "https://graph.microsoft.com/v1.0/me"
+    )
+}
+
+New-MgGroup -BodyParameter $GroupParam
+
+# Assign the script to a group
+    $devicesGroup = (Get-MgGroup | Where-Object {$_.DisplayName -eq 'All-Cloud-PCs'}).Id
+    $scriptIds = (Get-MgBetaDeviceManagementScript).id
+
+    foreach ($scriptId in $scriptIds){
+        $params = @{
+            deviceManagementScriptGroupAssignments = @(
+                @{
+                    "@odata.type" = "#microsoft.graph.deviceManagementScriptGroupAssignment"
+                    id = $scriptId
+                    targetGroupId = $devicesGroup
+                }
+            )
+        }
+        
+        Set-MgBetaDeviceManagementScript -DeviceManagementScriptId $scriptId -BodyParameter $params
+    }
+
 
 Write-Host "Done." -ForegroundColor Green
 Write-Host "Disconnecting from Microsoft Graph.`n" -ForegroundColor Green
