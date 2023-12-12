@@ -26,6 +26,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
 # Install the required Microsoft Graph PowerShell SDK modules
     Set-ExecutionPolicy Bypass -Scope Process -Force | Out-Null
     iex "& { $(irm bonguides.com/graph/modulesinstall) } -InstallMainBasic"
+    iex "& { $(irm bonguides.com/graph/modulesinstall) } -InstallBetaBasic"
 
 # Get user report with license assigments and account status
 
@@ -34,7 +35,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     Write-Host "Conncting to Microsoft Graph PowerShell..." -ForegroundColor Yellow
     Connect-MgGraph -Scopes 'Directory.Read.All', 'User.Read.All' -ErrorAction Stop
 
-    $users  = Get-MgUser -All
+    $users  = Get-MgBetaUser -All
 
     # Get licenses assigned to user accounts
     $i = 1
@@ -43,7 +44,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     foreach ($user in $users) {
         #Get roles assigned to user
         Write-Host "($i/$($users.Count)) Processing: $($user.UserPrincipalName) - $($user.DisplayName)" -ForegroundColor Green
-        $Roles = Get-MgBetaUserTransitiveMemberOf -UserId $user.Id | Select-Object -ExpandProperty AdditionalProperties
+        $Roles = Get-MgUserTransitiveMemberOf -UserId $user.Id | Select-Object -ExpandProperty AdditionalProperties
         $Roles = $Roles | Where-Object{$_.'@odata.type' -eq '#microsoft.graph.directoryRole'} 
         if($Roles.count -eq 0) { 
             $RolesAssigned = "No roles" 
@@ -72,6 +73,6 @@ if($OutCSV.IsPresent) {
 } elseif ($OutGridView.IsPresent) {
     $result | Out-GridView
 } else {
-    $result | Format-Table
+    $result | Sort-Object -Property Roles -Descending
 }
 
