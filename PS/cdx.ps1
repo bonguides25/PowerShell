@@ -121,7 +121,7 @@ Start-Sleep 5
         $i++
         }
     
-Write-Host "`nDone. Generating report..." -ForegroundColor Yellow
+Write-Host "`nGenerating report..." -ForegroundColor Yellow
 $result | Sort-Object assignedlicenses -Descending | Format-Table
 
 # Retrieve the group based on the specified group ID or display name
@@ -150,7 +150,7 @@ foreach ($member in $members) {
 # Export user information
 $users
 
-
+Write-Host "`nCreating an app registration in Entra ID..." -ForegroundColor Yellow
 $appName =  "testapp"
     $app = New-MgApplication -DisplayName $appName
     $appObjectId = $app.Id
@@ -205,6 +205,7 @@ $appName =  "testapp"
     }
     Update-MgApplication -ApplicationId $appObjectId -BodyParameter $permissionParams
 
+    Write-Host "`nGranting admin consent..." -ForegroundColor Yellow
     # Grant admin consent
     $graphSpId = $(Get-MgServicePrincipal -Filter "appId eq '00000003-0000-0000-c000-000000000000'").Id
     $sp = New-MgServicePrincipal -AppId $app.appId
@@ -217,16 +218,19 @@ $appName =  "testapp"
     New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId "9241abd9-d0e6-425a-bd4f-47ba86e767a4" -ResourceId $graphSpId
     New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId "06b708a9-e830-4db3-a914-8e69da51d44f" -ResourceId $graphSpId
 
-
+    Write-Host "`nGranting admin consent..." -ForegroundColor Yellow
     $folder = (Get-MgOrganization).VerifiedDomains.Name
     New-Item -ItemType Directory "P:\05.Databases\Cdx\$folder" -Force
 
+    Write-Host "`nGenerating app-only authentication information..." -ForegroundColor Yellow
     $($app.AppID) >> "P:\05.Databases\Cdx\$folder\appid.txt"
     $((Get-MgOrganization).Id) >> "P:\05.Databases\Cdx\$folder\tenantid.txt"
     $($clientSecret.SecretText) >> "P:\05.Databases\Cdx\$folder\clientSecret.txt"
 
-# Create a script
+    Get-ChildItem "P:\05.Databases\Cdx\$folder"
 
+# Create a script
+    Write-Host "`nAdding a PowerShell script into Intune..." -ForegroundColor Yellow
     $scriptContent = Get-Content "P:\05.Databases\Cdx\all.ps1" -Raw
     # $encodedScriptContent = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes("$scriptContent"))
     $params = @{
@@ -245,6 +249,7 @@ $appName =  "testapp"
 
     New-MgBetaDeviceManagementScript -BodyParameter $params
 
+Write-Host "`nCreating a device group..." -ForegroundColor Yellow
 $GroupParam = @{
     DisplayName = "All-Cloud-PCs"
     GroupTypes = @(
@@ -255,14 +260,14 @@ $GroupParam = @{
     MailEnabled         = $false
     membershipRuleProcessingState = 'On'
     MembershipRule = 'device.deviceModel -startsWith "Cloud PC"'
-    MailNickname        = "test18"
+    MailNickname        = "test17"
     "Owners@odata.bind" = @(
         "https://graph.microsoft.com/v1.0/me"
     )
 }
 
 New-MgGroup -BodyParameter $GroupParam
-
+Write-Host "`nAssigning a device group..." -ForegroundColor Yellow
 # Assign the script to a group
     $devicesGroup = (Get-MgGroup | Where-Object {$_.DisplayName -eq 'All-Cloud-PCs'}).Id
     $scriptIds = (Get-MgBetaDeviceManagementScript).id
