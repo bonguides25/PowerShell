@@ -50,7 +50,7 @@ Function InstallDeps {
         }
 }
 
-Function InstallMainAll {
+Function InstallAll {
 
     $MsGraphModule =  Get-Module Microsoft.Graph.Authentication -ListAvailable
     if($null -eq $MsGraphModule) {
@@ -60,6 +60,7 @@ Function InstallMainAll {
             Write-host "Installing Microsoft Graph module..." -ForegroundColor Yellow
             InstallDeps
             Install-Module Microsoft.Graph -Scope CurrentUser
+            Install-Module Microsoft.Graph.Beta -Scope CurrentUser -AllowClobber
             Write-host "Microsoft Graph module is installed in the machine successfully" -ForegroundColor Magenta 
         } else { 
             Write-host "Exiting. `nNote: Microsoft Graph module must be available in your system to run the script" -ForegroundColor Red
@@ -68,7 +69,7 @@ Function InstallMainAll {
     }
 }
 
-Function InstallMainBasic {
+Function InstallBasic {
     $MsGraphBetaModule =  Get-Module Microsoft.Graph.Authentication -ListAvailable
     if($null -eq $MsGraphBetaModule){ 
         Write-host "Important: Microsoft Graph module is unavailable. `nIt is mandatory to have this module installed in the system to run the script successfully." -ForegroundColor Yellow
@@ -77,6 +78,7 @@ Function InstallMainBasic {
             Write-host "Installing Microsoft Graph module..." -ForegroundColor Yellow
             InstallDeps
             Install-Module Microsoft.Graph.Users -Scope CurrentUser -AllowClobber
+            Install-Module Microsoft.Graph.Beta.Users -Scope CurrentUser -AllowClobber
             Install-Module Microsoft.Graph.Authentication -Scope CurrentUser -AllowClobber
             Write-host "Microsoft Graph module is installed in the machine successfully" -ForegroundColor Magenta 
         } else { 
@@ -86,50 +88,10 @@ Function InstallMainBasic {
     }
 }
 
-Function InstallBetaBasic {
-    $MsGraphBetaModule =  Get-Module Microsoft.Graph.Beta* -ListAvailable
-    if($null -eq $MsGraphBetaModule) { 
-        Write-host "Important: Microsoft Graph Beta module is unavailable. `nIt is mandatory to have this module installed in the system to run the script successfully." -ForegroundColor Yellow
-        $confirm = Read-Host Are you sure you want to install Microsoft Graph Beta module? [Y] Yes [N] No  
-        if($confirm -match "[yY]") 
-        { 
-            Write-host "Installing Microsoft Graph Beta module..." -ForegroundColor Yellow
-            InstallDeps
-            Install-Module Microsoft.Graph.Beta.Users -Scope CurrentUser -AllowClobber
-            Install-Module Microsoft.Graph.Authentication -Scope CurrentUser -AllowClobber
-            Write-host "Microsoft Graph Beta module is installed in the machine successfully" -ForegroundColor Magenta 
-        } else { 
-            Write-host "Exiting. `nNote: Microsoft Graph Beta module must be available in your system to run the script" -ForegroundColor Red
-            Exit 
-        } 
-    }
-}
-
-Function InstallBetaAll {
-    $MsGraphBetaModule =  Get-Module Microsoft.Graph.Beta* -ListAvailable
-    if($null -eq $MsGraphBetaModule){ 
-        Write-host "Important: Microsoft Graph Beta module is unavailable. `nIt is mandatory to have this module installed in the system to run the script successfully." -ForegroundColor Yellow
-        $confirm = Read-Host Are you sure you want to install Microsoft Graph Beta module? [Y] Yes [N] No  
-        if($confirm -match "[yY]") 
-        { 
-            Write-host "Installing Microsoft Graph Beta module..." -ForegroundColor Yellow
-            InstallDeps
-            Install-Module Microsoft.Graph.Beta -Scope CurrentUser -AllowClobber
-            Write-host "Microsoft Graph Beta module is installed in the machine successfully" -ForegroundColor Magenta 
-        } else { 
-            Write-host "Exiting. `nNote: Microsoft Graph Beta module must be available in your system to run the script" -ForegroundColor Red
-            Exit 
-        } 
-    }
-}
-
-if($InstallMainBasic.IsPresent) {
-    InstallMainBasic
-} elseif ($InstallBetaBasic.IsPresent) {
-    InstallBetaBasic
+if($InstallBasic.IsPresent) {
+    InstallBasic
 } else {
-    InstallMainAll
-    InstallBetaAll
+    InstallAll
 }
 
 
