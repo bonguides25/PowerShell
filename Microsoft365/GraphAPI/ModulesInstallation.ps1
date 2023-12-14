@@ -89,7 +89,7 @@ Function InstallBasic {
 
 
 Function InstallLicMgmt {
-    $MsGraphBetaModule =  Get-Module Microsoft.Graph.Authentication -ListAvailable
+    $MsGraphBetaModule =  Get-Module Microsoft.Graph.Beta.Identit* -ListAvailable
     if($null -eq $MsGraphBetaModule){ 
         Write-host "Important: Microsoft Graph module is unavailable. `nIt is mandatory to have this module installed in the system to run the script successfully." -ForegroundColor Yellow
         $confirm = Read-Host Are you sure you want to install Microsoft Graph module? [Y] Yes [N] No  
