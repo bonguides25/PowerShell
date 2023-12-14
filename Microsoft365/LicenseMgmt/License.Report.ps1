@@ -25,6 +25,11 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     Set-ExecutionPolicy Bypass -Scope Process -Force | Out-Null
     iex "& { $(irm bonguides.com/graph/modulesinstall) } -InstallBasic"
 
+# Connect to Microsoft Graph
+    Disconnect-MgGraph -ErrorAction:SilentlyContinue | Out-Null
+    Write-Host "Conncting to Microsoft Graph PowerShell..." -ForegroundColor Yellow
+    Connect-MgGraph -Scopes "Directory.Read.All" -ErrorAction Stop
+
 # Caching the information into variables
     $skus = Get-MgSubscribedSku -All
     $renewalData = Get-MgBetaDirectorySubscription -All
