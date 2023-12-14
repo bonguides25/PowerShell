@@ -51,7 +51,7 @@ Function InstallDeps {
 
 Function InstallAll {
 
-    $MsGraphModule =  Get-Module Microsoft.Graph.Authentication -ListAvailable
+    $MsGraphModule =  Get-Module Microsoft.Graph.Beta -ListAvailable
     if($null -eq $MsGraphModule) {
         Write-host "Important: Microsoft Graph module is unavailable. `nIt is mandatory to have this module installed in the system to run the script successfully." -ForegroundColor Yellow
         $confirm = Read-Host Are you sure you want to install Microsoft Graph module? [Y] Yes [N] No  
@@ -69,7 +69,7 @@ Function InstallAll {
 }
 
 Function InstallBasic {
-    $MsGraphBetaModule =  Get-Module Microsoft.Graph.Authentication -ListAvailable
+    $MsGraphBetaModule =  Get-Module Microsoft.Graph.Beta.Us* -ListAvailable
     if($null -eq $MsGraphBetaModule){ 
         Write-host "Important: Microsoft Graph module is unavailable. `nIt is mandatory to have this module installed in the system to run the script successfully." -ForegroundColor Yellow
         $confirm = Read-Host Are you sure you want to install Microsoft Graph module? [Y] Yes [N] No  
