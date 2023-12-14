@@ -97,6 +97,7 @@ Function InstallLicMgmt {
             Write-host "Installing Microsoft Graph module..." -ForegroundColor Yellow
             InstallDeps
             Install-Module Microsoft.Graph.Beta.Identity.DirectoryManagement -Scope CurrentUser -AllowClobber
+            Install-Module Microsoft.Graph.Identity.DirectoryManagement -Scope CurrentUser -AllowClobber
             Install-Module Microsoft.Graph.Authentication -Scope CurrentUser -AllowClobber
             Write-host "Microsoft Graph module is installed in the machine successfully" -ForegroundColor Magenta 
         } else { 
