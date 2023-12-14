@@ -62,11 +62,11 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
 # Output options to console, graphical grid view or export to CSV file
     if($OutCSV.IsPresent) {
         $filePath = "$env:userprofile\desktop\result-$(Get-Date -Format yyyy-mm-dd-hh-mm-ss).csv"
-        $result | Export-CSV $filePath -NoTypeInformation -Encoding UTF8
+        $skuReport | Export-CSV $filePath -NoTypeInformation -Encoding UTF8
         Write-Host "`nThe report is saved to: $filePath `n" -ForegroundColor Cyan
         Invoke-Item "$env:userprofile\desktop"
     } elseif ($OutGridView.IsPresent) {
-        $result | Out-GridView
+        $skuReport | Out-GridView
     } else {
-        $result | Sort-Object -Property Roles -Descending
+        $skuReport | Sort-Object -Property Roles -Descending
     }
