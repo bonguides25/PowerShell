@@ -108,6 +108,8 @@ Function InstallLicMgmt {
 
 if($InstallBasic.IsPresent) {
     InstallBasic
+} elseif ($InstallLicMgmt.IsPresent) {
+    InstallLicMgmt
 } else {
     InstallAll
 }
