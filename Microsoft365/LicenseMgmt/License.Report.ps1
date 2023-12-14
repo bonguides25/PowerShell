@@ -23,7 +23,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
 
 # Install the required Microsoft Graph PowerShell SDK modules
     Set-ExecutionPolicy Bypass -Scope Process -Force | Out-Null
-    iex "& { $(irm bonguides.com/graph/modulesinstall) } -InstallBasic"
+    iex "& { $(irm bonguides.com/graph/modulesinstall) } -InstallLicMgmt"
 
 # Connect to Microsoft Graph
     Disconnect-MgGraph -ErrorAction:SilentlyContinue | Out-Null
