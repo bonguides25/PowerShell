@@ -9,7 +9,8 @@ Description  : Install Microsoft Graph PowerShell SDK
 
 param (
     [switch]$InstallBasic,
-    [switch]$InstallAll
+    [switch]$InstallAll,
+    [switch]$InstallLicMgmt
 )
 
 # Required running with elevated right.
@@ -77,6 +78,25 @@ Function InstallBasic {
             InstallDeps
             Install-Module Microsoft.Graph.Users -Scope CurrentUser -AllowClobber
             Install-Module Microsoft.Graph.Beta.Users -Scope CurrentUser -AllowClobber
+            Install-Module Microsoft.Graph.Authentication -Scope CurrentUser -AllowClobber
+            Write-host "Microsoft Graph module is installed in the machine successfully" -ForegroundColor Magenta 
+        } else { 
+            Write-host "Exiting. `nNote: Microsoft Graph module must be available in your system to run the script" -ForegroundColor Red
+            Exit 
+        } 
+    }
+}
+
+
+Function InstallLicMgmt {
+    $MsGraphBetaModule =  Get-Module Microsoft.Graph.Authentication -ListAvailable
+    if($null -eq $MsGraphBetaModule){ 
+        Write-host "Important: Microsoft Graph module is unavailable. `nIt is mandatory to have this module installed in the system to run the script successfully." -ForegroundColor Yellow
+        $confirm = Read-Host Are you sure you want to install Microsoft Graph module? [Y] Yes [N] No  
+        if($confirm -match "[yY]") { 
+            Write-host "Installing Microsoft Graph module..." -ForegroundColor Yellow
+            InstallDeps
+            Install-Module Microsoft.Graph.Beta.Identity.DirectoryManagement -Scope CurrentUser -AllowClobber
             Install-Module Microsoft.Graph.Authentication -Scope CurrentUser -AllowClobber
             Write-host "Microsoft Graph module is installed in the machine successfully" -ForegroundColor Magenta 
         } else { 
