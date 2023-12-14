@@ -68,5 +68,5 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     } elseif ($OutGridView.IsPresent) {
         $skuReport | Out-GridView
     } else {
-        $skuReport | Sort-Object -Property Roles -Descending
+        $skuReport | Format-Table
     }
