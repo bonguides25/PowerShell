@@ -29,7 +29,7 @@ Function InstallDeps {
         $nuGetPath = "C:\Program Files\PackageManagement\ProviderAssemblies\nuget\*\Microsoft.PackageManagement.NuGetProvider.dll"
         $testPath = Test-Path -Path $nuGetPath
         if ($testPath -match 'false') {
-            Write-Host "Installing NuGet Provider..." -ForegroundColor Yellow
+            # Write-Host "Installing NuGet Provider..." -ForegroundColor Yellow
             Install-PackageProvider -Name NuGet -Force | Out-Null
         }
 
@@ -37,14 +37,14 @@ Function InstallDeps {
         $PSGetCurrentVersion = (Get-PackageProvider -Name 'PowerShellGet').Version
         $PSGetLatestVersion = (Find-Module PowerShellGet).Version
         if ($PSGetCurrentVersion -lt $PSGetLatestVersion) {
-            Write-Host "Updating PowerShellGet Module from $PSGetCurrentVersion to $PSGetLatestVersion..." -ForegroundColor Yellow
+            # Write-Host "Updating PowerShellGet Module from $PSGetCurrentVersion to $PSGetLatestVersion..." -ForegroundColor Yellow
             Install-Module -Name 'PowerShellGet' -Force
         }
 
     # We're installing from the PowerShell Gallery so make sure that it's trusted.
         $InstallationPolicy = (Get-PSRepository -Name PSGallery).InstallationPolicy
         if ($InstallationPolicy -match "Untrusted") {
-            Write-host "Configuring the PowerShell Gallery Repository..." -ForegroundColor Yellow
+            # Write-host "Configuring the PowerShell Gallery Repository..." -ForegroundColor Yellow
             Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
         }
 }
