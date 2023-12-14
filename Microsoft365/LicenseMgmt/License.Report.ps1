@@ -26,35 +26,42 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     iex "& { $(irm bonguides.com/graph/modulesinstall) } -InstallBasic"
 
 # Caching the information into variables
-$skus = Get-MgSubscribedSku -All
-$renewalData = Get-MgBetaDirectorySubscription -All
-$translationTable = Invoke-RestMethod -Method GET -Uri "https://bonguides.com/ms/skus" | ConvertFrom-Csv
+    $skus = Get-MgSubscribedSku -All
+    $renewalData = Get-MgBetaDirectorySubscription -All
+    $translationTable = Invoke-RestMethod -Method GET -Uri "https://bonguides.com/ms/skus" | ConvertFrom-Csv
 
 # Create the report with the renewal information
-$skuReport = @()
-foreach ($sku in $skus) {
-    $expireDate = $renewalData | Where-Object {$_.skuId -match $($sku.SkuId)}
-    $skuNamePretty = ($translationTable | Where-Object {$_.GUID -eq $sku.skuId} | Sort-Object Product_Display_Name -Unique).Product_Display_Name
+    $skuReport = @()
+    foreach ($sku in $skus) {
+        $expireDate = $renewalData | Where-Object {$_.skuId -match $($sku.SkuId)}
+        $skuNamePretty = ($translationTable | Where-Object {$_.GUID -eq $sku.skuId} | Sort-Object Product_Display_Name -Unique).Product_Display_Name
 
-    if ($expireDate.nextLifecycleDateTime) {
-        $DaysToRenewal = ($expireDate.nextLifecycleDateTime - $((Get-Date).Date)).Days
+        if ($expireDate.nextLifecycleDateTime) {
+            $DaysToRenewal = ($expireDate.nextLifecycleDateTime - $((Get-Date).Date)).Days
+        } else {
+            $DaysToRenewal = $null
+        }
+
+        $object = [PSCustomObject][Ordered]@{
+            LicenseName   = $skuNamePretty
+            SkuPartNumber = $Sku.SkuPartNumber
+            SkuId         = $Sku.SkuId
+            ActiveUnits   = $Sku.PrepaidUnits.Enabled
+            ConsumedUnits = $Sku.ConsumedUnits
+            RenewalDate   = $expireDate.nextLifecycleDateTime
+            DaysToRenewal = $DaysToRenewal
+        }
+        $skuReport += $object
+    }
+
+# Output options to console, graphical grid view or export to CSV file
+    if($OutCSV.IsPresent) {
+        $filePath = "$env:userprofile\desktop\result-$(Get-Date -Format yyyy-mm-dd-hh-mm-ss).csv"
+        $result | Export-CSV $filePath -NoTypeInformation -Encoding UTF8
+        Write-Host "`nThe report is saved to: $filePath `n" -ForegroundColor Cyan
+        Invoke-Item "$env:userprofile\desktop"
+    } elseif ($OutGridView.IsPresent) {
+        $result | Out-GridView
     } else {
-        $DaysToRenewal = $null
+        $result | Sort-Object -Property Roles -Descending
     }
-
-    $object = [PSCustomObject][Ordered]@{
-        LicenseName   = $skuNamePretty
-        SkuPartNumber = $Sku.SkuPartNumber
-        SkuId         = $Sku.SkuId
-        ActiveUnits   = $Sku.PrepaidUnits.Enabled
-        ConsumedUnits = $Sku.ConsumedUnits
-        RenewalDate   = $expireDate.nextLifecycleDateTime
-        DaysToRenewal = $DaysToRenewal
-    }
-    $skuReport += $object
-}
-
-# Output options to console, graphical grid view or export to CSV file.
-$skuReport | Format-Table
-# $skuReport | Out-GridView -Title "License Report"
-# $skuReport | Export-Csv 'C:\Temp\report.csv' -Nti -Encoding UTF8
