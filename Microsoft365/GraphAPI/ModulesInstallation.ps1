@@ -56,7 +56,7 @@ Function InstallAll {
         Write-host "Important: Microsoft Graph module is unavailable. `nIt is mandatory to have this module installed in the system to run the script successfully." -ForegroundColor Yellow
         $confirm = Read-Host Are you sure you want to install Microsoft Graph module? [Y] Yes [N] No  
         if($confirm -match "[yY]") { 
-            Write-host "Installing Microsoft Graph module..." -ForegroundColor Yellow
+            Write-host "`nInstalling Microsoft Graph module..." -ForegroundColor Yellow
             InstallDeps
             Install-Module Microsoft.Graph -Scope CurrentUser
             Install-Module Microsoft.Graph.Beta -Scope CurrentUser -AllowClobber
@@ -74,7 +74,7 @@ Function InstallBasic {
         Write-host "Important: Microsoft Graph module is unavailable. `nIt is mandatory to have this module installed in the system to run the script successfully." -ForegroundColor Yellow
         $confirm = Read-Host Are you sure you want to install Microsoft Graph module? [Y] Yes [N] No  
         if($confirm -match "[yY]") { 
-            Write-host "Installing Microsoft Graph module..." -ForegroundColor Yellow
+            Write-host "`nInstalling Microsoft Graph module..." -ForegroundColor Yellow
             InstallDeps
             Install-Module Microsoft.Graph.Users -Scope CurrentUser -AllowClobber
             Install-Module Microsoft.Graph.Beta.Users -Scope CurrentUser -AllowClobber
@@ -94,7 +94,7 @@ Function InstallLicMgmt {
         Write-host "Important: Microsoft Graph module is unavailable. `nIt is mandatory to have this module installed in the system to run the script successfully." -ForegroundColor Yellow
         $confirm = Read-Host Are you sure you want to install Microsoft Graph module? [Y] Yes [N] No  
         if($confirm -match "[yY]") { 
-            Write-host "Installing Microsoft Graph module..." -ForegroundColor Yellow
+            Write-host "`nInstalling Microsoft Graph module..." -ForegroundColor Yellow
             InstallDeps
             Install-Module Microsoft.Graph.Beta.Identity.DirectoryManagement -Scope CurrentUser -AllowClobber
             Install-Module Microsoft.Graph.Identity.DirectoryManagement -Scope CurrentUser -AllowClobber
