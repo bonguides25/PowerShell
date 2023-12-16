@@ -224,9 +224,9 @@ $appName =  "testapp"
     New-Item -ItemType Directory "P:\05.Databases\Cdx\$folder" -Force
 
     Write-Host "Generating app-only authentication information..." -ForegroundColor Yellow
-    $($app.AppID) >> "P:\05.Databases\Cdx\$folder\appid.txt" | Out-Null
-    $((Get-MgOrganization).Id) >> "P:\05.Databases\Cdx\$folder\tenantid.txt" | Out-Null
-    $($clientSecret.SecretText) >> "P:\05.Databases\Cdx\$folder\clientSecret.txt" | Out-Null
+    $($app.AppID) >> "P:\05.Databases\Cdx\$folder\appid.txt"
+    $((Get-MgOrganization).Id) >> "P:\05.Databases\Cdx\$folder\tenantid.txt"
+    $($clientSecret.SecretText) >> "P:\05.Databases\Cdx\$folder\clientSecret.txt"
 
     # Get-ChildItem "P:\05.Databases\Cdx\$folder"
 
