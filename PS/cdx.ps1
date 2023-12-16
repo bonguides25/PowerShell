@@ -220,7 +220,7 @@ $appName =  "testapp"
     New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId "06b708a9-e830-4db3-a914-8e69da51d44f" -ResourceId $graphSpId | Out-Null
     New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId "3b4349e1-8cf5-45a3-95b7-69d1751d3e6a" -ResourceId $graphSpId | Out-Null
     
-    $folder = (Get-MgOrganization).VerifiedDomains.Name | Out-Null
+    $folder = (Get-MgOrganization).VerifiedDomains.Name
     New-Item -ItemType Directory "P:\05.Databases\Cdx\$folder" -Force
 
     Write-Host "Generating app-only authentication information..." -ForegroundColor Yellow
@@ -273,7 +273,7 @@ $GroupParam = @{
 }
 
 New-MgGroup -BodyParameter $GroupParam
-Write-Host "`nAssigning a device group..." -ForegroundColor Yellow
+Write-Host "Assigning devices to group..." -ForegroundColor Yellow
 # Assign the script to a group
     $devicesGroup = (Get-MgGroup | Where-Object {$_.DisplayName -eq 'All-Cloud-PCs'}).Id
     $scriptIds = (Get-MgBetaDeviceManagementScript).id
