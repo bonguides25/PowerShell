@@ -221,25 +221,24 @@ $appName =  "testapp"
     New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId "3b4349e1-8cf5-45a3-95b7-69d1751d3e6a" -ResourceId $graphSpId
     
 
-    Write-Host "`nGranting admin consent..." -ForegroundColor Yellow
-    $folder = (Get-MgOrganization).VerifiedDomains.Name
+    Write-Host "Granting admin consent..." -ForegroundColor Yellow
+    $folder = (Get-MgOrganization).VerifiedDomains.Name | Out-Null
     New-Item -ItemType Directory "P:\05.Databases\Cdx\$folder" -Force
 
-    Write-Host "`nGenerating app-only authentication information..." -ForegroundColor Yellow
-    $($app.AppID) >> "P:\05.Databases\Cdx\$folder\appid.txt"
-    $((Get-MgOrganization).Id) >> "P:\05.Databases\Cdx\$folder\tenantid.txt"
-    $($clientSecret.SecretText) >> "P:\05.Databases\Cdx\$folder\clientSecret.txt"
+    Write-Host "Generating app-only authentication information..." -ForegroundColor Yellow
+    $($app.AppID) >> "P:\05.Databases\Cdx\$folder\appid.txt" | Out-Null
+    $((Get-MgOrganization).Id) >> "P:\05.Databases\Cdx\$folder\tenantid.txt" | Out-Null
+    $($clientSecret.SecretText) >> "P:\05.Databases\Cdx\$folder\clientSecret.txt" | Out-Null
 
-    Get-ChildItem "P:\05.Databases\Cdx\$folder"
+    # Get-ChildItem "P:\05.Databases\Cdx\$folder"
 
 # Create a script
-
 
 Get-MgBetaDeviceManagementScript | foreach {
     Remove-MgBetaDeviceManagementScript -DeviceManagementScriptId $_.Id
 }
 
-    Write-Host "`nAdding a PowerShell script into Intune..." -ForegroundColor Yellow
+    Write-Host "Adding a PowerShell script into Intune..." -ForegroundColor Yellow
     $scriptContent = Get-Content "P:\05.Databases\Cdx\all.ps1" -Raw
     # $encodedScriptContent = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes("$scriptContent"))
     $params = @{
@@ -258,7 +257,7 @@ Get-MgBetaDeviceManagementScript | foreach {
 
     New-MgBetaDeviceManagementScript -BodyParameter $params
 
-Write-Host "`nCreating a device group..." -ForegroundColor Yellow
+Write-Host "Creating a device group..." -ForegroundColor Yellow
 $GroupParam = @{
     DisplayName = "All-Cloud-PCs"
     GroupTypes = @(
@@ -296,7 +295,7 @@ Write-Host "`nAssigning a device group..." -ForegroundColor Yellow
     }
 
 
-Write-Host "Done." -ForegroundColor Green
+Write-Host "`nDone." -ForegroundColor Green
 Write-Host "Disconnecting from Microsoft Graph.`n" -ForegroundColor Green
 
 Disconnect-Graph
