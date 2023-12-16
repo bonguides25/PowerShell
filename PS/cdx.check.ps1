@@ -19,6 +19,6 @@ Connect-Windows365 -ClientSecret $ClientSecret -TenantID $TenantId -ClientID $Cl
 
 Write-Host
 Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "startsWith(DisplayName, 'Account')" -OrderBy UserPrincipalName
-Write-Host
-Get-CloudPC | select displayName, status, servicePlanName
+Write-Host "`nNumber of Cloud PCs: $(Get-CloudPc).Count"
+Get-CloudPC | select displayName, status, servicePlanName | Format-Table
 Write-Host
