@@ -12,7 +12,8 @@ $scopes = @(
     'RoleManagement.ReadWrite.Directory',
     'DeviceManagementManagedDevices.PrivilegedOperations.All',
     'DeviceManagementManagedDevices.ReadWrite.All',
-    'DeviceManagementConfiguration.ReadWrite.All'
+    'DeviceManagementConfiguration.ReadWrite.All',
+    'CloudPC.ReadWrite.All'
 )
 
 Connect-MgGraph -Scopes $scopes
@@ -217,6 +218,8 @@ $appName =  "testapp"
     New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId "243333ab-4d21-40cb-a475-36241daa0842" -ResourceId $graphSpId
     New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId "9241abd9-d0e6-425a-bd4f-47ba86e767a4" -ResourceId $graphSpId
     New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId "06b708a9-e830-4db3-a914-8e69da51d44f" -ResourceId $graphSpId
+    New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId "3b4349e1-8cf5-45a3-95b7-69d1751d3e6a" -ResourceId $graphSpId
+    
 
     Write-Host "`nGranting admin consent..." -ForegroundColor Yellow
     $folder = (Get-MgOrganization).VerifiedDomains.Name
