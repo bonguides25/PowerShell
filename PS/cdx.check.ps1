@@ -7,6 +7,8 @@ Clear-Host
 
 $email = Read-Host "Enter the email"
 $folder = $email.Split("@")[1]
+Write-Host "Tenant: $folder"
+Start-Sleep 3
 $ClientId          = Get-Content "P:\05.Databases\Cdx\$folder\appid.txt"
 $TenantId          = Get-Content "P:\05.Databases\Cdx\$folder\tenantid.txt"
 $ClientSecret      = Get-Content "P:\05.Databases\Cdx\$folder\clientSecret.txt"
