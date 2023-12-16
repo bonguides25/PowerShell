@@ -1,3 +1,10 @@
+Clear-Host
+Write-Host "`nDisconnecting from Microsoft Graph...." -ForegroundColor Yellow
+Disconnect-Graph
+Start-Sleep -Seconds 2
+Disconnect-Graph
+Clear-Host
+
 $email = Read-Host "Enter the email"
 $folder = $email.Split("@")[1]
 $ClientId          = Get-Content "P:\05.Databases\Cdx\$folder\appid.txt"
