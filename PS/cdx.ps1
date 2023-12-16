@@ -127,29 +127,8 @@ $result | Sort-Object assignedlicenses -Descending | Format-Table
 
 # Retrieve the group based on the specified group ID or display name
 $groupId = (Get-MgGroup -ConsistencyLevel eventual -Count groupCount -Search '"DisplayName:sg-CloudPCUsers"').Id
-
 $members = Get-MgGroupMember -GroupId $groupId -All
-
-# Initialize an array to store user information
-$users = @()
-
-# Iterate through each group member and retrieve user details
-foreach ($member in $members) {
-    $user = Get-MgUser -UserId $member.Id -ErrorAction SilentlyContinue
-
-    # Add user information to the array
-    $Objects = [PSCustomObject][ordered]@{
-        Group             = "sg-CloudPCUsers"
-        Name              = $user.DisplayName
-        UserPrincipalName = $user.UserPrincipalName
-    }
-
-    # Add the ordered custom object to the array
-    $users += $Objects
-}
-
-# Export user information
-$users
+Write-Host "Members of CloudPCs group: $($members).Count" -ForegroundColor Yellow
 
 Write-Host "Creating an app registration in Entra ID..." -ForegroundColor Yellow
 $appName =  "testapp"
