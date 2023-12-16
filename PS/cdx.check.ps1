@@ -7,4 +7,7 @@ $ClientSecretPass = ConvertTo-SecureString -String $ClientSecret -AsPlainText -F
 $ClientSecretCredential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $ClientId, $ClientSecretPass
 Connect-MgGraph -TenantId $TenantId -ClientSecretCredential $ClientSecretCredential
 
-Get-MgDomain
+Write-Host
+Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "startsWith(DisplayName, 'Account')" -OrderBy UserPrincipalName
+Write-Host
+Write-Host
