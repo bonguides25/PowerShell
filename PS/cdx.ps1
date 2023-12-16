@@ -128,7 +128,7 @@ $result | Sort-Object assignedlicenses -Descending | Format-Table
 # Retrieve the group based on the specified group ID or display name
 $groupId = (Get-MgGroup -ConsistencyLevel eventual -Count groupCount -Search '"DisplayName:sg-CloudPCUsers"').Id
 $members = Get-MgGroupMember -GroupId $groupId -All
-Write-Host "Members of CloudPCs group: $($members).Count" -ForegroundColor Yellow
+# Write-Host "Members of CloudPCs group: $($members).Count" -ForegroundColor Yellow
 
 Write-Host "Creating an app registration in Entra ID..." -ForegroundColor Yellow
 $appName =  "testapp"
