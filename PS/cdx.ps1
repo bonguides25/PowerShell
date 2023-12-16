@@ -151,7 +151,7 @@ foreach ($member in $members) {
 # Export user information
 $users
 
-Write-Host "`nCreating an app registration in Entra ID..." -ForegroundColor Yellow
+Write-Host "Creating an app registration in Entra ID..." -ForegroundColor Yellow
 $appName =  "testapp"
     $app = New-MgApplication -DisplayName $appName
     $appObjectId = $app.Id
@@ -206,22 +206,20 @@ $appName =  "testapp"
     }
     Update-MgApplication -ApplicationId $appObjectId -BodyParameter $permissionParams
 
-    Write-Host "`nGranting admin consent..." -ForegroundColor Yellow
+    Write-Host "Granting admin consent..." -ForegroundColor Yellow
     # Grant admin consent
     $graphSpId = $(Get-MgServicePrincipal -Filter "appId eq '00000003-0000-0000-c000-000000000000'").Id
     $sp = New-MgServicePrincipal -AppId $app.appId
-    New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId "19dbc75e-c2e2-444c-a770-ec69d8559fc7" -ResourceId $graphSpId
-    New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId "741f803b-c850-494e-b5df-cde7c675a1ca" -ResourceId $graphSpId
-    New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId "1bfefb4e-e0b5-418b-a88f-73c46d2cc8e9" -ResourceId $graphSpId
-    New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId "9e3f62cf-ca93-4989-b6ce-bf83c28f9fe8" -ResourceId $graphSpId
-    New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId "5b07b0dd-2377-4e44-a38d-703f09a0dc3c" -ResourceId $graphSpId
-    New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId "243333ab-4d21-40cb-a475-36241daa0842" -ResourceId $graphSpId
-    New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId "9241abd9-d0e6-425a-bd4f-47ba86e767a4" -ResourceId $graphSpId
-    New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId "06b708a9-e830-4db3-a914-8e69da51d44f" -ResourceId $graphSpId
-    New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId "3b4349e1-8cf5-45a3-95b7-69d1751d3e6a" -ResourceId $graphSpId
+    New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId "19dbc75e-c2e2-444c-a770-ec69d8559fc7" -ResourceId $graphSpId | Out-Null
+    New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId "741f803b-c850-494e-b5df-cde7c675a1ca" -ResourceId $graphSpId | Out-Null
+    New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId "1bfefb4e-e0b5-418b-a88f-73c46d2cc8e9" -ResourceId $graphSpId | Out-Null
+    New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId "9e3f62cf-ca93-4989-b6ce-bf83c28f9fe8" -ResourceId $graphSpId | Out-Null
+    New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId "5b07b0dd-2377-4e44-a38d-703f09a0dc3c" -ResourceId $graphSpId | Out-Null
+    New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId "243333ab-4d21-40cb-a475-36241daa0842" -ResourceId $graphSpId | Out-Null
+    New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId "9241abd9-d0e6-425a-bd4f-47ba86e767a4" -ResourceId $graphSpId | Out-Null
+    New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId "06b708a9-e830-4db3-a914-8e69da51d44f" -ResourceId $graphSpId | Out-Null
+    New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId "3b4349e1-8cf5-45a3-95b7-69d1751d3e6a" -ResourceId $graphSpId | Out-Null
     
-
-    Write-Host "Granting admin consent..." -ForegroundColor Yellow
     $folder = (Get-MgOrganization).VerifiedDomains.Name | Out-Null
     New-Item -ItemType Directory "P:\05.Databases\Cdx\$folder" -Force
 
