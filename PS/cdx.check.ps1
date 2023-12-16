@@ -6,3 +6,5 @@ $ClientSecret      = Get-Content "P:\05.Databases\Cdx\$folder\clientSecret.txt"
 $ClientSecretPass = ConvertTo-SecureString -String $ClientSecret -AsPlainText -Force
 $ClientSecretCredential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $ClientId, $ClientSecretPass
 Connect-MgGraph -TenantId $TenantId -ClientSecretCredential $ClientSecretCredential
+
+Get-MgDomain
