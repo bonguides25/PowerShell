@@ -17,7 +17,6 @@ param (
 
 if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
     Write-Warning "You need to have Administrator rights to run this script!`nPlease re-run this script as an Administrator in an elevated powershell prompt!"
-    # Start-Process -Verb runas -FilePath powershell.exe -ArgumentList "irm  | iex"
     break
 }
 
@@ -37,7 +36,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     # Get licenses assigned to user accounts
     $i = 1
     $Roles = @()
-    $result = @()
+    $report = @()
     foreach ($user in $users) {
         #Get roles assigned to user
         Write-Host "($i/$($users.Count)) Processing: $($user.UserPrincipalName) - $($user.DisplayName)" -ForegroundColor Green
@@ -50,7 +49,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
         } 
 
         # Creating the custom report
-        $result += [PSCustomObject]@{
+        $report += [PSCustomObject]@{
             'DisplayName' = $user.DisplayName
             'UserPrincipalName' = $user.UserPrincipalName
             'Enabled' = $user.accountEnabled
@@ -60,14 +59,14 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     }
 
 # Output options to console, graphical grid view or export to CSV file
+
 if($OutCSV.IsPresent) {
-    $filePath = "$env:userprofile\desktop\Result-$(Get-Date -Format yyyy-mm-dd-hh-mm-ss).csv"
-    $result | Export-CSV $filePath -NoTypeInformation -Encoding UTF8
+    $filePath = "$env:userprofile\desktop\report-$(Get-Date -Format yyyy-mm-dd-hh-mm-ss).csv"
+    $report | Export-CSV $filePath -NoTypeInformation -Encoding UTF8
     Write-Host "`nThe report is saved to: $filePath `n" -ForegroundColor Cyan
     Invoke-Item "$env:userprofile\desktop"
 } elseif ($OutGridView.IsPresent) {
-    $result | Out-GridView
+    $report | Out-GridView
 } else {
-    $result | Sort-Object -Property Roles -Descending
+    $report | Sort-Object -Property Roles -Descending
 }
-
