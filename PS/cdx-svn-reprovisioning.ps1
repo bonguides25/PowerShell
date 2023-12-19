@@ -60,7 +60,7 @@ foreach ($scriptId in $scriptIds){
     Set-MgBetaDeviceManagementScript -DeviceManagementScriptId $scriptId -BodyParameter $params
 }
 
-$pcs = Get-CloudPC | Select-Object managedDeviceName, userPrincipalName, status, servicePlanName
+$pcs = Get-CloudPC | Select-Object managedDeviceName, userPrincipalName, status, servicePlanName | FT
 foreach ($pc in $pcs){
     Invoke-CPCReprovision -Name $pc.managedDeviceName
 }
@@ -68,4 +68,4 @@ foreach ($pc in $pcs){
 Start-Sleep 5
 
 
-Get-CloudPC | select managedDeviceName, userPrincipalName, status, servicePlanName
+Get-CloudPC | select managedDeviceName, userPrincipalName, status, servicePlanName | FT
