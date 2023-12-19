@@ -17,6 +17,7 @@ $ClientSecretCredential = New-Object -TypeName System.Management.Automation.PSCr
 Connect-MgGraph -TenantId $TenantId -ClientSecretCredential $ClientSecretCredential
 Connect-Windows365 -ClientSecret $ClientSecret -TenantID $TenantId -ClientID $ClientId -Authtype ServicePrincipal
 
+Get-CloudPC | select managedDeviceName, userPrincipalName, status, servicePlanName
 
 Get-MgBetaDeviceManagementScript | ForEach-Object {
     Remove-MgBetaDeviceManagementScript -DeviceManagementScriptId $_.Id
@@ -58,3 +59,5 @@ foreach ($scriptId in $scriptIds){
     
     Set-MgBetaDeviceManagementScript -DeviceManagementScriptId $scriptId -BodyParameter $params
 }
+
+Get-CloudPC | select managedDeviceName, userPrincipalName, status, servicePlanName
