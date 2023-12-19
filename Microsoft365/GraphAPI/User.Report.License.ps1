@@ -10,6 +10,11 @@ Script Highlights:
 #. Single script allows you to generate user report with license assigments and account status
 ============================================================================================#>
 
+param (
+    [switch]$OutCSV,
+    [switch]$OutGridView
+)
+
 if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
     Write-Warning "You need to have Administrator rights to run this script!`nPlease re-run this script as an Administrator in an elevated powershell prompt!"
     break
@@ -19,8 +24,8 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     Set-ExecutionPolicy Bypass -Scope Process -Force | Out-Null
     iex "& { $(irm bonguides.com/graph/modulesinstall) } -InstallBasic"
 
-# Get user report with license assigments and account status
-    $result = @()
+# Connect to Microsoft Graph PowerShell
+    $report = @()
     $uri = "https://bonguides.com/files/LicenseFriendlyName.txt"
     $friendlyNameHash = Invoke-RestMethod -Method GET -Uri $uri | ConvertFrom-StringData
 
@@ -30,7 +35,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     Connect-MgGraph -Scopes "Directory.Read.All" -ErrorAction Stop
     $users  = Get-MgBetaUser -All
 
-    # Get licenses assigned to user accounts
+# Get licenses assigned to user accounts
     $i = 1
     foreach ($user in $users) {
         Write-Progress -PercentComplete ($i/$($users.Count)*100) -Status "Processing: $($user.UserPrincipalName) - $($user.DisplayName)" -Activity "Processing: ($i/$($users.Count))"
@@ -53,7 +58,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
         }
 
         # Creating the custom report
-        $result += [PSCustomObject]@{
+        $report += [PSCustomObject]@{
             'DisplayName' = $user.DisplayName
             'UserPrincipalName' = $user.UserPrincipalName
             'Enabled' = $user.accountEnabled
@@ -62,13 +67,16 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
         $i++
     }
 
-    Write-Host "`nDone. Generating report..." -ForegroundColor Yellow
+Write-Host "`nDone. Generating report..." -ForegroundColor Yellow
 
-    # Output options to console, graphical grid view or export to CSV file.
-        # $result | Sort-Object assignedlicenses -Descending 
-        # $result | Out-GridView
-        $filePath = "$env:userprofile\desktop\Result-$(Get-Date -Format yyyy-mm-dd-hh-mm-ss).csv"
-        $result | Export-CSV $filePath -NoTypeInformation -Encoding UTF8
-        Write-Host "The report is saved to: $filePath `n" -ForegroundColor Cyan
-
+# Output options to console, graphical grid view or export to CSV file
+if($OutCSV.IsPresent) {
+    $filePath = "$env:userprofile\desktop\report-$(Get-Date -Format yyyy-mm-dd-hh-mm-ss).csv"
+    $report | Export-CSV $filePath -NoTypeInformation -Encoding UTF8
+    Write-Host "`nThe report is saved to: $filePath `n" -ForegroundColor Cyan
     Invoke-Item "$env:userprofile\desktop"
+} elseif ($OutGridView.IsPresent) {
+    $report | Out-GridView
+} else {
+    $report | Sort-Object assignedlicenses -Descending
+}
