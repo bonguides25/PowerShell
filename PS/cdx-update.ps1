@@ -40,6 +40,7 @@ if (Test-Path 'C:\temp\setup.exe') {
     Start-Sleep 5
     
     SendMailX
+    
 }
 
 
