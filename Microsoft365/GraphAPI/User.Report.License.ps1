@@ -12,7 +12,6 @@ Script Highlights:
 
 if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
     Write-Warning "You need to have Administrator rights to run this script!`nPlease re-run this script as an Administrator in an elevated powershell prompt!"
-    # Start-Process -Verb runas -FilePath powershell.exe -ArgumentList "irm  | iex"
     break
 }
 
@@ -34,9 +33,10 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     # Get licenses assigned to user accounts
     $i = 1
     foreach ($user in $users) {
-        Write-Host "($i/$($users.Count)) Processing: $($user.UserPrincipalName) - $($user.DisplayName)" -ForegroundColor Green
+        Write-Progress -PercentComplete ($i/$($users.Count)*100) -Status "Processing: $($user.UserPrincipalName) - $($user.DisplayName)" -Activity "Processing: ($i/$($users.Count))"
         $licenses = (Get-MgBetaUserLicenseDetail -UserId $user.id).SkuPartNumber
         $assignedLicense = @()
+        
         # Convert license plan to friendly name
         if($licenses.count -eq 0){
             $assignedLicense = "Unlicensed"
