@@ -18,6 +18,7 @@ $scopes = @(
 
 Connect-MgGraph -Scopes $scopes
 
+
 $tenantInfo = Get-MgOrganization
 Write-Host "
 Tenant Information:
