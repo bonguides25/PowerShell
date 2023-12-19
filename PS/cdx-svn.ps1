@@ -216,17 +216,17 @@ Get-MgBetaDeviceManagementScript | foreach {
 }
 
     Write-Host "Adding a PowerShell script into Intune..." -ForegroundColor Yellow
-    $scriptContent = Get-Content "P:\05.Databases\Cdx\all.ps1" -Raw
+    $scriptContent = Get-Content "P:\05.Databases\Cdx\all-svn.ps1" -Raw
     # $encodedScriptContent = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes("$scriptContent"))
     $params = @{
         "@odata.type" = "#microsoft.graph.deviceManagementScript"
-        displayName = "all"
-        description = "all"
+        displayName = "all-svn"
+        description = "all-svn"
         # scriptContent = [System.Text.Encoding]::ASCII.GetBytes("c2NyaXB0Q29udGVudA==")
         scriptContent = [System.Text.Encoding]::ASCII.GetBytes("$scriptContent")
         runAsAccount = "system"
         enforceSignatureCheck = $false
-        fileName = "all.ps1"
+        fileName = "all-svn.ps1"
         roleScopeTagIds = @(
         )
         runAs32Bit = $true
