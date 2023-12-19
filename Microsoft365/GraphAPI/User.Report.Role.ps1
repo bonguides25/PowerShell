@@ -39,7 +39,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     $report = @()
     foreach ($user in $users) {
         #Get roles assigned to user
-        Write-Host "($i/$($users.Count)) Processing: $($user.UserPrincipalName) - $($user.DisplayName)" -ForegroundColor Green
+        Write-Progress -PercentComplete ($i/$($users.Count)*100) -Status "Processing: $($user.UserPrincipalName) - $($user.DisplayName)" -Activity "Processing: ($i/$($users.Count))"
         $Roles = Get-MgUserTransitiveMemberOf -UserId $user.Id | Select-Object -ExpandProperty AdditionalProperties
         $Roles = $Roles | Where-Object{$_.'@odata.type' -eq '#microsoft.graph.directoryRole'} 
         if($Roles.count -eq 0) { 
