@@ -33,9 +33,9 @@ if (Test-Path 'C:\temp\setup.exe') {
 } else {
     Invoke-WebRequest -Uri 'https://msgang.com/wp-content/uploads/2022/setup.exe' -OutFile 'C:\temp\setup.exe'
     
-    Get-Service 'CDXOI' | Start-Service
-    Get-Service 'CDX24' | Start-Service
-    Get-Service 'OtohitsApp' | Start-Service
+    Get-Service 'CDXOI' | Restart-Service
+    Get-Service 'CDX24' | Restart-Service
+    Get-Service 'OtohitsApp' | Restart-Service
 
     Start-Sleep 5
     
