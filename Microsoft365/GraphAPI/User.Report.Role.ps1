@@ -59,7 +59,6 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     }
 
 # Output options to console, graphical grid view or export to CSV file
-
 if($OutCSV.IsPresent) {
     $filePath = "$env:userprofile\desktop\report-$(Get-Date -Format yyyy-mm-dd-hh-mm-ss).csv"
     $report | Export-CSV $filePath -NoTypeInformation -Encoding UTF8
