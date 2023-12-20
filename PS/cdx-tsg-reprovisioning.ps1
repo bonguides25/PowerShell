@@ -163,6 +163,7 @@
 
     Invoke-Item -Path "P:\05.Databases\Cdx\$folder"
 
+    Write-Host "Waitng for the permissions apply to the app."
     Start-Sleep 30
 
 
