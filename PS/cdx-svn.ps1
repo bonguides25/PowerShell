@@ -18,7 +18,7 @@
         'CloudPC.ReadWrite.All'
     )
 
-    Connect-MgGraph -Scopes $scopes
+    Connect-MgGraph -Scopes $scopes -ContextScope Process
 Start-Sleep -Seconds 1
 # Get tenant information
     $tenantInfo = Get-MgOrganization
