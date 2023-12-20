@@ -4,6 +4,7 @@
     Write-Host "Tenant: $folder1"
 
     if (not(Test-Path "P:\05.Databases\Cdx\$folder1")) {
+        Write-Host "The folder not exists. Try to creating..."
         # Connect to Microsoft Graph
             Clear-Host
             Write-Host "`nDisconnecting from Microsoft Graph...." -ForegroundColor Yellow
@@ -250,7 +251,7 @@
 
 
     } else {
-
+        Write-Host "The folder exists. Do reprovisioning..."
         # Connect to Microsoft Graph with app-only
             Clear-Host
             Write-Host "`nDisconnecting from Microsoft Graph...." -ForegroundColor Yellow
