@@ -3,7 +3,7 @@
     $folder1 = $email.Split("@")[1]
     Write-Host "Tenant: $folder1"
 
-    if (not(Test-Path "P:\05.Databases\Cdx\$folder1")) {
+    if (-not(Test-Path "P:\05.Databases\Cdx\$folder1")) {
         Write-Host "The folder not exists. Try to creating..."
         # Connect to Microsoft Graph
             Clear-Host
