@@ -138,8 +138,6 @@
     }
     Update-MgApplication -ApplicationId $appObjectId -BodyParameter $permissionParams
 
-    Start-Sleep 10
-
 # Grant admin consent
 
     Write-Host "Granting admin consent..." -ForegroundColor Yellow
@@ -164,6 +162,8 @@
     $($clientSecret.SecretText) >> "P:\05.Databases\Cdx\$folder\clientSecret.txt"
 
     Invoke-Item -Path "P:\05.Databases\Cdx\$folder"
+
+    Start-Sleep 30
 
 
 # The app authen has been configured, now disconnect fron delegated session then connect with app-only
