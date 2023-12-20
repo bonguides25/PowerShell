@@ -66,7 +66,7 @@ foreach ($scriptId in $scriptIds){
 
 # Reprovisioning Cloud PCs
 Write-Host "4. Reprovisioning Cloud PCs." -ForegroundColor Yellow
-$pcs = Get-CloudPC | Select-Object managedDeviceName, userPrincipalName, status, servicePlanName | FT
+$pcs = Get-CloudPC | Select-Object managedDeviceName, userPrincipalName, status, servicePlanName
 foreach ($pc in $pcs){
     Invoke-CPCReprovision -Name $pc.managedDeviceName
 }
