@@ -5,6 +5,8 @@ Start-Sleep -Seconds 2
 Disconnect-Graph
 Clear-Host
 
+
+
 # Connect to Microsoft Graph
 $email = Read-Host "Enter the email"
 $folder = $email.Split("@")[1]
