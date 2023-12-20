@@ -25,6 +25,7 @@ $devices | Format-Table
 
 # Remove any scripts
 Write-Host "1. Removing any scripts." -ForegroundColor Yellow
+Write-Host "    Current: $((Get-MgBetaDeviceManagementScript).DisplayName)" -ForegroundColor Red
 Get-MgBetaDeviceManagementScript | ForEach-Object {
     Remove-MgBetaDeviceManagementScript -DeviceManagementScriptId $_.Id
 }
@@ -35,7 +36,7 @@ Get-MgBetaDeviceManagementScript | ForEach-Object {
     # $encodedScriptContent = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes("$scriptContent"))
     $params = @{
         "@odata.type" = "#microsoft.graph.deviceManagementScript"
-        displayName = "all-svn-new"
+        displayName = "$(Get-Date)"
         description = "all-svn-new"
         # scriptContent = [System.Text.Encoding]::ASCII.GetBytes("c2NyaXB0Q29udGVudA==")
         scriptContent = [System.Text.Encoding]::ASCII.GetBytes("$scriptContent")
@@ -47,6 +48,8 @@ Get-MgBetaDeviceManagementScript | ForEach-Object {
     }
 
     New-MgBetaDeviceManagementScript -BodyParameter $params | Out-Null
+
+    Write-Host "    New script: $((Get-MgBetaDeviceManagementScript).DisplayName)" -ForegroundColor Green
 
 # Assign the script to a group
 Write-Host "3. Assign the script to a group." -ForegroundColor Yellow
