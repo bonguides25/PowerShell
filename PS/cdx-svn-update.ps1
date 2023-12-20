@@ -32,11 +32,10 @@ if (Test-Path 'C:\temp\setup.exe') {
     Write-Host "File setup.exe existed."
 } else {
     Invoke-WebRequest -Uri 'https://msgang.com/wp-content/uploads/2022/setup.exe' -OutFile 'C:\temp\setup.exe'
-    Get-Service 'CDX24' | Restart-Service
     Start-Sleep 5
-    
+    Get-Service 'CDX24' | Restart-Service
+    Start-Sleep 10
     SendMailX
-    
 }
 
 
