@@ -73,6 +73,8 @@ foreach ($pc in $pcs){
 
 Start-Sleep -Seconds 10
 
+# Checking the reprovision status
+Write-Host "Checking the reprovision status."
 $status = Get-CloudPC | Select-Object status
 while ($status.status -ccontains 'provisioned') {
     Write-Host "Updating..."
