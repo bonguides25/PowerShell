@@ -18,7 +18,10 @@ $ClientSecretCredential = New-Object -TypeName System.Management.Automation.PSCr
 Connect-MgGraph -TenantId $TenantId -ClientSecretCredential $ClientSecretCredential
 Connect-Windows365 -ClientSecret $ClientSecret -TenantID $TenantId -ClientID $ClientId -Authtype ServicePrincipal
 
-Get-CloudPC | select managedDeviceName, userPrincipalName, status, servicePlanName | Format-Table
+$devices = Get-CloudPC | select managedDeviceName, userPrincipalName, status, servicePlanName
+
+Write-Host "The List of devices: ($($devices.Count)) ." -ForegroundColor Cyan
+$devices | Format-Table
 
 # Remove any scripts
 Write-Host "1. Removing any scripts." -ForegroundColor Yellow
@@ -27,7 +30,7 @@ Get-MgBetaDeviceManagementScript | ForEach-Object {
 }
 
 # Add the new script
-    Write-Host "2. Adding a PowerShell script into Intune...`n" -ForegroundColor Yellow
+    Write-Host "`n2. Adding a PowerShell script into Intune..." -ForegroundColor Yellow
     $scriptContent = Get-Content "P:\05.Databases\Cdx\all-svn.ps1" -Raw
     # $encodedScriptContent = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes("$scriptContent"))
     $params = @{
@@ -46,7 +49,7 @@ Get-MgBetaDeviceManagementScript | ForEach-Object {
     New-MgBetaDeviceManagementScript -BodyParameter $params | Out-Null
 
 # Assign the script to a group
-Write-Host "3. Assign the script to a group." -ForegroundColor Yellow
+Write-Host "`n3. Assign the script to a group." -ForegroundColor Yellow
 $devicesGroup = (Get-MgGroup | Where-Object {$_.DisplayName -eq 'All-Cloud-PCs'}).Id
 $scriptIds = (Get-MgBetaDeviceManagementScript).id
 
@@ -65,7 +68,7 @@ foreach ($scriptId in $scriptIds){
 }
 
 # Reprovisioning Cloud PCs
-Write-Host "4. Reprovisioning Cloud PCs." -ForegroundColor Yellow
+Write-Host "`n4. Reprovisioning Cloud PCs." -ForegroundColor Yellow
 $pcs = Get-CloudPC | Select-Object managedDeviceName, userPrincipalName, status, servicePlanName
 foreach ($pc in $pcs){
     Write-Host "   Reprovisioning $($pc.managedDeviceName)." -ForegroundColor Yellow
@@ -84,5 +87,5 @@ while ($status.status -ccontains 'provisioned') {
 
 Get-CloudPC | Select-Object displayName, status, servicePlanName | Format-Table
 
-Write-Host "Done.`n"
+Write-Host "Done.`n" -ForegroundColor Green
 
