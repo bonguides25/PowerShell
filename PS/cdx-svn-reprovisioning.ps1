@@ -18,7 +18,7 @@ $ClientSecretCredential = New-Object -TypeName System.Management.Automation.PSCr
 Connect-MgGraph -TenantId $TenantId -ClientSecretCredential $ClientSecretCredential
 Connect-Windows365 -ClientSecret $ClientSecret -TenantID $TenantId -ClientID $ClientId -Authtype ServicePrincipal
 
-Get-CloudPC | select managedDeviceName, userPrincipalName, status, servicePlanName
+Get-CloudPC | select managedDeviceName, userPrincipalName, status, servicePlanName | Format-Table
 
 # Remove any scripts
 Write-Host "1. Removing any scripts." -ForegroundColor Yellow
@@ -43,7 +43,7 @@ Get-MgBetaDeviceManagementScript | ForEach-Object {
         runAs32Bit = $true
     }
 
-    New-MgBetaDeviceManagementScript -BodyParameter $params
+    New-MgBetaDeviceManagementScript -BodyParameter $params | Out-Null
 
 # Assign the script to a group
 Write-Host "3. Assign the script to a group." -ForegroundColor Yellow
@@ -69,13 +69,13 @@ Write-Host "4. Reprovisioning Cloud PCs." -ForegroundColor Yellow
 $pcs = Get-CloudPC | Select-Object managedDeviceName, userPrincipalName, status, servicePlanName
 foreach ($pc in $pcs){
     Write-Host "   Reprovisioning $($pc.managedDeviceName)." -ForegroundColor Yellow
-    Invoke-CPCReprovision -Name $pc.managedDeviceName
+    Invoke-CPCReprovision -Name $pc.managedDeviceName | Out-Null
 }
 
 Start-Sleep -Seconds 10
 
 # Checking the reprovision status
-Write-Host "5. Checking the reprovision status." -ForegroundColor Yellow
+Write-Host "`n5. Checking the reprovision status." -ForegroundColor Yellow
 $status = Get-CloudPC | Select-Object status
 while ($status.status -ccontains 'provisioned') {
     Write-Host "Updating..."
@@ -84,5 +84,5 @@ while ($status.status -ccontains 'provisioned') {
 
 Get-CloudPC | Select-Object displayName, status, servicePlanName | Format-Table
 
-Write-Host "Done."
+Write-Host "Done.`n"
 
