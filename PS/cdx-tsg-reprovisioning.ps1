@@ -163,8 +163,14 @@
 
     Invoke-Item -Path "P:\05.Databases\Cdx\$folder"
 
-    Write-Host "Waitng for the permissions apply to the app."
-    Start-Sleep 30
+
+    $Seconds = 30
+    $EndTime = [datetime]::UtcNow.AddSeconds($Seconds)
+
+    while (($TimeRemaining = ($EndTime - [datetime]::UtcNow)) -gt 0) {
+    Write-Progress -Activity 'Waitng for the permissions apply to the app...' -Status Godot -SecondsRemaining $TimeRemaining.TotalSeconds
+    Start-Sleep 1
+    }
 
 
 # The app authen has been configured, now disconnect fron delegated session then connect with app-only
