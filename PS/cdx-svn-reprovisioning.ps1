@@ -65,7 +65,6 @@ foreach ($pc in $pcs){
     Invoke-CPCReprovision -Name $pc.managedDeviceName
 }
 
-Start-Sleep 5
-
+Start-Sleep 10
 
 Get-CloudPC | select managedDeviceName, userPrincipalName, status, servicePlanName | FT
