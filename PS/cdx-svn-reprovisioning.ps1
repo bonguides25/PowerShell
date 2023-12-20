@@ -79,7 +79,7 @@ Write-Host "5. Checking the reprovision status." -ForegroundColor Yellow
 $status = Get-CloudPC | Select-Object status
 while ($status.status -ccontains 'provisioned') {
     Write-Host "Updating..."
-    Start-Sleep -Seconds 30
+    Start-Sleep -Seconds 10
 }
 
 Get-CloudPC | Select-Object displayName, status, servicePlanName | Format-Table
