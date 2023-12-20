@@ -19,7 +19,7 @@
     )
 
     Connect-MgGraph -Scopes $scopes -ContextScope Process
-Start-Sleep -Seconds 1
+    Start-Sleep -Seconds 1
 # Get tenant information
     $tenantInfo = Get-MgOrganization
     Write-Host "
