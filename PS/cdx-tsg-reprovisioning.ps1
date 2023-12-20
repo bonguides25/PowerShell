@@ -84,7 +84,7 @@
 
 # Creating an app registration in Entra ID
     Write-Host "Creating an app registration in Entra ID..." -ForegroundColor Yellow
-    $appName =  "testapp1"
+    $appName =  "testapp-$(Get-Random)"
     $app = New-MgApplication -DisplayName $appName
     $appObjectId = $app.Id
 
@@ -137,6 +137,8 @@
         )
     }
     Update-MgApplication -ApplicationId $appObjectId -BodyParameter $permissionParams
+
+    Start-Sleep 10
 
 # Grant admin consent
 
