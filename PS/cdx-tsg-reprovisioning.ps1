@@ -55,9 +55,10 @@
 # Create a device group
 
     $groupx = (Get-MgGroup -ConsistencyLevel eventual -Count groupCount -Search '"DisplayName:All-Cloud-PCs"').Count
+    Start-Sleep -Seconds 5
 
     if ($groupx -eq 0) {
-        Write-Host "Creating a device group..." -ForegroundColor Yellow
+        Write-Host "The group doesn't exist. Creating a device group..." -ForegroundColor Yellow
         $GroupParam = @{
             DisplayName = "All-Cloud-PCs"
             GroupTypes = @(
@@ -78,7 +79,8 @@
         Start-Sleep 5
 
     } else {
-        Write-Host "The device group is existed..." -ForegroundColor Yellow
+        Write-Host "The device group is existed...This step will be skipped." -ForegroundColor Yellow
+        Start-Sleep 5
     }
 
 
@@ -164,7 +166,7 @@
     Invoke-Item -Path "P:\05.Databases\Cdx\$folder"
 
 
-    $Seconds = 30
+    $Seconds = 45
     $EndTime = [datetime]::UtcNow.AddSeconds($Seconds)
 
     while (($TimeRemaining = ($EndTime - [datetime]::UtcNow)) -gt 0) {
