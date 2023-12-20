@@ -8,7 +8,6 @@
         Remove-Item -Path "P:\05.Databases\Cdx\$folder" -Force -ErrorAction Stop
     }
 
-
 # Connect to Microsoft Graph
 
     Write-Host "`nDisconnecting from Microsoft Graph...." -ForegroundColor Yellow
