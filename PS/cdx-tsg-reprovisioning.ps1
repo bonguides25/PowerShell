@@ -6,13 +6,13 @@
     if (-not(Test-Path "P:\05.Databases\Cdx\$folder1")) {
         Write-Host "The folder not exists. Try to creating..."
         # Connect to Microsoft Graph
-            Clear-Host
+
             Write-Host "`nDisconnecting from Microsoft Graph...." -ForegroundColor Yellow
             Disconnect-Graph
             Start-Sleep -Seconds 2
             Disconnect-Graph
             Start-Sleep -Seconds 2
-            Clear-Host
+
             $scopes = @(
                 'Directory.ReadWrite.All',
                 'User.ReadWrite.All',
@@ -253,12 +253,10 @@
     } else {
         Write-Host "The folder exists. Do reprovisioning..."
         # Connect to Microsoft Graph with app-only
-            Clear-Host
             Write-Host "`nDisconnecting from Microsoft Graph...." -ForegroundColor Yellow
             Disconnect-Graph
             Start-Sleep -Seconds 2
             Disconnect-Graph
-            Clear-Host
             $email = Read-Host "Enter the email"
             $folder = $email.Split("@")[1]
             Write-Host "Tenant: $folder"
