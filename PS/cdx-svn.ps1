@@ -1,88 +1,95 @@
-Clear-Host
-Write-Host "`nDisconnecting from Microsoft Graph...." -ForegroundColor Yellow
-Disconnect-Graph
-Start-Sleep -Seconds 2
-Disconnect-Graph
-Clear-Host
-$scopes = @(
-    'Directory.ReadWrite.All',
-    'User.ReadWrite.All',
-    'Application.ReadWrite.All',
-    'AppRoleAssignment.ReadWrite.All',
-    'RoleManagement.ReadWrite.Directory',
-    'DeviceManagementManagedDevices.PrivilegedOperations.All',
-    'DeviceManagementManagedDevices.ReadWrite.All',
-    'DeviceManagementConfiguration.ReadWrite.All',
-    'CloudPC.ReadWrite.All'
-)
+# Connect to Microsoft Graph
+    Clear-Host
+    Write-Host "`nDisconnecting from Microsoft Graph...." -ForegroundColor Yellow
+    Disconnect-Graph
+    Start-Sleep -Seconds 2
+    Disconnect-Graph
+    Clear-Host
+    $scopes = @(
+        'Directory.ReadWrite.All',
+        'User.ReadWrite.All',
+        'Application.ReadWrite.All',
+        'AppRoleAssignment.ReadWrite.All',
+        'RoleManagement.ReadWrite.Directory',
+        'DeviceManagementManagedDevices.PrivilegedOperations.All',
+        'DeviceManagementManagedDevices.ReadWrite.All',
+        'DeviceManagementConfiguration.ReadWrite.All',
+        'CloudPC.ReadWrite.All'
+    )
 
-Connect-MgGraph -Scopes $scopes
+    Connect-MgGraph -Scopes $scopes
 
-
-$tenantInfo = Get-MgOrganization
-Write-Host "
-Tenant Information:
-Tenant: $($tenantInfo.DisplayName)
-Id    : $($tenantInfo.Id)
-Domain: $((Get-MgDomain).Id)
-" -ForegroundColor Yellow
+# Get tenant information
+    $tenantInfo = Get-MgOrganization
+    Write-Host "
+    Tenant Information:
+    Tenant: $($tenantInfo.DisplayName)
+    Id    : $($tenantInfo.Id)
+    Domain: $((Get-MgDomain).Id)
+    " -ForegroundColor Yellow
 
 # Creating users in bulk
-Write-Host "Creating user accounts..." -ForegroundColor Yellow 
-$domain = Get-MgDomain | select -ExpandProperty Id
-$items = @(1..6)
-foreach ($item in $items) {
-    $params = @{
-        AccountEnabled = $true
-        DisplayName = "Account$item"
-        UserPrincipalName = "account$item@$domain"
-        MailNickname = "account$item"
-        UsageLocation = 'US'
-        PasswordProfile = @{
-            ForceChangePasswordNextSignIn = $false
-            Password = 'Nttg$ti74fnff[gr4]'
+    Write-Host "Creating user accounts..." -ForegroundColor Yellow 
+    $domain = Get-MgDomain | select -ExpandProperty Id
+    $items = @(1..6)
+    foreach ($item in $items) {
+        $params = @{
+            AccountEnabled = $true
+            DisplayName = "Account$item"
+            UserPrincipalName = "account$item@$domain"
+            MailNickname = "account$item"
+            UsageLocation = 'US'
+            PasswordProfile = @{
+                ForceChangePasswordNextSignIn = $false
+                Password = 'Nttg$ti74fnff[gr4]'
+            }
         }
+        Write-Host "($item/$($items.Count)) Creating $($params.UserPrincipalName)"  -ForegroundColor Yellow 
+        New-MgUser -BodyParameter $params | Out-Null
+        Start-Sleep -Seconds 1
     }
-    Write-Host "($item/$($items.Count)) Creating $($params.UserPrincipalName)"  -ForegroundColor Yellow 
-    New-MgUser -BodyParameter $params | Out-Null
-    Start-Sleep -Seconds 1
-}
 
-Start-Sleep 10
+    Start-Sleep 10
 
-Write-Host "`nLicense Information:" -ForegroundColor Green
-irm https://bonguides.com/pw/lictranslator | iex
+# Get the license information
 
-$users = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "startsWith(DisplayName, 'Account')" -OrderBy UserPrincipalName
-while ($users.Count -lt 6){
-Start-Sleep 1
-$users = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "startsWith(DisplayName, 'Account')" -OrderBy UserPrincipalName
-}
+    Write-Host "`nLicense Information:" -ForegroundColor Green
+    Invoke-RestMethod https://bonguides.com/pw/lictranslator | Invoke-Expression
 
-Write-Host "`nAssign licenses and add members to group." -ForegroundColor Green
-$users = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "startsWith(DisplayName, 'Account')" -OrderBy UserPrincipalName
-$groupId = (Get-MgGroup -ConsistencyLevel eventual -Count groupCount -Search '"DisplayName:sg-CloudPCUsers"').Id
-$sku1 = (Get-MgSubscribedSku | Where-Object {$_.SkuPartNumber -match 'CPC_E_2C_8GB_256GB'}).SkuId
-$sku2 = (Get-MgSubscribedSku | Where-Object {$_.SkuPartNumber -match 'CPC_E_2C_4GB_128GB​'}).SkuId
+# Wait for all users have been created    
 
-$i = 1
-foreach ($user in $users) {
-    Write-Host "($i/$($users.Count)) Assign licenses to account: $($user.UserPrincipalName)" -ForegroundColor Green
-    Set-MgUserLicense -UserId $($user.Id) -Addlicenses @{SkuId = $sku1} -RemoveLicenses @() | Out-Null
-    Set-MgUserLicense -UserId $($user.Id) -Addlicenses @{SkuId = $sku2} -RemoveLicenses @() | Out-Null
-    $i++
-    Start-Sleep 1
-}
-Write-Host
-$i = 1
-foreach ($user in $users) {
-    Write-Host "($i/$($users.Count)) Adding account to group: $($user.UserPrincipalName)" -ForegroundColor Magenta
-    New-MgGroupMember -GroupId $groupId -DirectoryObjectId $($user.Id) | Out-Null
-    $i++
-    Start-Sleep 1
-}
+    $users = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "startsWith(DisplayName, 'Account')" -OrderBy UserPrincipalName
+    while ($users.Count -lt 6){
+        Start-Sleep 1
+    }
 
-Start-Sleep 5
+# Assign license to users
+
+    Write-Host "`nAssign licenses and add members to group." -ForegroundColor Green
+    $users = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "startsWith(DisplayName, 'Account')" -OrderBy UserPrincipalName
+    $groupId = (Get-MgGroup -ConsistencyLevel eventual -Count groupCount -Search '"DisplayName:sg-CloudPCUsers"').Id
+    $sku1 = (Get-MgSubscribedSku | Where-Object {$_.SkuPartNumber -match 'CPC_E_2C_8GB_256GB'}).SkuId
+    $sku2 = (Get-MgSubscribedSku | Where-Object {$_.SkuPartNumber -match 'CPC_E_2C_4GB_128GB​'}).SkuId
+
+    $i = 1
+    foreach ($user in $users) {
+        Write-Host "($i/$($users.Count)) Assign licenses to account: $($user.UserPrincipalName)" -ForegroundColor Green
+        Set-MgUserLicense -UserId $($user.Id) -Addlicenses @{SkuId = $sku1} -RemoveLicenses @() | Out-Null
+        Start-Sleep 2
+        Set-MgUserLicense -UserId $($user.Id) -Addlicenses @{SkuId = $sku2} -RemoveLicenses @() | Out-Null
+        $i++
+        Start-Sleep 2
+    }
+
+    Write-Host
+# Add users to group
+    $i = 1
+    foreach ($user in $users) {
+        Write-Host "($i/$($users.Count)) Adding account to group: $($user.UserPrincipalName)" -ForegroundColor Magenta
+        New-MgGroupMember -GroupId $groupId -DirectoryObjectId $($user.Id) | Out-Null
+        $i++
+        Start-Sleep 2
+    }
 
 # Get user report with license assigments and account status
     $result = @()
@@ -98,41 +105,44 @@ Start-Sleep 5
         Write-Host "($i/$($users.Count)) Processing: $($user.UserPrincipalName) - $($user.DisplayName)" -ForegroundColor Cyan
         $licenses = (Get-MgBetaUserLicenseDetail -UserId $user.id).SkuPartNumber
         $assignedLicense = @()
-    # Convert license plan to friendly name
+
+        # Convert license plan to friendly name
         if($licenses.count -eq 0){
             $assignedLicense = "Unlicensed"
         } else {
         
-        foreach($License in $licenses){
-            $EasyName = $friendlyNameHash[$License]
-            if(!($EasyName)){
-                $NamePrint = $License
-            } else {
-                $NamePrint = $EasyName
-        }
-        $assignedLicense += $NamePrint
-    }
-    }
+            foreach($License in $licenses){
+                $EasyName = $friendlyNameHash[$License]
+                if(!($EasyName)){
+                    $NamePrint = $License
+                } else {
+                    $NamePrint = $EasyName
+                }
 
-    # Creating the custom report
+                $assignedLicense += $NamePrint
+            }
+        }
+
+        # Creating the custom report
         $result += [PSCustomObject]@{
             'DisplayName' = $user.DisplayName
             'UserPrincipalName' = $user.UserPrincipalName
             'Assignedlicenses'=(@($assignedLicense)-join ',')
         }
         $i++
-        }
+    }
     
-Write-Host "`nGenerating report..." -ForegroundColor Yellow
-$result | Sort-Object assignedlicenses -Descending | Format-Table
+    Write-Host "`nGenerating report..." -ForegroundColor Yellow
+    $result | Sort-Object assignedlicenses -Descending | Format-Table
 
 # Retrieve the group based on the specified group ID or display name
-$groupId = (Get-MgGroup -ConsistencyLevel eventual -Count groupCount -Search '"DisplayName:sg-CloudPCUsers"').Id
-$members = Get-MgGroupMember -GroupId $groupId -All
-# Write-Host "Members of CloudPCs group: $($members).Count" -ForegroundColor Yellow
+    $groupId = (Get-MgGroup -ConsistencyLevel eventual -Count groupCount -Search '"DisplayName:sg-CloudPCUsers"').Id
+    $members = Get-MgGroupMember -GroupId $groupId -All
+    # Write-Host "Members of CloudPCs group: $($members).Count" -ForegroundColor Yellow
 
-Write-Host "Creating an app registration in Entra ID..." -ForegroundColor Yellow
-$appName =  "testapp"
+# Creating an app registration in Entra ID
+    Write-Host "Creating an app registration in Entra ID..." -ForegroundColor Yellow
+    $appName =  "testapp"
     $app = New-MgApplication -DisplayName $appName
     $appObjectId = $app.Id
 
@@ -186,6 +196,7 @@ $appName =  "testapp"
     }
     Update-MgApplication -ApplicationId $appObjectId -BodyParameter $permissionParams
 
+# Grant admin consent
     Write-Host "Granting admin consent..." -ForegroundColor Yellow
     # Grant admin consent
     $graphSpId = $(Get-MgServicePrincipal -Filter "appId eq '00000003-0000-0000-c000-000000000000'").Id
@@ -208,13 +219,11 @@ $appName =  "testapp"
     $((Get-MgOrganization).Id) >> "P:\05.Databases\Cdx\$folder\tenantid.txt"
     $($clientSecret.SecretText) >> "P:\05.Databases\Cdx\$folder\clientSecret.txt"
 
-    # Get-ChildItem "P:\05.Databases\Cdx\$folder"
+# Create a script in Intune
 
-# Create a script
-
-Get-MgBetaDeviceManagementScript | foreach {
-    Remove-MgBetaDeviceManagementScript -DeviceManagementScriptId $_.Id
-}
+    Get-MgBetaDeviceManagementScript | foreach {
+        Remove-MgBetaDeviceManagementScript -DeviceManagementScriptId $_.Id
+    }
 
     Write-Host "Adding a PowerShell script into Intune..." -ForegroundColor Yellow
     $scriptContent = Get-Content "P:\05.Databases\Cdx\all-svn.ps1" -Raw
@@ -235,26 +244,28 @@ Get-MgBetaDeviceManagementScript | foreach {
 
     New-MgBetaDeviceManagementScript -BodyParameter $params
 
-Write-Host "Creating a device group..." -ForegroundColor Yellow
-$GroupParam = @{
-    DisplayName = "All-Cloud-PCs"
-    GroupTypes = @(
-        'DynamicMembership'
-    )
-    SecurityEnabled     = $true
-    IsAssignableToRole  = $false
-    MailEnabled         = $false
-    membershipRuleProcessingState = 'On'
-    MembershipRule = 'device.deviceModel -startsWith "Cloud PC"'
-    MailNickname        = "test17"
-    "Owners@odata.bind" = @(
-        "https://graph.microsoft.com/v1.0/me"
-    )
-}
+# Create a device group
+    Write-Host "Creating a device group..." -ForegroundColor Yellow
+    $GroupParam = @{
+        DisplayName = "All-Cloud-PCs"
+        GroupTypes = @(
+            'DynamicMembership'
+        )
+        SecurityEnabled     = $true
+        IsAssignableToRole  = $false
+        MailEnabled         = $false
+        membershipRuleProcessingState = 'On'
+        MembershipRule = 'device.deviceModel -startsWith "Cloud PC"'
+        MailNickname        = "test17"
+        "Owners@odata.bind" = @(
+            "https://graph.microsoft.com/v1.0/me"
+        )
+    }
 
-New-MgGroup -BodyParameter $GroupParam
-Write-Host "Assigning devices to group..." -ForegroundColor Yellow
-# Assign the script to a group
+    New-MgGroup -BodyParameter $GroupParam
+
+# Assigning Intune script to the device group
+    Write-Host "Assigning devices to group..." -ForegroundColor Yellow
     $devicesGroup = (Get-MgGroup | Where-Object {$_.DisplayName -eq 'All-Cloud-PCs'}).Id
     $scriptIds = (Get-MgBetaDeviceManagementScript).id
 
@@ -272,11 +283,11 @@ Write-Host "Assigning devices to group..." -ForegroundColor Yellow
         Set-MgBetaDeviceManagementScript -DeviceManagementScriptId $scriptId -BodyParameter $params
     }
 
+# Disconnect Microsoft Graph
+    Write-Host "`nDone." -ForegroundColor Green
+    Write-Host "Disconnecting from Microsoft Graph.`n" -ForegroundColor Green
 
-Write-Host "`nDone." -ForegroundColor Green
-Write-Host "Disconnecting from Microsoft Graph.`n" -ForegroundColor Green
-
-Disconnect-Graph
+    Disconnect-Graph
 
 
 
