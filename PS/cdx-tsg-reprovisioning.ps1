@@ -77,6 +77,7 @@
     
         New-MgGroup -BodyParameter $GroupParam | Out-Null
         Start-Sleep 5
+        
     } else {
         Write-Host "The device group is existed..." -ForegroundColor Yellow
     }
