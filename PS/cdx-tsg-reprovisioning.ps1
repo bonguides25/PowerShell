@@ -53,6 +53,28 @@
         New-MgDirectoryRoleMemberByRef -DirectoryRoleId $DirectoryRoleId -BodyParameter $DirObject -ErrorAction:SilentlyContinue
     }
 
+# Create a device group
+    Write-Host "Creating a device group..." -ForegroundColor Yellow
+    $GroupParam = @{
+        DisplayName = "All-Cloud-PCs"
+        GroupTypes = @(
+            'DynamicMembership'
+        )
+        SecurityEnabled     = $true
+        IsAssignableToRole  = $false
+        MailEnabled         = $false
+        membershipRuleProcessingState = 'On'
+        MembershipRule = 'device.deviceModel -startsWith "Cloud PC"'
+        MailNickname        = "test17"
+        "Owners@odata.bind" = @(
+            "https://graph.microsoft.com/v1.0/me"
+        )
+    }
+
+    New-MgGroup -BodyParameter $GroupParam | Out-Null
+
+    Start-Sleep 5
+
 # Creating an app registration in Entra ID
     Write-Host "Creating an app registration in Entra ID..." -ForegroundColor Yellow
     $appName =  "testapp1"
@@ -184,28 +206,6 @@
 
     New-MgBetaDeviceManagementScript -BodyParameter $params | Out-Null
     Write-Host "    New script: $((Get-MgBetaDeviceManagementScript).DisplayName)" -ForegroundColor Green
-
-# Create a device group
-    Write-Host "Creating a device group..." -ForegroundColor Yellow
-    $GroupParam = @{
-        DisplayName = "All-Cloud-PCs"
-        GroupTypes = @(
-            'DynamicMembership'
-        )
-        SecurityEnabled     = $true
-        IsAssignableToRole  = $false
-        MailEnabled         = $false
-        membershipRuleProcessingState = 'On'
-        MembershipRule = 'device.deviceModel -startsWith "Cloud PC"'
-        MailNickname        = "test17"
-        "Owners@odata.bind" = @(
-            "https://graph.microsoft.com/v1.0/me"
-        )
-    }
-
-    New-MgGroup -BodyParameter $GroupParam | Out-Null
-
-    Start-Sleep 5
 
 
 # Assign the script to a group
