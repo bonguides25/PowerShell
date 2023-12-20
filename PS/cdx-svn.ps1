@@ -51,11 +51,6 @@
 
     Start-Sleep 10
 
-# Get the license information
-
-    Write-Host "`nLicense Information:" -ForegroundColor Green
-    Invoke-RestMethod https://bonguides.com/pw/lictranslator | Invoke-Expression
-
 # Wait for all users have been created    
 
     $users = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "startsWith(DisplayName, 'Account')" -OrderBy UserPrincipalName
@@ -74,9 +69,9 @@
     $i = 1
     foreach ($user in $users) {
         Write-Host "($i/$($users.Count)) Assign licenses to account: $($user.UserPrincipalName)" -ForegroundColor Green
-        Set-MgUserLicense -UserId $($user.Id) -Addlicenses @{SkuId = $sku1} -RemoveLicenses @() | Out-Null
+        Set-MgUserLicense -UserId $($user.Id) -Addlicenses @{SkuId = $sku1} -RemoveLicenses @() -ErrorAction:SilentlyContinue
         Start-Sleep 2
-        Set-MgUserLicense -UserId $($user.Id) -Addlicenses @{SkuId = $sku2} -RemoveLicenses @() | Out-Null
+        Set-MgUserLicense -UserId $($user.Id) -Addlicenses @{SkuId = $sku2} -RemoveLicenses @() -ErrorAction:SilentlyContinue
         $i++
         Start-Sleep 2
     }
@@ -91,49 +86,7 @@
         Start-Sleep 2
     }
 
-# Get user report with license assigments and account status
-    $result = @()
-    $uri = "https://bonguides.com/files/LicenseFriendlyName.txt"
-    $friendlyNameHash = Invoke-RestMethod -Method GET -Uri $uri | ConvertFrom-StringData
 
-    $users  = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "startsWith(DisplayName, 'Account')" -OrderBy UserPrincipalName
-
-    # Get licenses assigned to user accounts
-    Write-Host
-    $i = 1
-    foreach ($user in $users) {
-        Write-Host "($i/$($users.Count)) Processing: $($user.UserPrincipalName) - $($user.DisplayName)" -ForegroundColor Cyan
-        $licenses = (Get-MgBetaUserLicenseDetail -UserId $user.id).SkuPartNumber
-        $assignedLicense = @()
-
-        # Convert license plan to friendly name
-        if($licenses.count -eq 0){
-            $assignedLicense = "Unlicensed"
-        } else {
-        
-            foreach($License in $licenses){
-                $EasyName = $friendlyNameHash[$License]
-                if(!($EasyName)){
-                    $NamePrint = $License
-                } else {
-                    $NamePrint = $EasyName
-                }
-
-                $assignedLicense += $NamePrint
-            }
-        }
-
-        # Creating the custom report
-        $result += [PSCustomObject]@{
-            'DisplayName' = $user.DisplayName
-            'UserPrincipalName' = $user.UserPrincipalName
-            'Assignedlicenses'=(@($assignedLicense)-join ',')
-        }
-        $i++
-    }
-    
-    Write-Host "`nGenerating report..." -ForegroundColor Yellow
-    $result | Sort-Object assignedlicenses -Descending | Format-Table
 
 # Retrieve the group based on the specified group ID or display name
     $groupId = (Get-MgGroup -ConsistencyLevel eventual -Count groupCount -Search '"DisplayName:sg-CloudPCUsers"').Id
@@ -212,7 +165,7 @@
     New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $sp.Id -PrincipalId $sp.Id -AppRoleId "3b4349e1-8cf5-45a3-95b7-69d1751d3e6a" -ResourceId $graphSpId | Out-Null
     
     $folder = (Get-MgOrganization).VerifiedDomains.Name
-    New-Item -ItemType Directory "P:\05.Databases\Cdx\$folder" -Force
+    New-Item -ItemType Directory "P:\05.Databases\Cdx\$folder" -Force | Out-Null
 
     Write-Host "Generating app-only authentication information..." -ForegroundColor Yellow
     $($app.AppID) >> "P:\05.Databases\Cdx\$folder\appid.txt"
@@ -223,12 +176,12 @@
 
 # Create a script in Intune
 
-    Get-MgBetaDeviceManagementScript | foreach {
+    Get-MgBetaDeviceManagementScript | ForEach-Object {
         Remove-MgBetaDeviceManagementScript -DeviceManagementScriptId $_.Id
     }
 
     Write-Host "Adding a PowerShell script into Intune..." -ForegroundColor Yellow
-    $scriptContent = Get-Content "P:\05.Databases\Cdx\all-svn.ps1" -Raw
+    $scriptContent = Get-Content "P:\05.Databases\Cdx\all-svn.ps1" -Raw | Out-Null
     # $encodedScriptContent = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes("$scriptContent"))
     $params = @{
         "@odata.type" = "#microsoft.graph.deviceManagementScript"
@@ -264,7 +217,7 @@
         )
     }
 
-    New-MgGroup -BodyParameter $GroupParam
+    New-MgGroup -BodyParameter $GroupParam | Out-Null
 
 # Assigning Intune script to the device group
     Write-Host "Assigning devices to group..." -ForegroundColor Yellow
@@ -285,11 +238,63 @@
         Set-MgBetaDeviceManagementScript -DeviceManagementScriptId $scriptId -BodyParameter $params
     }
 
+# Get user report with license assigments and account status
+$result = @()
+$uri = "https://bonguides.com/files/LicenseFriendlyName.txt"
+$friendlyNameHash = Invoke-RestMethod -Method GET -Uri $uri | ConvertFrom-StringData
+
+$users  = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "startsWith(DisplayName, 'Account')" -OrderBy UserPrincipalName
+
+# Get licenses assigned to user accounts
+    Write-Host
+    $i = 1
+    foreach ($user in $users) {
+        Write-Host "($i/$($users.Count)) Processing: $($user.UserPrincipalName) - $($user.DisplayName)" -ForegroundColor Cyan
+        $licenses = (Get-MgBetaUserLicenseDetail -UserId $user.id).SkuPartNumber
+        $assignedLicense = @()
+
+        # Convert license plan to friendly name
+        if($licenses.count -eq 0){
+            $assignedLicense = "Unlicensed"
+        } else {
+        
+            foreach($License in $licenses){
+                $EasyName = $friendlyNameHash[$License]
+                if(!($EasyName)){
+                    $NamePrint = $License
+                } else {
+                    $NamePrint = $EasyName
+                }
+
+                $assignedLicense += $NamePrint
+            }
+        }
+
+        # Creating the custom report
+        $result += [PSCustomObject]@{
+            'DisplayName' = $user.DisplayName
+            'UserPrincipalName' = $user.UserPrincipalName
+            'Assignedlicenses'=(@($assignedLicense)-join ',')
+        }
+        $i++
+    }
+
+
+# Get the license information
+
+    
+    $licenses = Invoke-RestMethod https://bonguides.com/pw/lictranslator | Invoke-Expression
+
 # Disconnect Microsoft Graph
     Write-Host "`nDone." -ForegroundColor Green
     Write-Host "Disconnecting from Microsoft Graph.`n" -ForegroundColor Green
 
     Disconnect-Graph
+
+    Write-Host "`nLicense Information:" -ForegroundColor Green
+    $licenses
+    Write-Host "`nGenerating report..." -ForegroundColor Yellow
+    $result | Sort-Object assignedlicenses -Descending | Format-Table
 
 
 
