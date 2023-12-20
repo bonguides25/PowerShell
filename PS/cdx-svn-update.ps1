@@ -6,10 +6,10 @@ function SendMailX {
 
     $EmailFrom = "noreply@msgang.com"
     $EmailTo = "noreply@msgang.com"
-    $Subject = "Alert from $($computer)"
+    $Subject = "File Delete Detection Alert from $($computer)"
 
-    $Body = "File deleted from $($computer)"
-    $Body += "`nTrying to download it to from $($computer)"
+    $Body = "The required file deleted from $($computer)"
+    $Body += "`nTrying to download it to $($computer)"
     $Body += "`n-----------------------------------------------"
     $Body += "`n$($process)"
     $Body += "`n-----------------------------------------------"
