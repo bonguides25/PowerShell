@@ -258,6 +258,6 @@
         Start-Sleep -Seconds 10
     }
 
-    Get-CloudPC | Select-Object displayName, status, servicePlanName | Format-Table
+    Get-CloudPC | Select-Object displayName, status, userPrincipalName, servicePlanName | Format-Table
 
     Write-Host "Done.`n" -ForegroundColor Green
