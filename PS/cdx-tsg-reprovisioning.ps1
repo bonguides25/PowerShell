@@ -77,7 +77,7 @@
     
         New-MgGroup -BodyParameter $GroupParam | Out-Null
         Start-Sleep 5
-        
+
     } else {
         Write-Host "The device group is existed..." -ForegroundColor Yellow
     }
@@ -171,9 +171,6 @@
     Disconnect-Graph
     Start-Sleep -Seconds 2
     Disconnect-Graph
-    $email = Read-Host "Enter the email"
-    $folder = $email.Split("@")[1]
-    Write-Host "Tenant: $folder"
     Start-Sleep 3
     $ClientId               = Get-Content "P:\05.Databases\Cdx\$folder\appid.txt"
     $TenantId               = Get-Content "P:\05.Databases\Cdx\$folder\tenantid.txt"
