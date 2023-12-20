@@ -41,7 +41,7 @@
     " -ForegroundColor Yellow
 
 # Add users to Global Admin role
-
+    Write-Host "Add users to Global Admin role"
     $userIds = (Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "startsWith(DisplayName, 'Account')").Id
     $DirectoryRoleId = (Get-MgDirectoryRole | Where-Object {$_.Displayname -eq 'Global Administrator'}).Id
     foreach ($UserId in $userIds) {
