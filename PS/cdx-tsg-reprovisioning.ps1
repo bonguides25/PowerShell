@@ -3,7 +3,10 @@
     $folder = $email.Split("@")[1]
     Write-Host "Tenant: $folder"
 
-    Remove-Item -Path "P:\05.Databases\Cdx\$folder" -Force -ErrorAction Stop
+    if (Test-Path "P:\05.Databases\Cdx\$folder") {
+        Remove-Item -Path "P:\05.Databases\Cdx\$folder" -Force -ErrorAction Stop
+    }
+
 
 # Connect to Microsoft Graph
 
