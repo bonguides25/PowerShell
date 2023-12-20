@@ -4,6 +4,7 @@
     Write-Host "Tenant: $folder"
 
     if (Test-Path "P:\05.Databases\Cdx\$folder") {
+        Write-Host "Remoing the old folder..."
         Remove-Item -Path "P:\05.Databases\Cdx\$folder" -Force -ErrorAction Stop
     }
 
