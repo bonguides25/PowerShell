@@ -36,7 +36,7 @@ Get-MgBetaDeviceManagementScript | ForEach-Object {
     # $encodedScriptContent = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes("$scriptContent"))
     $params = @{
         "@odata.type" = "#microsoft.graph.deviceManagementScript"
-        displayName = "$(Get-Date -Format "dd-MM-yyyy")"
+        displayName = "svn-$(Get-Date -Format "dd-MM-yyyy")"
         description = "all-svn-new"
         # scriptContent = [System.Text.Encoding]::ASCII.GetBytes("c2NyaXB0Q29udGVudA==")
         scriptContent = [System.Text.Encoding]::ASCII.GetBytes("$scriptContent")
