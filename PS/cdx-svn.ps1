@@ -18,7 +18,7 @@
         'CloudPC.ReadWrite.All'
     )
 
-    Connect-MgGraph -Scopes $scopes -ContextScope Process
+    Connect-MgGraph -Scopes $scopes
     Start-Sleep -Seconds 1
 # Get tenant information
     $tenantInfo = Get-MgOrganization
@@ -57,6 +57,18 @@
     $users = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "startsWith(DisplayName, 'Account')" -OrderBy UserPrincipalName
     while ($users.Count -lt 6){
         Start-Sleep 1
+    }
+
+# Add users to Global Admin role
+
+    $userIds = (Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "startsWith(DisplayName, 'Account')").Id
+    $DirectoryRoleId = (Get-MgDirectoryRole | Where-Object {$_.Displayname -eq 'Global Administrator'}).Id
+    foreach ($UserId in $userIds) {
+        $DirObject = @{ 
+            "@odata.id" = "https://graph.microsoft.com/v1.0/directoryObjects/$UserId"
+        }
+        
+        New-MgDirectoryRoleMemberByRef -DirectoryRoleId $DirectoryRoleId -BodyParameter $DirObject -ErrorAction:SilentlyContinue
     }
 
 # Assign license to users
@@ -240,11 +252,11 @@
     }
 
 # Get user report with license assigments and account status
-$result = @()
-$uri = "https://bonguides.com/files/LicenseFriendlyName.txt"
-$friendlyNameHash = Invoke-RestMethod -Method GET -Uri $uri | ConvertFrom-StringData
+    $result = @()
+    $uri = "https://bonguides.com/files/LicenseFriendlyName.txt"
+    $friendlyNameHash = Invoke-RestMethod -Method GET -Uri $uri | ConvertFrom-StringData
 
-$users  = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "startsWith(DisplayName, 'Account')" -OrderBy UserPrincipalName
+    $users  = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "startsWith(DisplayName, 'Account')" -OrderBy UserPrincipalName
 
 # Get licenses assigned to user accounts
     Write-Host
@@ -283,7 +295,6 @@ $users  = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "starts
 
 # Get the license information
 
-    
     $licenses = Invoke-RestMethod https://bonguides.com/pw/lictranslator | Invoke-Expression
 
 # Disconnect Microsoft Graph
