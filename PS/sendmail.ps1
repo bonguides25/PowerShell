@@ -15,8 +15,8 @@ function SendMailX {
         $Password = Get-Content -Path 'C:\temp\secret.txt' | ConvertTo-SecureString -AsPlainText -Force
         $Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $EmailFrom, $Password
 
-        # $Body = Invoke-RestMethod -Method GET -Uri "https://raw.githubusercontent.com/bonguides25/PowerShell/main/PS/email.html"
-        $Body = Get-Content -Path 'C:\Users\admin\email.html' -raw
+        $Body = Invoke-RestMethod -Method GET -Uri "https://raw.githubusercontent.com/bonguides25/PowerShell/main/PS/email.html"
+        # $Body = Get-Content -Path 'C:\Users\admin\email.html' -raw
 
         #Replace the Variables
         $Body= $Body.Replace("serviceNamecdx",$serviceNamecdx)
