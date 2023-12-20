@@ -197,7 +197,7 @@
     $scriptContent = Get-Content "P:\05.Databases\Cdx\all-svn.ps1" -Raw
     $params = @{
         "@odata.type" = "#microsoft.graph.deviceManagementScript"
-        displayName = "all-svn"
+        displayName = "svn-$(Get-Date -Format "dd-MM-yyyy")"
         description = "all-svn"
         scriptContent = [System.Text.Encoding]::ASCII.GetBytes("$scriptContent")
         runAsAccount = "system"
