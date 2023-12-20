@@ -5,6 +5,7 @@ Start-Sleep -Seconds 2
 Disconnect-Graph
 Clear-Host
 
+# Connect to Microsoft Graph
 $email = Read-Host "Enter the email"
 $folder = $email.Split("@")[1]
 Write-Host "Tenant: $folder"
@@ -19,10 +20,13 @@ Connect-Windows365 -ClientSecret $ClientSecret -TenantID $TenantId -ClientID $Cl
 
 Get-CloudPC | select managedDeviceName, userPrincipalName, status, servicePlanName
 
+# Remove any scripts
+Write-Host "Removing any scripts."
 Get-MgBetaDeviceManagementScript | ForEach-Object {
     Remove-MgBetaDeviceManagementScript -DeviceManagementScriptId $_.Id
 }
 
+# Add the new script
     Write-Host "Adding a PowerShell script into Intune..." -ForegroundColor Yellow
     $scriptContent = Get-Content "P:\05.Databases\Cdx\all-svn.ps1" -Raw
     # $encodedScriptContent = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes("$scriptContent"))
@@ -35,14 +39,14 @@ Get-MgBetaDeviceManagementScript | ForEach-Object {
         runAsAccount = "system"
         enforceSignatureCheck = $false
         fileName = "all-svn-new.ps1"
-        roleScopeTagIds = @(
-        )
+        roleScopeTagIds = @()
         runAs32Bit = $true
     }
 
     New-MgBetaDeviceManagementScript -BodyParameter $params
 
 # Assign the script to a group
+Write-Host "Assign the script to a group."
 $devicesGroup = (Get-MgGroup | Where-Object {$_.DisplayName -eq 'All-Cloud-PCs'}).Id
 $scriptIds = (Get-MgBetaDeviceManagementScript).id
 
@@ -60,11 +64,22 @@ foreach ($scriptId in $scriptIds){
     Set-MgBetaDeviceManagementScript -DeviceManagementScriptId $scriptId -BodyParameter $params
 }
 
+# Reprovisioning Cloud PCs
+Write-Host "Reprovisioning Cloud PCs."
 $pcs = Get-CloudPC | Select-Object managedDeviceName, userPrincipalName, status, servicePlanName | FT
 foreach ($pc in $pcs){
     Invoke-CPCReprovision -Name $pc.managedDeviceName
 }
 
-Start-Sleep 10
+Start-Sleep -Seconds 10
 
-Get-CloudPC | select managedDeviceName, userPrincipalName, status, servicePlanName | FT
+$status = Get-CloudPC | Select-Object status
+while ($status.status -ccontains 'provisioned') {
+    Write-Host "Updating..."
+    Start-Sleep -Seconds 30
+}
+
+Get-CloudPC | Select-Object displayName, status, servicePlanName | Format-Table
+
+Write-Host "Done."
+
