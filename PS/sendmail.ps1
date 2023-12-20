@@ -17,15 +17,15 @@ function SendMailX {
         $Password = Get-Content -Path 'C:\temp\secret.txt' | ConvertTo-SecureString -AsPlainText -Force
         $Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $EmailFrom, $Password
 
-        $Body = Invoke-RestMethod -Method GET -Uri "https://raw.githubusercontent.com/bonguides25/PowerShell/main/PS/email.html"
-        # $Body = Get-Content -Path 'C:\Users\admin\email.html' -Raw
+        # $Body = Invoke-RestMethod -Method GET -Uri "https://raw.githubusercontent.com/bonguides25/PowerShell/main/PS/email.html"
+        $Body = Get-Content -Path 'C:\cdx-report.html' -Raw
 
         #Replace the Variables
-        $Body= $Body.Replace("serviceNamecdx",$serviceNamecdx)
-        $Body= $Body.Replace("serviceStatuscdx",$serviceStatuscdx)
+        # $Body= $Body.Replace("serviceNamecdx",$serviceNamecdx)
+        # $Body= $Body.Replace("serviceStatuscdx",$serviceStatuscdx)
 
-        $Body= $Body.Replace("serviceNameoto",$serviceNameoto)
-        $Body= $Body.Replace("serviceStatusoto",$serviceStatusoto)
+        # $Body= $Body.Replace("serviceNameoto",$serviceNameoto)
+        # $Body= $Body.Replace("serviceStatusoto",$serviceStatusoto)
 
         $SMTPServer = "smtp.office365.com"
 
