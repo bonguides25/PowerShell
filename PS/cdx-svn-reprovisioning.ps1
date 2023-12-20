@@ -48,6 +48,7 @@ Get-MgBetaDeviceManagementScript | ForEach-Object {
     }
 
     New-MgBetaDeviceManagementScript -BodyParameter $params | Out-Null
+    
     Write-Host "    New script: $((Get-MgBetaDeviceManagementScript).DisplayName)" -ForegroundColor Green
 
 # Assign the script to a group
