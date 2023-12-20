@@ -19,7 +19,7 @@ Clear-Host
     Connect-Windows365 -ClientSecret $ClientSecret -TenantID $TenantId -ClientID $ClientId -Authtype ServicePrincipal
 
 # Get the device list
-    $devices = Get-CloudPC | select managedDeviceName, userPrincipalName, status, servicePlanName
+    $devices = Get-CloudPC | Select-Object managedDeviceName, userPrincipalName, status, servicePlanName
     Write-Host "The List of devices: ($($devices.Count)) ." -ForegroundColor Cyan
     $devices | Format-Table
 
