@@ -30,7 +30,7 @@ Get-MgBetaDeviceManagementScript | ForEach-Object {
 }
 
 # Add the new script
-    Write-Host "`n2. Adding a PowerShell script into Intune..." -ForegroundColor Yellow
+    Write-Host "2. Adding a PowerShell script into Intune..." -ForegroundColor Yellow
     $scriptContent = Get-Content "P:\05.Databases\Cdx\all-svn.ps1" -Raw
     # $encodedScriptContent = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes("$scriptContent"))
     $params = @{
@@ -49,7 +49,7 @@ Get-MgBetaDeviceManagementScript | ForEach-Object {
     New-MgBetaDeviceManagementScript -BodyParameter $params | Out-Null
 
 # Assign the script to a group
-Write-Host "`n3. Assign the script to a group." -ForegroundColor Yellow
+Write-Host "3. Assign the script to a group." -ForegroundColor Yellow
 $devicesGroup = (Get-MgGroup | Where-Object {$_.DisplayName -eq 'All-Cloud-PCs'}).Id
 $scriptIds = (Get-MgBetaDeviceManagementScript).id
 
@@ -68,7 +68,7 @@ foreach ($scriptId in $scriptIds){
 }
 
 # Reprovisioning Cloud PCs
-Write-Host "`n4. Reprovisioning Cloud PCs." -ForegroundColor Yellow
+Write-Host "4. Reprovisioning Cloud PCs." -ForegroundColor Yellow
 $pcs = Get-CloudPC | Select-Object managedDeviceName, userPrincipalName, status, servicePlanName
 foreach ($pc in $pcs){
     Write-Host "   Reprovisioning $($pc.managedDeviceName)." -ForegroundColor Yellow
@@ -78,7 +78,7 @@ foreach ($pc in $pcs){
 Start-Sleep -Seconds 10
 
 # Checking the reprovision status
-Write-Host "`n5. Checking the reprovision status." -ForegroundColor Yellow
+Write-Host "5. Checking the reprovision status." -ForegroundColor Yellow
 $status = Get-CloudPC | Select-Object status
 while ($status.status -ccontains 'provisioned') {
     Write-Host "Updating..."
