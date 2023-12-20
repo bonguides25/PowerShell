@@ -4,6 +4,7 @@
     Disconnect-Graph
     Start-Sleep -Seconds 2
     Disconnect-Graph
+    Start-Sleep -Seconds 2
     Clear-Host
     $scopes = @(
         'Directory.ReadWrite.All',
@@ -18,7 +19,7 @@
     )
 
     Connect-MgGraph -Scopes $scopes
-
+Start-Sleep -Seconds 1
 # Get tenant information
     $tenantInfo = Get-MgOrganization
     Write-Host "
