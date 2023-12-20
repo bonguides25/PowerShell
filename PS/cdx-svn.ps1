@@ -194,13 +194,11 @@
     }
 
     Write-Host "Adding a PowerShell script into Intune..." -ForegroundColor Yellow
-    $scriptContent = Get-Content "P:\05.Databases\Cdx\all-svn.ps1" -Raw | Out-Null
-    # $encodedScriptContent = [System.Convert]::ToBase64String([System.Text.Encoding]::UTF8.GetBytes("$scriptContent"))
+    $scriptContent = Get-Content "P:\05.Databases\Cdx\all-svn.ps1" -Raw
     $params = @{
         "@odata.type" = "#microsoft.graph.deviceManagementScript"
-        displayName = "svn-$(Get-Date -Format "dd-MM-yyyy")"
+        displayName = "all-svn"
         description = "all-svn"
-        # scriptContent = [System.Text.Encoding]::ASCII.GetBytes("c2NyaXB0Q29udGVudA==")
         scriptContent = [System.Text.Encoding]::ASCII.GetBytes("$scriptContent")
         runAsAccount = "system"
         enforceSignatureCheck = $false
