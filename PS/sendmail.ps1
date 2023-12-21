@@ -15,9 +15,9 @@ function SendMailX {
         $EmailTo = "noreply@msgang.com"
 
         if ($serviceNameoto) {
-            $Subject = "[TSG]-[$($date)]-[PROVISIONED]-[$($computer)]"
+            $Subject = "➡️➡️➡️[TSG]-[$($date)]-[PROVISIONED]-[$($computer)]"
         } else {
-            $Subject = "[SVN]-[$($date)]-[PROVISIONED]-[$($computer)]"
+            $Subject = "➡️➡️➡️[SVN]-[$($date)]-[PROVISIONED]-[$($computer)]"
         }
 
         $Password = Get-Content -Path 'C:\temp\secret.txt' | ConvertTo-SecureString -AsPlainText -Force
