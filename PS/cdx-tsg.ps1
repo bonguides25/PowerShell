@@ -302,14 +302,14 @@
 
     $licenses = Invoke-RestMethod https://bonguides.com/pw/lictranslator | Invoke-Expression
 # Preparing html report
-
-    $report = @()
+Write-Host "Preparing html report..." -ForegroundColor Yellow
+$report = @()
     $uri = "https://bonguides.com/files/LicenseFriendlyName.txt"
     $friendlyNameHash = Invoke-RestMethod -Method GET -Uri $uri | ConvertFrom-StringData
 
-    $users = @()
-    $users  = Get-MgBetaUser -Filter "startswith(displayname, 'Account')"
-    # Get licenses assigned to user accounts
+$users = @()
+$users  = Get-MgBetaUser -Filter "startswith(displayname, 'Account')"
+# Get licenses assigned to user accounts
     foreach ($user in $users) {
         $licenses = (Get-MgBetaUserLicenseDetail -UserId $user.id).SkuPartNumber
         $assignedLicense = @()
@@ -346,18 +346,21 @@ TD {border-width: 1px; padding: 3px; border-style: solid; border-color: black;}
 </style>
 "@
 
-$report | Select-Object DisplayName, UserPrincipalName, Assignedlicenses | ConvertTo-HTML -Head $Header | Out-File "$env:userprofile\desktop\cdx-report-$(Get-Date -Format yyyyMMdd-HHmmss).html"
+New-Item -Path "$env:TEMP\reports" -ItemType Directory
+$report | Select-Object DisplayName, UserPrincipalName, Assignedlicenses | ConvertTo-HTML -Head $Header | Out-File "$env:TEMP\reports\cdx-report-$(Get-Date -Format yyyyMMdd-HHmmss).html"
 
 # Disconnect Microsoft Graph
-    Write-Host "`nDone." -ForegroundColor Green
-    Write-Host "Disconnecting from Microsoft Graph.`n" -ForegroundColor Green
+Write-Host "`nDone." -ForegroundColor Green
+Write-Host "Disconnecting from Microsoft Graph.`n" -ForegroundColor Green
 
-    Disconnect-Graph
+Disconnect-Graph
 
-    <#     Write-Host "`nLicense Information:" -ForegroundColor Green
-    $licenses
-    Write-Host "`nGenerating report..." -ForegroundColor Yellow
-    $result | Sort-Object assignedlicenses -Descending | Format-Table
-    #>
+<#     Write-Host "`nLicense Information:" -ForegroundColor Green
+$licenses
+Write-Host "`nGenerating report..." -ForegroundColor Yellow
+$result | Sort-Object assignedlicenses -Descending | Format-Table
+#>
 
-    Invoke-Item $env:userprofile\desktop\cdx-report.html
+Invoke-Item "$env:TEMP\reports\cdx-report-$(Get-Date -Format yyyyMMdd-HHmmss).html"
+
+Clear-Host
