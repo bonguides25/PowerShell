@@ -185,7 +185,7 @@
     $((Get-MgOrganization).Id) >> "P:\05.Databases\Cdx\$folder\tenantid.txt"
     $($clientSecret.SecretText) >> "P:\05.Databases\Cdx\$folder\clientSecret.txt"
 
-    Invoke-Item -Path "P:\05.Databases\Cdx\$folder"
+    # Invoke-Item -Path "P:\05.Databases\Cdx\$folder"
 
 # Create a script in Intune
 
