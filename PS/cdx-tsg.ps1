@@ -53,13 +53,14 @@
     Start-Sleep 10
 
 # Wait for all users have been created    
-
+    Write-Host "Wait for all users have been created..."
     $users = Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "startsWith(DisplayName, 'Account')" -OrderBy UserPrincipalName
     while ($users.Count -lt 6){
         Start-Sleep 1
     }
 
 # Add users to Global Admin role
+    Write-Host "Adding users to Global Admin role..."
 
     $userIds = (Get-MgUser -ConsistencyLevel eventual -Count userCount -Filter "startsWith(DisplayName, 'Account')").Id
     $DirectoryRoleId = (Get-MgDirectoryRole | Where-Object {$_.Displayname -eq 'Global Administrator'}).Id
@@ -182,7 +183,7 @@
     $((Get-MgOrganization).Id) >> "P:\05.Databases\Cdx\$folder\tenantid.txt"
     $($clientSecret.SecretText) >> "P:\05.Databases\Cdx\$folder\clientSecret.txt"
 
-    Invoke-Item -Path "P:\05.Databases\Cdx\$folder"
+    # Invoke-Item -Path "P:\05.Databases\Cdx\$folder"
 
 # Create a script in Intune
 
