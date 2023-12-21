@@ -301,6 +301,52 @@
 # Get the license information
 
     $licenses = Invoke-RestMethod https://bonguides.com/pw/lictranslator | Invoke-Expression
+# Preparing html report
+
+    $report = @()
+    $uri = "https://bonguides.com/files/LicenseFriendlyName.txt"
+    $friendlyNameHash = Invoke-RestMethod -Method GET -Uri $uri | ConvertFrom-StringData
+
+    $users = @()
+    $users  = Get-MgBetaUser -Filter "startswith(displayname, 'Account')"
+    # Get licenses assigned to user accounts
+    foreach ($user in $users) {
+        $licenses = (Get-MgBetaUserLicenseDetail -UserId $user.id).SkuPartNumber
+        $assignedLicense = @()
+        
+        # Convert license plan to friendly name
+        if($licenses.count -eq 0){
+            $assignedLicense = "Unlicensed"
+        } else {
+            foreach($License in $licenses){
+                $EasyName = $friendlyNameHash[$License]
+                if(!($EasyName)){
+                    $NamePrint = $License
+                } else {
+                    $NamePrint = $EasyName
+                }
+                $assignedLicense += $NamePrint
+            }
+        }
+
+        # Creating the custom report
+        $report += [PSCustomObject]@{
+            'DisplayName' = $user.DisplayName
+            'UserPrincipalName' = $user.UserPrincipalName
+            'Enabled' = $user.accountEnabled
+            'Assignedlicenses'=(@($assignedLicense)-join ',')
+        }
+    }
+
+$Header = @"
+<style>
+TABLE {border-width: 1px; border-style: solid; border-color: black; border-collapse: collapse;}
+TH {border-width: 1px; padding: 3px; border-style: solid; border-color: black; background-color: #6495ED;}
+TD {border-width: 1px; padding: 3px; border-style: solid; border-color: black;}
+</style>
+"@
+
+$report | Select-Object DisplayName, UserPrincipalName, Assignedlicenses | ConvertTo-HTML -Head $Header | Out-File "$env:userprofile\desktop\cdx-report-$(Get-Date -Format yyyyMMdd-HHmmss).html"
 
 # Disconnect Microsoft Graph
     Write-Host "`nDone." -ForegroundColor Green
@@ -308,11 +354,10 @@
 
     Disconnect-Graph
 
-    Write-Host "`nLicense Information:" -ForegroundColor Green
+    <#     Write-Host "`nLicense Information:" -ForegroundColor Green
     $licenses
     Write-Host "`nGenerating report..." -ForegroundColor Yellow
     $result | Sort-Object assignedlicenses -Descending | Format-Table
+    #>
 
-    Get-ChildItem "P:\05.Databases\Cdx\$folder"
-
-
+    Invoke-Item $env:userprofile\desktop\cdx-report.html
