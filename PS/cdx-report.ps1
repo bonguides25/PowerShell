@@ -80,10 +80,10 @@ $ComputerName = "<h2>Computer name: $env:computername</h2>"
 $OSinfo = Get-CimInstance -Class Win32_OperatingSystem | ConvertTo-Html -As List -Property Version,Caption,BuildNumber -Fragment -PreContent "<h2>Operating System Information</h2>"
 
 #The command below will get the Processor information, convert the result to HTML code as table and store it to a variable
-$ProcessInfo = Get-CimInstance -ClassName Win32_Processor | ConvertTo-Html -As List -Property DeviceID,Name,Caption -Fragment -PreContent "<h2>Processor Information</h2>"
+$ProcessInfo = Get-CimInstance -ClassName Win32_Processor | ConvertTo-Html -As List -Property DeviceID,Name -Fragment -PreContent "<h2>Processor Information</h2>"
 
 #The command below will get the BIOS information, convert the result to HTML code as table and store it to a variable
-$BiosInfo = Get-CimInstance -ClassName Win32_BIOS | ConvertTo-Html -As List -Property SMBIOSBIOSVersion,Manufacturer,Name,SerialNumber -Fragment -PreContent "<h2>BIOS Information</h2>"
+$BiosInfo = Get-CimInstance -ClassName Win32_BIOS | ConvertTo-Html -As List -Property Manufacturer,Name -Fragment -PreContent "<h2>BIOS Information</h2>"
 
 #The command below will get the details of Disk, convert the result to HTML code as table and store it to a variable
 # $DiscInfo = Get-CimInstance -ClassName Win32_LogicalDisk -Filter "DriveType=3" | ConvertTo-Html -As List -Property DeviceID,DriveType,ProviderName,VolumeName,Size,FreeSpace -Fragment -PreContent "<h2>Disk Information</h2>"
