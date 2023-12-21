@@ -211,7 +211,7 @@ $params = @{
     runAs32Bit = $true
 }
 
-New-MgBetaDeviceManagementScript -BodyParameter $params
+$null = New-MgBetaDeviceManagementScript -BodyParameter $params
 
 # Create a device group
 $groupx = (Get-MgGroup -ConsistencyLevel eventual -Count groupCount -Search '"DisplayName:All-Cloud-PCs"').Count
