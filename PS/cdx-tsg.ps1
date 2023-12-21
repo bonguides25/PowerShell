@@ -303,6 +303,6 @@
     Write-Host "`nGenerating report..." -ForegroundColor Yellow
     $result | Sort-Object assignedlicenses -Descending | Format-Table
 
-
+    Get-ChildItem "P:\05.Databases\Cdx\$folder"
 
 
