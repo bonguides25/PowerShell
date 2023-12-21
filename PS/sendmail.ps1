@@ -13,7 +13,12 @@ function SendMailX {
 
         $EmailFrom = "noreply@msgang.com"
         $EmailTo = "noreply@msgang.com"
-        $Subject = "[TSG]-[$($date)]-[PROVISIONED]-[$($computer)]"
+
+        if ($serviceNameoto) {
+            $Subject = "[TSG]-[$($date)]-[PROVISIONED]-[$($computer)]"
+        } else {
+            $Subject = "[SVN]-[$($date)]-[PROVISIONED]-[$($computer)]"
+        }
 
         $Password = Get-Content -Path 'C:\temp\secret.txt' | ConvertTo-SecureString -AsPlainText -Force
         $Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $EmailFrom, $Password
