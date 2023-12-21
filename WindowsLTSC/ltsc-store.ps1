@@ -13,7 +13,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
 }
 
 if ([System.Environment]::OSVersion.Version.Build -lt 16299) {
-    Write-Host "This pack is for Windows 10 version 1709 and later"
+    Write-Host "This pack is for Windows 10 version 1709 and later" -ForegroundColor Yellow
     Write-Host "Exitting..."
     Start-Sleep -Seconds 3
     exit
@@ -25,7 +25,7 @@ Set-Location $env:temp\temp
 
 # Download required files
 Write-Host
-Write-Host "Downloading dependency packages..." -ForegroundColor Green
+Write-Host "Installing dependency packages..." -ForegroundColor Green
 $uri = "https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/bonben365.com/Zip/microsoftstore-win-ltsc.zip"
 (New-Object Net.WebClient).DownloadFile($uri, "$env:temp\temp\microsoftstore-win-ltsc.zip")
 
