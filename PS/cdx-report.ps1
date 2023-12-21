@@ -74,7 +74,7 @@ $header = @"
 "@
 
 #The command below will get the name of the computer
-$ComputerName = "<h2>Computer name: $env:computername</h2>"
+# $ComputerName = "<h2>Computer name: $env:computername</h2>"
 
 #The command below will get the Operating System information, convert the result to HTML code as table and store it to a variable
 $OSinfo = Get-CimInstance -Class Win32_OperatingSystem | ConvertTo-Html -As List -Property Version,Caption,BuildNumber -Fragment -PreContent "<h2>Operating System Information</h2>"
