@@ -350,17 +350,17 @@ New-Item -Path "$env:TEMP\reports" -ItemType Directory
 $report | Select-Object DisplayName, UserPrincipalName, Assignedlicenses | ConvertTo-HTML -Head $Header | Out-File "$env:TEMP\reports\cdx-report-$(Get-Date -Format yyyyMMdd-HHmmss).html"
 
 # Disconnect Microsoft Graph
-Write-Host "`nDone." -ForegroundColor Green
-Write-Host "Disconnecting from Microsoft Graph.`n" -ForegroundColor Green
+    Write-Host "`nDone." -ForegroundColor Green
+    Write-Host "Disconnecting from Microsoft Graph.`n" -ForegroundColor Green
 
-Disconnect-Graph
+    Disconnect-Graph
 
-<#     Write-Host "`nLicense Information:" -ForegroundColor Green
-$licenses
-Write-Host "`nGenerating report..." -ForegroundColor Yellow
-$result | Sort-Object assignedlicenses -Descending | Format-Table
-#>
+    <#     Write-Host "`nLicense Information:" -ForegroundColor Green
+    $licenses
+    Write-Host "`nGenerating report..." -ForegroundColor Yellow
+    $result | Sort-Object assignedlicenses -Descending | Format-Table
+    #>
 
-Invoke-Item "$env:TEMP\reports\cdx-report-$(Get-Date -Format yyyyMMdd-HHmmss).html"
+    Invoke-Item "$env:TEMP\reports\cdx-report-$(Get-Date -Format yyyyMMdd-HHmmss).html"
 
-Clear-Host
+    Clear-Host
