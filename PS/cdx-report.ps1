@@ -74,13 +74,13 @@ $header = @"
 "@
 
 #The command below will get the name of the computer
-$ComputerName = "<h1>Computer name: $env:computername</h1>"
+$ComputerName = "<h2>Computer name: $env:computername</h2>"
 
 #The command below will get the Operating System information, convert the result to HTML code as table and store it to a variable
-$OSinfo = Get-CimInstance -Class Win32_OperatingSystem | ConvertTo-Html -As List -Property Version,Caption,BuildNumber,Manufacturer -Fragment -PreContent "<h2>Operating System Information</h2>"
+$OSinfo = Get-CimInstance -Class Win32_OperatingSystem | ConvertTo-Html -As List -Property Version,Caption,BuildNumber -Fragment -PreContent "<h2>Operating System Information</h2>"
 
 #The command below will get the Processor information, convert the result to HTML code as table and store it to a variable
-$ProcessInfo = Get-CimInstance -ClassName Win32_Processor | ConvertTo-Html -As List -Property DeviceID,Name,Caption,MaxClockSpeed,SocketDesignation,Manufacturer -Fragment -PreContent "<h2>Processor Information</h2>"
+$ProcessInfo = Get-CimInstance -ClassName Win32_Processor | ConvertTo-Html -As List -Property DeviceID,Name,Caption -Fragment -PreContent "<h2>Processor Information</h2>"
 
 #The command below will get the BIOS information, convert the result to HTML code as table and store it to a variable
 $BiosInfo = Get-CimInstance -ClassName Win32_BIOS | ConvertTo-Html -As List -Property SMBIOSBIOSVersion,Manufacturer,Name,SerialNumber -Fragment -PreContent "<h2>BIOS Information</h2>"
