@@ -209,24 +209,34 @@
     New-MgBetaDeviceManagementScript -BodyParameter $params
 
 # Create a device group
-    Write-Host "Creating a device group..." -ForegroundColor Yellow
-    $GroupParam = @{
-        DisplayName = "All-Cloud-PCs"
-        GroupTypes = @(
-            'DynamicMembership'
-        )
-        SecurityEnabled     = $true
-        IsAssignableToRole  = $false
-        MailEnabled         = $false
-        membershipRuleProcessingState = 'On'
-        MembershipRule = 'device.deviceModel -startsWith "Cloud PC"'
-        MailNickname        = "test17"
-        "Owners@odata.bind" = @(
-            "https://graph.microsoft.com/v1.0/me"
-        )
-    }
+    $groupx = (Get-MgGroup -ConsistencyLevel eventual -Count groupCount -Search '"DisplayName:All-Cloud-PCs"').Count
+    Start-Sleep -Seconds 5
 
-    New-MgGroup -BodyParameter $GroupParam | Out-Null
+    if ($groupx -eq 0) {
+        Write-Host "The group doesn't exist. Creating a device group..." -ForegroundColor Yellow
+        $GroupParam = @{
+            DisplayName = "All-Cloud-PCs"
+            GroupTypes = @(
+                'DynamicMembership'
+            )
+            SecurityEnabled     = $true
+            IsAssignableToRole  = $false
+            MailEnabled         = $false
+            membershipRuleProcessingState = 'On'
+            MembershipRule = 'device.deviceModel -startsWith "Cloud PC"'
+            MailNickname        = "test17"
+            "Owners@odata.bind" = @(
+                "https://graph.microsoft.com/v1.0/me"
+            )
+        }
+
+        New-MgGroup -BodyParameter $GroupParam | Out-Null
+        Start-Sleep 5
+
+    } else {
+        Write-Host "The device group is existed...This step will be skipped." -ForegroundColor Yellow
+        Start-Sleep 5
+    }
 
 # Assigning Intune script to the device group
     Write-Host "Assigning devices to group..." -ForegroundColor Yellow
