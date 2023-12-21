@@ -76,7 +76,7 @@ if ([System.Environment]::OSVersion.Version.Build -lt 16299) {
     }
 
 # Installed apps
-    $packages = @("Microsoft.VCLibs","DesktopAppInstaller","WindowsStore","Microsoft.NET.Native")
+    $packages = @("WindowsStore")
     $report = ForEach ($package in $packages){Get-AppxPackage -Name *$package* | Select-Object Name,Version,Status }
     write-host "Installed packages:"
     $report | format-table
@@ -85,5 +85,5 @@ if ([System.Environment]::OSVersion.Version.Build -lt 16299) {
     Set-Location "$env:temp"
     Remove-Item $env:temp\temp -Recurse -Force
 
-    Write-Host Done.
+    Write-Host Done. -ForegroundColor Green
     Write-Host 
