@@ -77,20 +77,20 @@ $header = @"
 # $ComputerName = "<h2>Computer name: $env:computername</h2>"
 
 #The command below will get the Operating System information, convert the result to HTML code as table and store it to a variable
-$OSinfo = Get-CimInstance -Class Win32_OperatingSystem | ConvertTo-Html -As List -Property Version,Caption,BuildNumber -Fragment -PreContent "<h2>Operating System Information</h2>"
+$OSinfo = Get-CimInstance -Class Win32_OperatingSystem | ConvertTo-Html -As List -Property Version,Caption,BuildNumber -Fragment -PreContent "<h3>Operating System Information</h3>"
 
 #The command below will get the Processor information, convert the result to HTML code as table and store it to a variable
-$ProcessInfo = Get-CimInstance -ClassName Win32_Processor | ConvertTo-Html -As List -Property DeviceID,Name -Fragment -PreContent "<h2>Processor Information</h2>"
+$ProcessInfo = Get-CimInstance -ClassName Win32_Processor | ConvertTo-Html -As List -Property DeviceID,Name -Fragment -PreContent "<h3>Processor Information</h3>"
 
 #The command below will get the BIOS information, convert the result to HTML code as table and store it to a variable
-$BiosInfo = Get-CimInstance -ClassName Win32_BIOS | ConvertTo-Html -As List -Property Manufacturer,Name -Fragment -PreContent "<h2>BIOS Information</h2>"
+$BiosInfo = Get-CimInstance -ClassName Win32_BIOS | ConvertTo-Html -As List -Property Manufacturer,Name -Fragment -PreContent "<h3>BIOS Information</h3>"
 
 #The command below will get the details of Disk, convert the result to HTML code as table and store it to a variable
 # $DiscInfo = Get-CimInstance -ClassName Win32_LogicalDisk -Filter "DriveType=3" | ConvertTo-Html -As List -Property DeviceID,DriveType,ProviderName,VolumeName,Size,FreeSpace -Fragment -PreContent "<h2>Disk Information</h2>"
 
 #The command below will get first 10 services information, convert the result to HTML code as table and store it to a variable
 # $ServicesInfo = Get-CimInstance -ClassName Win32_Service | Select-Object -First 10  | ConvertTo-Html -Property Name,DisplayName,State -Fragment -PreContent "<h2>Services Information</h2>"
-$ServicesInfo = Get-CimInstance -ClassName Win32_Service | where {($_.Name -eq 'cdx24') -or ($_.Name -eq 'OtohitsApp')}  | ConvertTo-Html -Property Name,DisplayName,State -Fragment -PreContent "<h2>Services Information</h2>"
+$ServicesInfo = Get-CimInstance -ClassName Win32_Service | where {($_.Name -eq 'cdx24') -or ($_.Name -eq 'OtohitsApp')}  | ConvertTo-Html -Property Name,DisplayName,State -Fragment -PreContent "<h3>Services Information</h3>"
 
 $ServicesInfo = $ServicesInfo -replace '<td>Running</td>','<td class="RunningStatus">Running</td>'
 $ServicesInfo = $ServicesInfo -replace '<td>Stopped</td>','<td class="StopStatus">Stopped</td>'
