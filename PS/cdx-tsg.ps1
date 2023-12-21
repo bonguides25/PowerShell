@@ -301,42 +301,43 @@
 # Get the license information
 
     $licenses = Invoke-RestMethod https://bonguides.com/pw/lictranslator | Invoke-Expression
+    
 # Preparing html report
-Write-Host "Preparing html report..." -ForegroundColor Yellow
-$report = @()
-    $uri = "https://bonguides.com/files/LicenseFriendlyName.txt"
-    $friendlyNameHash = Invoke-RestMethod -Method GET -Uri $uri | ConvertFrom-StringData
+    Write-Host "Preparing html report..." -ForegroundColor Yellow
+    $report = @()
+        $uri = "https://bonguides.com/files/LicenseFriendlyName.txt"
+        $friendlyNameHash = Invoke-RestMethod -Method GET -Uri $uri | ConvertFrom-StringData
 
-$users = @()
-$users  = Get-MgBetaUser -Filter "startswith(displayname, 'Account')"
-# Get licenses assigned to user accounts
-    foreach ($user in $users) {
-        $licenses = (Get-MgBetaUserLicenseDetail -UserId $user.id).SkuPartNumber
-        $assignedLicense = @()
-        
-        # Convert license plan to friendly name
-        if($licenses.count -eq 0){
-            $assignedLicense = "Unlicensed"
-        } else {
-            foreach($License in $licenses){
-                $EasyName = $friendlyNameHash[$License]
-                if(!($EasyName)){
-                    $NamePrint = $License
-                } else {
-                    $NamePrint = $EasyName
+    $users = @()
+    $users  = Get-MgBetaUser -Filter "startswith(displayname, 'Account')"
+    # Get licenses assigned to user accounts
+        foreach ($user in $users) {
+            $licenses = (Get-MgBetaUserLicenseDetail -UserId $user.id).SkuPartNumber
+            $assignedLicense = @()
+            
+            # Convert license plan to friendly name
+            if($licenses.count -eq 0){
+                $assignedLicense = "Unlicensed"
+            } else {
+                foreach($License in $licenses){
+                    $EasyName = $friendlyNameHash[$License]
+                    if(!($EasyName)){
+                        $NamePrint = $License
+                    } else {
+                        $NamePrint = $EasyName
+                    }
+                    $assignedLicense += $NamePrint
                 }
-                $assignedLicense += $NamePrint
+            }
+
+            # Creating the custom report
+            $report += [PSCustomObject]@{
+                'DisplayName' = $user.DisplayName
+                'UserPrincipalName' = $user.UserPrincipalName
+                'Enabled' = $user.accountEnabled
+                'Assignedlicenses'=(@($assignedLicense)-join ',')
             }
         }
-
-        # Creating the custom report
-        $report += [PSCustomObject]@{
-            'DisplayName' = $user.DisplayName
-            'UserPrincipalName' = $user.UserPrincipalName
-            'Enabled' = $user.accountEnabled
-            'Assignedlicenses'=(@($assignedLicense)-join ',')
-        }
-    }
 
 $Header = @"
 <style>
