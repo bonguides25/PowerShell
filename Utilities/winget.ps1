@@ -26,7 +26,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     (New-Object Net.WebClient).DownloadFile($url, "$env:temp\temp\Microsoft.VCLibs.x64.14.00.Desktop.appx")
     Add-AppxPackage -Path Microsoft.VCLibs.x64.14.00.Desktop.appx -ErrorAction SilentlyContinue | Out-Null
 
-# Download and extract Nuget
+# Install Microsoft.UI.Xaml through Nuget.
     Write-Host "Downloading Windows Package Manager..." -ForegroundColor Green
     $ProgressPreference='Silent'
     $url = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
@@ -34,7 +34,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     .\nuget.exe install Microsoft.UI.Xaml -Version 2.7 | Out-Null
     Add-AppxPackage -Path "$path\Microsoft.UI.Xaml.2.7.0\tools\AppX\x64\Release\Microsoft.UI.Xaml.2.7.appx" -ErrorAction:SilentlyContinue | Out-Null
 
-# Download winget and license file
+# Download winget and license file the install it
     Write-Host "Installing Windows Package Manager..." -ForegroundColor Green
     function getLink($match) {
         $uri = "https://api.github.com/repos/microsoft/winget-cli/releases/latest"
