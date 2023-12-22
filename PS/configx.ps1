@@ -157,7 +157,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
   #$uri = 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/Temp/settings.json'
   #(New-Object Net.WebClient).DownloadFile($uri, $filePath)
 
-  irm bonguides.com/winget | iex
+<#   irm bonguides.com/winget | iex
 
   $wpath = "C:\Program Files\WindowsApps"
   $winget = Get-ChildItem $wpath -Recurse -File -ErrorAction SilentlyContinue | `
@@ -166,13 +166,13 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
 
   If ($winget.count -gt 1){ $winget = $winget[-1] }
   $wingetPath = [string]((Get-Item $winget).Directory.FullName)
-
+ #>
   # $id = 'Microsoft.WindowsTerminal'
 
   #If (-not (Test-Path -Path $wingetPath)) {
     # & "$wingetPath\winget.exe" install $id --exact --silent --scope machine --accept-source-agreements --accept-package-agreements
   #}
-  cmd.exe /c "winget.exe install Microsoft.WindowsTerminal --exact --silent --scope machine --accept-source-agreements --accept-package-agreements"
+  # cmd.exe /c "winget.exe install Microsoft.WindowsTerminal --exact --silent --scope machine --accept-source-agreements --accept-package-agreements"
 
   Write-Host "Completed..." -ForegroundColor Green
   Write-Host "Restarting..." -ForegroundColor Yellow
