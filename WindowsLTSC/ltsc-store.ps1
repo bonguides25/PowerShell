@@ -25,12 +25,12 @@ if ([System.Environment]::OSVersion.Version.Build -lt 16299) {
     Set-Location $env:temp\temp
 
     # Download required files
-    Write-Host "`nInstalling dependency packages..." -ForegroundColor Green
+    Write-Host "`nDownloading dependency packages..." -ForegroundColor Green
     $uri = "https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/bonben365.com/Zip/microsoftstore-win-ltsc.zip"
     (New-Object Net.WebClient).DownloadFile($uri, "$env:temp\temp\microsoftstore-win-ltsc.zip")
 
     # Extract downloaded file then run the script
-    Expand-Archive .\microsoftstore-win-ltsc.zip -Force -ErrorAction:SilentlyContinue
+    $null = Expand-Archive .\microsoftstore-win-ltsc.zip -Force -ErrorAction:SilentlyContinue
     Set-Location "$env:temp\temp\microsoftstore-win-ltsc"
 
     if ([System.Environment]::Is64BitOperatingSystem -like "True") {
@@ -46,6 +46,7 @@ if ([System.Environment]::OSVersion.Version.Build -lt 16299) {
         exit
     }
 
+    Write-Host "`Installing dependency packages..." -ForegroundColor Green
     if ($arch -eq "x86") {
         $depens = Get-ChildItem | Where-Object {($_.Name -match '^*Microsoft.NET.Native*|^*VCLibs*') -and ($_.Name -like '*x86*')}
     } 
@@ -63,13 +64,12 @@ if ([System.Environment]::OSVersion.Version.Build -lt 16299) {
     $null = Add-AppxProvisionedPackage -Online -PackagePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*WindowsStore*') -and ($_.Name -like '*AppxBundle*') })" -LicensePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*WindowsStore*') -and ($_.Name -like '*xml*') })"
 
     if ((Get-ChildItem "*StorePurchaseApp*")) {    
-
-    Add-AppxProvisionedPackage -Online -PackagePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*StorePurchaseApp*') -and ($_.Name -like '*AppxBundle*') })" -LicensePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*StorePurchaseApp*') -and ($_.Name -like '*xml*') })"
+    $null = Add-AppxProvisionedPackage -Online -PackagePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*StorePurchaseApp*') -and ($_.Name -like '*AppxBundle*') })" -LicensePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*StorePurchaseApp*') -and ($_.Name -like '*xml*') })"
     }
 
-    if ((Get-ChildItem "*DesktopAppInstaller*")) {    
-    Add-AppxProvisionedPackage -Online -PackagePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*DesktopAppInstaller*') -and ($_.Name -like '*AppxBundle*') })" -LicensePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*DesktopAppInstaller*') -and ($_.Name -like '*xml*') })"
-    }
+    # Install Windows Package Manager (winget)
+
+    Invoke-RestMethod bonguides.com/winget | Invoke-Expression
 
     if ((Get-ChildItem "*XboxIdentityProvider*")) {    
     Add-AppxProvisionedPackage -Online -PackagePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*XboxIdentityProvider*') -and ($_.Name -like '*AppxBundle*') })" -LicensePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*XboxIdentityProvider*') -and ($_.Name -like '*xml*') })"
@@ -78,41 +78,7 @@ if ([System.Environment]::OSVersion.Version.Build -lt 16299) {
 # Installed apps
     $packages = @("WindowsStore")
     $report = ForEach ($package in $packages){Get-AppxPackage -Name *$package* | Select-Object Name,Version,Status }
-    write-host "Installed packages:"
-    $report | format-table
+    Write-Host "Installed packages:" -ForegroundColor Green
+    $report | Format-List
+    Write-Host "`nDone." -ForegroundColor Green
 
-# Cleanup
-<#     Set-Location "$env:temp"
-    Remove-Item $env:temp\temp -Recurse -Force
- #>
-    Write-Host Done. -ForegroundColor Green
-    Write-Host
-
-#Install and update Desktop framework packages
-<#     $null = New-Item -Path $env:temp\temp -ItemType Directory -Force
-    Set-Location $env:temp\temp
-    $progressPreference = 'silentlyContinue'
-    Write-Host "`nInstalling dependencies..."
-    Invoke-WebRequest -Uri 'https://aka.ms/getwinget' -OutFile 'Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
-    Invoke-WebRequest -Uri 'https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx' -OutFile 'Microsoft.VCLibs.x64.14.00.Desktop.appx'
-    Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.7.3/Microsoft.UI.Xaml.2.7.x64.appx' -OutFile 'Microsoft.UI.Xaml.2.7.x64.appx'
-    Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.5/Microsoft.UI.Xaml.2.8.x64.appx' -OutFile 'Microsoft.UI.Xaml.2.8.x64.appx'
-
-    Add-AppxPackage Microsoft.VCLibs.x64.14.00.Desktop.appx
-    Add-AppxPackage Microsoft.UI.Xaml.2.7.x64.appx
-    Add-AppxPackage Microsoft.UI.Xaml.2.8.x64.appx
-    Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
-
-    #Download and install Windows Terminal
-    Write-Host "Instaling Microsoft Windows Store...`n"
-    $url = 'https://github.com/microsoft/terminal/releases/latest'
-    $request = [System.Net.WebRequest]::Create($url)
-    $response = $request.GetResponse()
-    $tagUrl = $response.ResponseUri.OriginalString
-    $version = $tagUrl.split('/')[-1].Trim('v')
-    $fileName = "Microsoft.WindowsTerminal_$($version)_8wekyb3d8bbwe.msixbundle"
-    $downloadUrl = $tagUrl.Replace('tag', 'download') + '/' + $fileName
-    (New-Object Net.WebClient).DownloadFile($downloadUrl, "$env:temp\WindowsTerminal.msixbundle")
-
-    #Install Windows Terminal
-    Add-AppxPackage WindowsTerminal.msixbundle #>
