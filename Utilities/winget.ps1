@@ -27,7 +27,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     Add-AppxPackage -Path Microsoft.VCLibs.x64.14.00.Desktop.appx -ErrorAction SilentlyContinue | Out-Null
 
 # Download and extract Nuget
-    Write-Host "`n Downloading Windows Package Manager..." -ForegroundColor Green
+    Write-Host "Downloading Windows Package Manager..." -ForegroundColor Green
     $ProgressPreference='Silent'
     $url = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
     (New-Object Net.WebClient).DownloadFile($url, "$env:temp\temp\nuget.exe")
@@ -35,7 +35,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     Add-AppxPackage -Path "$path\Microsoft.UI.Xaml.2.7.0\tools\AppX\x64\Release\Microsoft.UI.Xaml.2.7.appx" -ErrorAction:SilentlyContinue | Out-Null
 
 # Download winget and license file
-    Write-Host "` Installing Windows Package Manager..." -ForegroundColor Green
+    Write-Host "Installing Windows Package Manager..." -ForegroundColor Green
     function getLink($match) {
         $uri = "https://api.github.com/repos/microsoft/winget-cli/releases/latest"
         $get = Invoke-RestMethod -uri $uri -Method Get -ErrorAction stop
@@ -64,8 +64,8 @@ $winget = Get-ChildItem $wpath -Recurse -File -ErrorAction SilentlyContinue | Wh
 
 
 # Checking installed apps
-    Write-Host " The Windows Package Manager has been installed." -ForegroundColor Green
-    Write-Host " Winget version: $(& "$wingetPath\winget.exe" -v) `n" -ForegroundColor Green
+    Write-Host "The Windows Package Manager has been installed." -ForegroundColor Green
+    Write-Host "Winget version: $(& "$wingetPath\winget.exe" -v) `n" -ForegroundColor Green
 
 # Cleanup
     Remove-Item $path\* -Recurse -Force
