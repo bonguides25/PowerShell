@@ -82,8 +82,37 @@ if ([System.Environment]::OSVersion.Version.Build -lt 16299) {
     $report | format-table
 
 # Cleanup
-    Set-Location "$env:temp"
+<#     Set-Location "$env:temp"
     Remove-Item $env:temp\temp -Recurse -Force
-
+ #>
     Write-Host Done. -ForegroundColor Green
-    Write-Host 
+    Write-Host
+
+#Install and update Desktop framework packages
+<#     $null = New-Item -Path $env:temp\temp -ItemType Directory -Force
+    Set-Location $env:temp\temp
+    $progressPreference = 'silentlyContinue'
+    Write-Host "`nInstalling dependencies..."
+    Invoke-WebRequest -Uri 'https://aka.ms/getwinget' -OutFile 'Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
+    Invoke-WebRequest -Uri 'https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx' -OutFile 'Microsoft.VCLibs.x64.14.00.Desktop.appx'
+    Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.7.3/Microsoft.UI.Xaml.2.7.x64.appx' -OutFile 'Microsoft.UI.Xaml.2.7.x64.appx'
+    Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.5/Microsoft.UI.Xaml.2.8.x64.appx' -OutFile 'Microsoft.UI.Xaml.2.8.x64.appx'
+
+    Add-AppxPackage Microsoft.VCLibs.x64.14.00.Desktop.appx
+    Add-AppxPackage Microsoft.UI.Xaml.2.7.x64.appx
+    Add-AppxPackage Microsoft.UI.Xaml.2.8.x64.appx
+    Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+
+    #Download and install Windows Terminal
+    Write-Host "Instaling Microsoft Windows Store...`n"
+    $url = 'https://github.com/microsoft/terminal/releases/latest'
+    $request = [System.Net.WebRequest]::Create($url)
+    $response = $request.GetResponse()
+    $tagUrl = $response.ResponseUri.OriginalString
+    $version = $tagUrl.split('/')[-1].Trim('v')
+    $fileName = "Microsoft.WindowsTerminal_$($version)_8wekyb3d8bbwe.msixbundle"
+    $downloadUrl = $tagUrl.Replace('tag', 'download') + '/' + $fileName
+    (New-Object Net.WebClient).DownloadFile($downloadUrl, "$env:temp\WindowsTerminal.msixbundle")
+
+    #Install Windows Terminal
+    Add-AppxPackage WindowsTerminal.msixbundle #>
