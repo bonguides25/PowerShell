@@ -305,7 +305,6 @@
 
 
 # Get the license information
-
     $licenses = Invoke-RestMethod https://bonguides.com/pw/lictranslator | Invoke-Expression
 # Preparing html report
     Write-Host "Preparing html report..." -ForegroundColor Yellow

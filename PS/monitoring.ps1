@@ -19,7 +19,7 @@ $params = @{
 
 Invoke-RestMethod  @params
 
-$trigger = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionInterval (New-TimeSpan -Minutes 5)
+$trigger = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionInterval (New-TimeSpan -Minutes 120)
 $Action = New-ScheduledTaskAction -Execute "PowerShell" -Argument "-NoProfile -ExecutionPolicy Bypass -File 'C:\Users\mpnadmin\Desktop\monitor.ps1'" -WorkingDirectory 'C:\Users\mpnadmin\Desktop'
 $Principal = New-ScheduledTaskPrincipal -UserId "NT AUTHORITY\SYSTEM" -LogonType ServiceAccount
 Register-ScheduledTask -TaskName "CDX-Monitoring" -Trigger $Trigger -Action $Action -Principal $Principal
