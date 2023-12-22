@@ -180,4 +180,4 @@
 
 # Activate Windows license
 
-  # irm msgnag.com/win | iex
+  # irm msgang.com/win | iex
