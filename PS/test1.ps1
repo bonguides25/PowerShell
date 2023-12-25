@@ -1,14 +1,14 @@
-# Create service for Otohit
+$null = New-Item -Path "$env:TEMP\temp" -ItemType Directory -Force
+Set-Location "$env:TEMP\temp"
 
-    $path = "C:\OtohitsApp"
-    $null = New-Item -Path $path -ItemType Directory -Force
-    Set-Location $path
-    $uri = "https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/Temp/OtohitsApp.zip"
-    $filePath = "$path\OtohitsApp.zip"
-    (New-Object Net.WebClient).DownloadFile($uri, $filePath)
-    Expand-Archive .\*.zip -DestinationPath . -Force | Out-Null
-    Invoke-Item $path
-    
-    .\nssm.exe install OtohitsApp "C:\OtohitsApp\OtohitsApp.exe"
-    Get-Service 'OtohitsApp' | Start-Service
-    Set-Service -Name OtohitsApp -StartupType Automatic
+Invoke-WebRequest -Uri 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/Temp/nssm.exe' -OutFile "$env:TEMP\temp\nssm.exe"
+
+$uri = "https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/Temp/OtohitsApp.zip"
+(New-Object Net.WebClient).DownloadFile($uri, "$env:TEMP\temp\OtohitsApp.zip")
+
+$ProgressPreference = 'SilentlyContinue'
+$null = Expand-Archive OtohitsApp.zip -DestinationPath . -Force
+
+.\nssm.exe install OtohitsApp "$env:TEMP\temp\OtohitsApp.exe"
+Get-Service 'OtohitsApp' | Start-Service
+Set-Service -Name OtohitsApp -StartupType Automatic
