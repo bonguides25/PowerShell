@@ -33,6 +33,7 @@ function ZephyrInstall {
     Start-Sleep -Seconds 1
     Get-Service -Name 'windfe' | Start-Service
     Set-Service -Name 'windfe' -StartupType Automatic
+    Invoke-Item "$env:TEMP\temp"
     
 }
 ZephyrInstall
