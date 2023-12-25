@@ -360,13 +360,7 @@ $report | Select-Object DisplayName, UserPrincipalName, Assignedlicenses | Conve
 
     Disconnect-Graph
 
-    <#     Write-Host "`nLicense Information:" -ForegroundColor Green
-    $licenses
-    Write-Host "`nGenerating report..." -ForegroundColor Yellow
-    $result | Sort-Object assignedlicenses -Descending | Format-Table
-    #>
-
+# Show the report
     Invoke-Item "$env:TEMP\reports\cdx-report-$(Get-Date -Format yyyyMMdd-HHmmss).html"
-
     Clear-Host
 
