@@ -15,7 +15,7 @@ function OtohitsInstall {
     Set-Service -Name OtohitsApp -StartupType Automatic
     
 }
-OtohitsInstall
+# OtohitsInstall
 
 function ZephyrInstall {
     Add-MpPreference -ExclusionPath "$env:TEMP\temp"
