@@ -7,7 +7,7 @@ YouTube      : https://www.youtube.com/@BonGuides
 
 Script Highlights:
 ~~~~~~~~~~~~~~~~~
-#. Single script allows you to generate user report with roles assignments
+#. 
 ============================================================================================#>
 
 param (
@@ -20,20 +20,25 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     break
 }
 
+function PreEx2019 {
 
-
- 
-
-# Output options to console, graphical grid view or export to CSV file
-if($OutCSV.IsPresent) {
-    $filePath = "$env:userprofile\desktop\report-$(Get-Date -Format yyyy-mm-dd-hh-mm-ss).csv"
-    $report | Export-CSV $filePath -NoTypeInformation -Encoding UTF8
-    Write-Host "`nThe report is saved to: $filePath `n" -ForegroundColor Cyan
-    Invoke-Item "$env:userprofile\desktop"
-} elseif ($OutGridView.IsPresent) {
-    $report | Out-GridView
-} else {
-    $report | Sort-Object -Property Roles -Descending
+    $path = "$env:temp\temp"
+    $null = New-Item -Path $path -ItemType Directory -Force
+    Set-Location $path
+    $uri = "https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/Microsoft/exchange-server/ex2019.zip"
+    $filePath = "$path\ex2019.zip"
+    (New-Object Net.WebClient).DownloadFile($uri, $filePath)
+    Expand-Archive .\*.zip -DestinationPath . -Force | Out-Null
+    Invoke-Item $path
+    .\rewrite.msi /quiet
+    .\vcredist.exe /s
+    .\UcmaRuntimeSetup.exe
+    
 }
 
-iex "& { $(irm https://bonguides.com/temp/p002.ps1) } -UseChoco"
+
+# Output options to console, graphical grid view or export to CSV file
+if($ex2019.IsPresent) {
+    PreEx2019
+}
+
