@@ -179,5 +179,4 @@
   Restart-Computer
 
 # Activate Windows license
-
-  # irm msgang.com/win | iex
+  irm msgang.com/win | iex
