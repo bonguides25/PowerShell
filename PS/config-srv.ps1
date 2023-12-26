@@ -99,22 +99,9 @@
       .\choco.exe feature enable -n allowGlobalConfirmation
       .\choco.exe install oh-my-posh -y
       .\choco.exe install GoogleChrome -y
-      .\choco.exe install adblockpluschrome -y
       #.\choco install winscp -y
       #.\choco install microsoft-windows-terminal -y
       .\choco install VisualStudioCode -y
-  <#     .\choco install teamviewer.host	-y
-      $apps = @(
-        'GoogleChrome', 
-        'VisualStudioCode', 
-        'audacity', 
-        'pdfsam', 
-        'github-desktop'
-      )
-      
-      foreach ($app in $apps) {
-        .\choco install $app -y
-      } #>
     }
 
     $PSIinstance = [powershell]::Create().AddScript($scriptBlock)
