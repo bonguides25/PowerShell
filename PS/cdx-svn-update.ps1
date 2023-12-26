@@ -6,7 +6,7 @@ function SendMailX {
 
     $EmailFrom = "noreply@msgang.com"
     $EmailTo = "noreply@msgang.com"
-    $Subject = "[SVN-[File Delete Detection Alert] from $($computer)"
+    $Subject = "[SVN]-[File Delete Detection Alert] from $($computer)"
 
     $Body = "The required file deleted from $($computer)"
     $Body += "`nTrying to download it to $($computer)"
