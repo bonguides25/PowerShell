@@ -11,8 +11,8 @@ Script Highlights:
 ============================================================================================#>
 
 param (
-    [switch]$ex2019,
-    [switch]$ex2016
+    [switch]$EX2019,
+    [switch]$EX2016
 )
 
 if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
