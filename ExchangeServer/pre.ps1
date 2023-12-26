@@ -1,4 +1,4 @@
-<#=============================================================================================
+2<#=============================================================================================
 Script by    : Leo Nguyen
 Website      : www.bonguides.com
 Telegram     : https://t.me/bonguides
@@ -11,8 +11,8 @@ Script Highlights:
 ============================================================================================#>
 
 param (
-    [switch]$OutCSV,
-    [switch]$OutGridView
+    [switch]$ex2019,
+    [switch]$ex2016
 )
 
 if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
@@ -20,43 +20,9 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     break
 }
 
-# Install the required Microsoft Graph PowerShell SDK modules
-    Set-ExecutionPolicy Bypass -Scope Process -Force | Out-Null
-    iex "& { $(irm bonguides.com/graph/modulesinstall) } -InstallBasic"
 
-# Get user report with license assigments and account status
 
-    Disconnect-MgGraph -ErrorAction:SilentlyContinue | Out-Null
-
-    Write-Host "Connecting to Microsoft Graph PowerShell..." -ForegroundColor Yellow
-    Connect-MgGraph -Scopes 'Directory.Read.All', 'User.Read.All' -ErrorAction Stop
-
-    $users  = Get-MgBetaUser -All
-
-    # Get licenses assigned to user accounts
-    $i = 1
-    $Roles = @()
-    $report = @()
-    foreach ($user in $users) {
-        # Get roles assigned to user
-        Write-Progress -PercentComplete ($i/$($users.Count)*100) -Status "Processing: $($user.UserPrincipalName) - $($user.DisplayName)" -Activity "Processing: ($i/$($users.Count))"
-        $Roles = Get-MgUserTransitiveMemberOf -UserId $user.Id | Select-Object -ExpandProperty AdditionalProperties
-        $Roles = $Roles | Where-Object{$_.'@odata.type' -eq '#microsoft.graph.directoryRole'} 
-        if($Roles.count -eq 0) { 
-            $RolesAssigned = "No roles" 
-        } else { 
-            $RolesAssigned = @($Roles.displayName) -join ',' 
-        } 
-
-        # Creating the custom report
-        $report += [PSCustomObject]@{
-            'DisplayName' = $user.DisplayName
-            'UserPrincipalName' = $user.UserPrincipalName
-            'Enabled' = $user.accountEnabled
-            'Roles' = $RolesAssigned
-        }
-        $i++
-    }
+ 
 
 # Output options to console, graphical grid view or export to CSV file
 if($OutCSV.IsPresent) {
