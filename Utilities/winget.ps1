@@ -15,6 +15,8 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     break
 }
 
+$edition = (Get-CimInstance Win32_OperatingSystem).Caption
+
 # Create temporary directory
     $null = New-Item -Path $env:temp\temp -ItemType Directory -Force
     Set-Location $env:temp\temp
