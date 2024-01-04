@@ -16,7 +16,6 @@ Set-Location $env:temp\temp
 
 # Download required files
 Write-Host
-Write-Host "Downloading dependency packages..." -ForegroundColor Green
 $uri = "https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/bonben365.com/Zip/microsoftstore-win-ltsc.zip"
 (New-Object Net.WebClient).DownloadFile($uri, "$env:temp\temp\microsoftstore-win-ltsc.zip")
 
@@ -54,7 +53,6 @@ Write-Host "Installing Microsoft Store..." -ForegroundColor Green
 $null = Add-AppxProvisionedPackage -Online -PackagePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*WindowsStore*') -and ($_.Name -like '*AppxBundle*') })" -LicensePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*WindowsStore*') -and ($_.Name -like '*xml*') })"
 
 if ((Get-ChildItem "*StorePurchaseApp*")) {    
-Write-Host "Adding Store Purchase App..." -ForegroundColor Green
 $null = Add-AppxProvisionedPackage -Online -PackagePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*StorePurchaseApp*') -and ($_.Name -like '*AppxBundle*') })" -LicensePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*StorePurchaseApp*') -and ($_.Name -like '*xml*') })"
 }
 
@@ -63,13 +61,12 @@ Write-Host "Installing App Installer..."
 $null = Add-AppxProvisionedPackage -Online -PackagePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*DesktopAppInstaller*') -and ($_.Name -like '*AppxBundle*') })" -LicensePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*DesktopAppInstaller*') -and ($_.Name -like '*xml*') })"
 }
 
-if ((Get-ChildItem "*XboxIdentityProvider*")) {    
-Write-Host "Adding XboxIdentityProvider..." -ForegroundColor Green
+if ((Get-ChildItem "*XboxIdentityProvider*")) {
 $null = Add-AppxProvisionedPackage -Online -PackagePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*XboxIdentityProvider*') -and ($_.Name -like '*AppxBundle*') })" -LicensePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*XboxIdentityProvider*') -and ($_.Name -like '*xml*') })"
 }
 
 # Installed apps
-$packages = @("Microsoft.VCLibs","DesktopAppInstaller","WindowsStore","Microsoft.NET.Native")
+$packages = @("WindowsStore")
 $report = ForEach ($package in $packages){Get-AppxPackage -Name *$package* | select Name,Version,Status }
 write-host "Installed packages:"
 $report | format-table
