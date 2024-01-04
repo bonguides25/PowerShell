@@ -16,6 +16,7 @@ Set-Location $env:temp\temp
 
 # Download required files
 Write-Host
+Write-Host "Installing dependency packages..." -ForegroundColor Green
 $uri = "https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/bonben365.com/Zip/microsoftstore-win-ltsc.zip"
 (New-Object Net.WebClient).DownloadFile($uri, "$env:temp\temp\microsoftstore-win-ltsc.zip")
 
@@ -44,7 +45,6 @@ if ($arch -eq "x64") {
 }
 
 $progressPreference = 'silentlyContinue'
-Write-Host "Installing dependency packages..." -ForegroundColor Green
 foreach ($depen in $depens) {
     Add-AppxPackage -Path "$depen" -ErrorAction:SilentlyContinue
 }
@@ -57,7 +57,6 @@ $null = Add-AppxProvisionedPackage -Online -PackagePath "$(Get-ChildItem | Where
 }
 
 if ((Get-ChildItem "*DesktopAppInstaller*")) {    
-Write-Host "Installing App Installer..."
 $null = Add-AppxProvisionedPackage -Online -PackagePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*DesktopAppInstaller*') -and ($_.Name -like '*AppxBundle*') })" -LicensePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*DesktopAppInstaller*') -and ($_.Name -like '*xml*') })"
 }
 
@@ -68,12 +67,12 @@ $null = Add-AppxProvisionedPackage -Online -PackagePath "$(Get-ChildItem | Where
 # Installed apps
 $packages = @("WindowsStore")
 $report = ForEach ($package in $packages){Get-AppxPackage -Name *$package* | select Name,Version,Status }
-write-host "Installed packages:"
+write-host "`nInstalled packages:"
 $report | format-table
 
 # Cleanup
 Set-Location "$env:temp"
 Remove-Item $env:temp\temp -Recurse -Force
 
-Write-Host Done.
+Write-Host "Done." -ForegroundColor Green
 Write-Host 
