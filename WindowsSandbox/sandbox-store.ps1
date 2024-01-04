@@ -60,7 +60,7 @@ Add-AppxProvisionedPackage -Online -PackagePath "$(Get-ChildItem | Where-Object 
 }
 
 if ((Get-ChildItem "*DesktopAppInstaller*")) {    
-Write-Host "Adding App Installer..."
+Write-Host "Installing App Installer..."
 Add-AppxProvisionedPackage -Online -PackagePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*DesktopAppInstaller*') -and ($_.Name -like '*AppxBundle*') })" -LicensePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*DesktopAppInstaller*') -and ($_.Name -like '*xml*') })"
 }
 
