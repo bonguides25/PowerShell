@@ -31,10 +31,11 @@ $edition = (Get-CimInstance Win32_OperatingSystem).Caption
 # Install Microsoft.UI.Xaml through Nuget.
     Write-Host "Downloading Windows Package Manager..." -ForegroundColor Green
     $ProgressPreference='Silent'
-    $url = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
-    (New-Object Net.WebClient).DownloadFile($url, "$env:temp\temp\nuget.exe")
-    .\nuget.exe install Microsoft.UI.Xaml -Version 2.7 | Out-Null
-    Add-AppxPackage -Path "$path\Microsoft.UI.Xaml.2.7.0\tools\AppX\x64\Release\Microsoft.UI.Xaml.2.7.appx" -ErrorAction:SilentlyContinue | Out-Null
+    Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.7.3/Microsoft.UI.Xaml.2.7.x64.appx' -OutFile 'Microsoft.UI.Xaml.2.7.x64.appx'
+    # Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.5/Microsoft.UI.Xaml.2.8.x64.appx' -OutFile 'Microsoft.UI.Xaml.2.8.x64.appx'
+
+    Add-AppxPackage Microsoft.UI.Xaml.2.7.x64.appx
+    # Add-AppxPackage Microsoft.UI.Xaml.2.8.x64.appx
 
 # Download winget and license file the install it
     Write-Host "Installing Windows Package Manager..." -ForegroundColor Green
