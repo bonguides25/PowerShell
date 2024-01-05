@@ -22,6 +22,7 @@ $edition = (Get-CimInstance Win32_OperatingSystem).Caption
 if (Test-Path 'C:\Users\WDAGUtilityAccount') {
     Write-Host "You're using Windows Sandbox."
     irm bonguides.com/wsb/winget | iex
+    exit
 }
 
 # Create temporary directory
