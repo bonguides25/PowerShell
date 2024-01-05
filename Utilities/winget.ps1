@@ -20,60 +20,62 @@ $edition = (Get-CimInstance Win32_OperatingSystem).Caption
 # Install Windows Package Manager on Windows Sandbox
 
 if (Test-Path 'C:\Users\WDAGUtilityAccount') {
-    Write-Host "You're using Windows Sandbox."
+    Write-Host "`nYou're using Windows Sandbox." -ForegroundColor Green
     irm bonguides.com/wsb/winget | iex
-    exit
-}
+} else {
 
-# Create temporary directory
+    # Create temporary directory
     $null = New-Item -Path $env:temp\temp -ItemType Directory -Force
     Set-Location $env:temp\temp
     $path = "$env:temp\temp"
 
-# Install C++ Runtime framework packages for Desktop Bridge
-    $ProgressPreference='Silent'
-    $url = 'https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx'
-    (New-Object Net.WebClient).DownloadFile($url, "$env:temp\temp\Microsoft.VCLibs.x64.14.00.Desktop.appx")
-    Add-AppxPackage -Path Microsoft.VCLibs.x64.14.00.Desktop.appx -ErrorAction SilentlyContinue | Out-Null
-
-# Install Microsoft.UI.Xaml through Nuget.
-    Write-Host "Downloading Windows Package Manager..." -ForegroundColor Green
-    $ProgressPreference='Silent'
-    Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.7.3/Microsoft.UI.Xaml.2.7.x64.appx' -OutFile 'Microsoft.UI.Xaml.2.7.x64.appx'
-    # Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.5/Microsoft.UI.Xaml.2.8.x64.appx' -OutFile 'Microsoft.UI.Xaml.2.8.x64.appx'
-
-    Add-AppxPackage Microsoft.UI.Xaml.2.7.x64.appx
-    # Add-AppxPackage Microsoft.UI.Xaml.2.8.x64.appx
-
-# Download winget and license file the install it
-    Write-Host "Installing Windows Package Manager..." -ForegroundColor Green
-    function getLink($match) {
-        $uri = "https://api.github.com/repos/microsoft/winget-cli/releases/latest"
-        $get = Invoke-RestMethod -uri $uri -Method Get -ErrorAction stop
-        $data = $get[0].assets | Where-Object name -Match $match
-        return $data.browser_download_url
-    }
-
-    $url = getLink("msixbundle")
-    $licenseUrl = getLink("License1.xml")
-
-    # Finally, install winget
-    $fileName = 'winget.msixbundle'
-    $licenseName = 'license1.xml'
-
-    (New-Object Net.WebClient).DownloadFile($url, "$env:temp\temp\$fileName")
-    (New-Object Net.WebClient).DownloadFile($licenseUrl, "$env:temp\temp\$licenseName")
-
-    Add-AppxProvisionedPackage -Online -PackagePath $fileName -LicensePath $licenseName | Out-Null
-
-# Checking installed apps
-    #Update the $env:Path to the current session
-    $userpath = [System.Environment]::GetEnvironmentVariable("Path","User")
-    $machinePath = [System.Environment]::GetEnvironmentVariable("Path","Machine")
-    $env:Path = $userpath + ";" + $machinePath
+    # Install C++ Runtime framework packages for Desktop Bridge
+        $ProgressPreference='Silent'
+        $url = 'https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx'
+        (New-Object Net.WebClient).DownloadFile($url, "$env:temp\temp\Microsoft.VCLibs.x64.14.00.Desktop.appx")
+        Add-AppxPackage -Path Microsoft.VCLibs.x64.14.00.Desktop.appx -ErrorAction SilentlyContinue | Out-Null
     
-    Write-Host "The Windows Package Manager has been installed." -ForegroundColor Green
-    Write-Host "Windows Package Manager: $(winget.exe -v) `n" -ForegroundColor Green
+    # Install Microsoft.UI.Xaml through Nuget.
+        Write-Host "Downloading Windows Package Manager..." -ForegroundColor Green
+        $ProgressPreference='Silent'
+        Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.7.3/Microsoft.UI.Xaml.2.7.x64.appx' -OutFile 'Microsoft.UI.Xaml.2.7.x64.appx'
+        # Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.5/Microsoft.UI.Xaml.2.8.x64.appx' -OutFile 'Microsoft.UI.Xaml.2.8.x64.appx'
+    
+        Add-AppxPackage Microsoft.UI.Xaml.2.7.x64.appx
+        # Add-AppxPackage Microsoft.UI.Xaml.2.8.x64.appx
+    
+    # Download winget and license file the install it
+        Write-Host "Installing Windows Package Manager..." -ForegroundColor Green
+        function getLink($match) {
+            $uri = "https://api.github.com/repos/microsoft/winget-cli/releases/latest"
+            $get = Invoke-RestMethod -uri $uri -Method Get -ErrorAction stop
+            $data = $get[0].assets | Where-Object name -Match $match
+            return $data.browser_download_url
+        }
+    
+        $url = getLink("msixbundle")
+        $licenseUrl = getLink("License1.xml")
+    
+        # Finally, install winget
+        $fileName = 'winget.msixbundle'
+        $licenseName = 'license1.xml'
+    
+        (New-Object Net.WebClient).DownloadFile($url, "$env:temp\temp\$fileName")
+        (New-Object Net.WebClient).DownloadFile($licenseUrl, "$env:temp\temp\$licenseName")
+    
+        Add-AppxProvisionedPackage -Online -PackagePath $fileName -LicensePath $licenseName | Out-Null
+    
+    # Checking installed apps
+        #Update the $env:Path to the current session
+        $userpath = [System.Environment]::GetEnvironmentVariable("Path","User")
+        $machinePath = [System.Environment]::GetEnvironmentVariable("Path","Machine")
+        $env:Path = $userpath + ";" + $machinePath
+        
+        Write-Host "The Windows Package Manager has been installed." -ForegroundColor Green
+        Write-Host "Windows Package Manager: $(winget -v) `n" -ForegroundColor Green
+    
+    # Cleanup
+        Remove-Item $path\* -Recurse -Force
+}
 
-# Cleanup
-    Remove-Item $path\* -Recurse -Force
+
