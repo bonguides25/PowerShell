@@ -17,6 +17,13 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
 
 $edition = (Get-CimInstance Win32_OperatingSystem).Caption
 
+# Install Windows Package Manager on Windows Sandbox
+
+if (Test-Path 'C:\Users\WDAGUtilityAccount') {
+    Write-Host "You're using Windows Sandbox."
+    irm bonguides.com/wsb/winget | iex
+}
+
 # Create temporary directory
     $null = New-Item -Path $env:temp\temp -ItemType Directory -Force
     Set-Location $env:temp\temp
