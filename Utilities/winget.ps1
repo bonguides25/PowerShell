@@ -15,10 +15,8 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     break
 }
 
-$edition = (Get-CimInstance Win32_OperatingSystem).Caption
 
 # Install Windows Package Manager on Windows Sandbox
-
 if (Test-Path 'C:\Users\WDAGUtilityAccount') {
     Write-Host "`nYou're using Windows Sandbox." -ForegroundColor Yellow
     irm bonguides.com/wsb/winget | iex
