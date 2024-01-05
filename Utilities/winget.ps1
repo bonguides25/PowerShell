@@ -64,15 +64,7 @@ if (Test-Path 'C:\Users\WDAGUtilityAccount') {
         (New-Object Net.WebClient).DownloadFile($licenseUrl, "$env:temp\temp\$licenseName")
     
         Add-AppxProvisionedPackage -Online -PackagePath $fileName -LicensePath $licenseName | Out-Null
-    
-    # Checking installed apps
-        #Update the $env:Path to the current session
-        $userpath = [System.Environment]::GetEnvironmentVariable("Path","User")
-        $machinePath = [System.Environment]::GetEnvironmentVariable("Path","Machine")
-        $env:Path = $userpath + ";" + $machinePath
-        
         Write-Host "The Windows Package Manager has been installed." -ForegroundColor Green
-        Write-Host "Windows Package Manager: $(winget -v) `n" -ForegroundColor Green
     
     # Cleanup
         Remove-Item $path\* -Recurse -Force
