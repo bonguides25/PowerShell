@@ -68,7 +68,7 @@ $winget = Get-ChildItem $wpath -Recurse -File -ErrorAction SilentlyContinue | Wh
 
 # Checking installed apps
     Write-Host "The Windows Package Manager has been installed." -ForegroundColor Green
-    # Write-Host "Winget version: $(& "$wingetPath\winget.exe" -v) `n" -ForegroundColor Green
+    Write-Host "Winget version: $(& "$wingetPath\winget.exe" -v) `n" -ForegroundColor Green
 
 # Cleanup
     Remove-Item $path\* -Recurse -Force
