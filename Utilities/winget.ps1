@@ -58,17 +58,14 @@ $edition = (Get-CimInstance Win32_OperatingSystem).Caption
 
     Add-AppxProvisionedPackage -Online -PackagePath $fileName -LicensePath $licenseName | Out-Null
 
-$wpath = "C:\Program Files\WindowsApps"
-$winget = Get-ChildItem $wpath -Recurse -File -ErrorAction SilentlyContinue | Where-Object { $_.name -like "AppInstallerCLI.exe" -or $_.name -like "WinGet.exe" } | Select-Object -ExpandProperty fullname -ErrorAction SilentlyContinue
-
-# If there are multiple versions, select latest.
-    if ($winget.count -gt 1){ $winget = $winget[-1] }
-    $wingetPath = [string]((Get-Item $winget).Directory.FullName)
-
-
 # Checking installed apps
+    #Update the $env:Path to the current session
+    $userpath = [System.Environment]::GetEnvironmentVariable("Path","User")
+    $machinePath = [System.Environment]::GetEnvironmentVariable("Path","Machine")
+    $env:Path = $userpath + ";" + $machinePath
+    
     Write-Host "The Windows Package Manager has been installed." -ForegroundColor Green
-    Write-Host "Winget version: $(& "$wingetPath\winget.exe" -v) `n" -ForegroundColor Green
+    Write-Host "Windows Package Manager: $(winget.exe -v) `n" -ForegroundColor Green
 
 # Cleanup
     Remove-Item $path\* -Recurse -Force
