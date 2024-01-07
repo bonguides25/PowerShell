@@ -76,14 +76,11 @@ ForEach ($User in $Users) {
     $Report.Add($ReportLine)
 }
 
-
 if($OutCSV.IsPresent) {
-    $Report | Sort-Object UserPrincipalName | Export-CSV -Encoding UTF8 -NoTypeInformation "c:\temp\MFAUsers.csv"
+    $Report | Sort-Object UserPrincipalName | Export-CSV -Encoding UTF8 -NoTypeInformation "C:\scripts\MFAUsers.csv"
     Write-Host "Report is saved in C:\scripts\MFAUsers.csv"
-}
-
-if($OutGridView.IsPresent) {
+} elseif ($OutGridView.IsPresent) {
     $Report | Select-Object UserPrincipalName, DisplayName, MFAState, MFADefaultMethod, MFAPhoneNumber, PrimarySMTP, Aliases | Sort-Object UserPrincipalName | Out-GridView
+} else {
+    $Report | Select-Object UserPrincipalName, DisplayName, MFAState, MFADefaultMethod, MFAPhoneNumber, PrimarySMTP, Aliases | Sort-Object UserPrincipalName | Format-Table
 }
-
-$Report | Select-Object UserPrincipalName, DisplayName, MFAState, MFADefaultMethod, MFAPhoneNumber, PrimarySMTP, Aliases | Sort-Object UserPrincipalName
