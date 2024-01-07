@@ -15,6 +15,11 @@ param (
     [switch]$OutGridView
 )
 
+if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
+    Write-Warning "You need to have Administrator rights to run this script!`nPlease re-run this script as an Administrator in an elevated powershell prompt!"
+    break
+}
+
 # Check for module installation
 $module =  Get-Module 'MSOnline' -ListAvailable
     if($null -eq $module) {
@@ -30,6 +35,12 @@ $module =  Get-Module 'MSOnline' -ListAvailable
     } 
 }
 
+# Create a folder to store the script and csv file (if it's not exist)
+if (-not(Test-Path 'C:\Scripts')) {
+    New-Item -Path 'C:\Scripts' -ItemType Directory -ErrorAction:SilentlyContinue
+}
+
+# Connect to Microsoft 365 PowerShell
 Connect-MsolService
 
 Write-Host "Finding Azure Active Directory Accounts..."
