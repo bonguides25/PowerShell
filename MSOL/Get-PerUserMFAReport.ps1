@@ -15,7 +15,7 @@ param (
     [switch]$OutGridView
 )
 
-#Check for module installation
+# Check for module installation
 $module =  Get-Module 'MSOnline' -ListAvailable
     if($null -eq $module) {
     Write-host "Important: MSOnline module is unavailable. It is mandatory to have this module installed in the system to run the script successfully." 
@@ -29,6 +29,8 @@ $module =  Get-Module 'MSOnline' -ListAvailable
         Exit 
     } 
 }
+
+Connect-MsolService
 
 Write-Host "Finding Azure Active Directory Accounts..."
 $Users = Get-MsolUser -All | Where-Object { $_.UserType -ne "Guest" }
@@ -77,7 +79,7 @@ ForEach ($User in $Users) {
 
 if($OutCSV.IsPresent) {
     $Report | Sort-Object UserPrincipalName | Export-CSV -Encoding UTF8 -NoTypeInformation "c:\temp\MFAUsers.csv"
-    Write-Host "Report is in c:\temp\MFAUsers.csv"
+    Write-Host "Report is saved in C:\scripts\MFAUsers.csv"
 }
 
 if($OutGridView.IsPresent) {
