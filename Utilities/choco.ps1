@@ -60,10 +60,12 @@ function InstallChocoShow {
 if ($HideOutput.IsPresent) {
     InstallChocoHide
 }
+InstallChocoShow
+# if ($ShowOutput.IsPresent) {
+#     InstallChocoShow
+# }
 
-if ($ShowOutput.IsPresent) {
-    InstallChocoShow
-}
+
     
 
 
