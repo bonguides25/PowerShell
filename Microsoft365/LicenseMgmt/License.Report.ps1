@@ -8,6 +8,7 @@ YouTube      : https://www.youtube.com/@BonGuides
 Script Highlights:
 ~~~~~~~~~~~~~~~~~
 #. Single script allows you to generate licenses/ subscriptions report
+#. Single-line script execution: irm https://bonguides.com/pw/lictranslator | iex
 ============================================================================================#>
 
 param (
