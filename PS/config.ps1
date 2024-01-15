@@ -99,7 +99,7 @@
       .\choco.exe feature enable -n allowGlobalConfirmation
       .\choco.exe install oh-my-posh -y
       .\choco.exe install GoogleChrome -y
-      .\choco.exe install adblockpluschrome -y
+      # .\choco.exe install adblockpluschrome -y
       #.\choco install winscp -y
       #.\choco install microsoft-windows-terminal -y
       .\choco install VisualStudioCode -y
@@ -138,17 +138,17 @@
 
 # 9. Activating Windows license.
   # Write-Host "9. Activating Windows license..." -ForegroundColor Green
-  # Invoke-RestMethod msgang.com/win | Invoke-Expression
+  Invoke-RestMethod msgang.com/win | Invoke-Expression
 
 # 10. Creating shortcuts to desktop
   Write-Host "10. Creating shortcuts to desktop..." -ForegroundColor Green
   Copy-Item "$env:userprofile\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\System Tools\Control Panel.lnk" "$env:userprofile\Desktop\"
 
 # 11. Change to the Light theme
-  Write-Host "11. Changing to the Light theme..." -ForegroundColor Green
-  Start-Process -Filepath "C:\Windows\Resources\Themes\light.theme"
-  Start-Sleep -Seconds 3
-  Get-Process -ProcessName 'SystemSettings' | Stop-Process
+  # Write-Host "11. Changing to the Light theme..." -ForegroundColor Green
+  # Start-Process -Filepath "C:\Windows\Resources\Themes\light.theme"
+  # Start-Sleep -Seconds 3
+  # Get-Process -ProcessName 'SystemSettings' | Stop-Process
 
 # 12. Configure Terminal
   #Write-Host "12. Configure Terminal..." -ForegroundColor Green
