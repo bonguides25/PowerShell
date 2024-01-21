@@ -32,9 +32,9 @@ if ($PSVersionTable.PSVersion.Major -ge 7) {
 
 switch ($StatusCode) {
     200 {
-        Write-Host "The tenant's name $domain is unavailable." -ForegroundColor Red
+        Write-Host "The tenant's name $FQDN is unavailable." -ForegroundColor Red
     }
     404 {
-        Write-Host "The tenant's name $domain is available." -ForegroundColor Green
+        Write-Host "The tenant's name $FQDN is available." -ForegroundColor Green
     }
 }
