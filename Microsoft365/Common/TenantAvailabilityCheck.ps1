@@ -16,21 +16,25 @@ if ($FQDN -notmatch "(?=^.{4,253}$)(^((?!-)[a-zA-Z0-9-]{1,63}(?<!-)\.)+[a-zA-Z]{
 
 $uri = "https://login.microsoftonline.com/{0}/FederationMetadata/2007-06/FederationMetadata.xml" -f $FQDN
 
-$response = try { 
-    (Invoke-WebRequest -Uri $uri -Method GET -ErrorAction Stop).BaseResponse
-} catch [System.Net.WebException] { 
-    $_.Exception.Response 
+if ($PSVersionTable.PSVersion.Major -eq 5) {
+    $response = try { 
+        (Invoke-WebRequest -Uri $uri -Method GET -ErrorAction Stop).BaseResponse
+    } catch [System.Net.WebException] { 
+        $_.Exception.Response
+    }
+    $StatusCode = $response.StatusCode.Value__
 }
 
-switch ($response.StatusCode.Value__) {
+if ($PSVersionTable.PSVersion.Major -ge 7) {
+    $response = Invoke-WebRequest -Uri $uri -Method GET -SkipHttpErrorCheck
+    $StatusCode = $response.StatusCode
+}
+
+switch ($StatusCode) {
     200 {
-        Write-Host "The tenant name `"$FQDN`" is unavailable." -ForegroundColor Red
+        Write-Host "The tenant's name $domain is unavailable." -ForegroundColor Red
     }
     404 {
-        Write-Host "The tenant name `"$FQDN`" is available." -ForegroundColor Green
-    }
-    default {
-        Write-Error -Message "Unable to determine result." -ErrorAction Stop
-        break;
+        Write-Host "The tenant's name $domain is available." -ForegroundColor Green
     }
 }
