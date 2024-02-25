@@ -22,7 +22,7 @@ Set-Location $env:temp\temp
 $progressPreference = 'silentlyContinue'
 Write-Host "`nInstalling Visual Studio Code (VSCode)..." -ForegroundColor Yellow
 
-Invoke-WebRequest -Uri "https://go.microsoft.com/fwlink/?LinkID=623230" -OutFile 'vscode-install.exe'
+Invoke-WebRequest -Uri "https://code.visualstudio.com/sha/download?build=stable&os=win32-x64" -OutFile 'vscode-install.exe'
 
 # Install Options
 # I'm using /silent, use /verysilent for no UI
