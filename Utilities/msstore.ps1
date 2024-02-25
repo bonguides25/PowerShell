@@ -20,7 +20,7 @@ $null = New-Item -Path $env:temp\temp -ItemType Directory -Force
 Set-Location $env:temp\temp
 
 $progressPreference = 'silentlyContinue'
-Write-Host "`nInstalling Microsoft Store and its dependencies..." -ForegroundColor Green
+Write-Host "`nInstalling Microsoft Store..." -ForegroundColor Green
 
 Invoke-WebRequest -Uri 'https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx' -OutFile 'Microsoft.VCLibs.x64.14.00.Desktop.appx'
 Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.7.3/Microsoft.UI.Xaml.2.7.x64.appx' -OutFile 'Microsoft.UI.Xaml.2.7.x64.appx'
