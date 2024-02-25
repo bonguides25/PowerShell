@@ -32,7 +32,7 @@ $installerArguments = "/silent /mergetasks='!runcode,addcontextmenufiles,addcont
 #Install with default options, and don't run code after install.
 #$installerArguments = "/silent /mergetasks='!runcode'"
 
-Start-Process $installerPath -ArgumentList $installerArguments -Wait
+Start-Process vscode-install.exe -ArgumentList $installerArguments -Wait
 
 # Cleanup
 Write-Host "Cleanup the downloaded file." -ForegroundColor Yellow
