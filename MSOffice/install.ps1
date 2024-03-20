@@ -392,7 +392,7 @@ $Link1.Add_PreviewMouseDown({[system.Diagnostics.Process]::start('https://bongui
         $fileName = 'configuration.xml'
         $null = New-Item $fileName -ItemType File -Force
         Add-Content $fileName -Value '<Configuration>'
-        Add-Content $fileName -Value '<Remove All="True"/>'
+        Add-Content $fileName -Value '<Remove All="True">'
         Add-Content $fileName -Value '</Remove>'
         Add-Content $fileName -Value '</Configuration>'
         $uri = 'https://github.com/bonben365/office-installer/raw/main/setup.exe'
