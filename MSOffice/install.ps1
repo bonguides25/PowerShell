@@ -386,10 +386,19 @@ $Link1.Add_PreviewMouseDown({[system.Diagnostics.Process]::start('https://bongui
         $sync.Form.Dispatcher.Invoke([action] { $sync.ProgressBar.BorderBrush = "#FF707070" })
         $sync.Form.Dispatcher.Invoke([action] { $sync.ProgressBar.IsIndeterminate = $true })
         $sync.Form.Dispatcher.Invoke([action] { $sync.image.Visibility = "Visible" })
-        
-        Set-Location -Path $($sync.workingDir)
-        (New-Object Net.WebClient).DownloadFile($($sync.uninstall), "$($sync.workingDir)\04.Uninstall.bat")
-        Start-Process -FilePath .\04.Uninstall.bat -Wait
+
+        $null = New-Item -Path $env:temp\c2r -ItemType Directory -Force
+        Set-Location $env:temp\c2r
+        $fileName = 'configuration.xml'
+        $null = New-Item $fileName -ItemType File -Force
+        Add-Content $fileName -Value '<Configuration>'
+        Add-Content $fileName -Value '<Remove All="True"/>'
+        Add-Content $fileName -Value '</Remove>'
+        Add-Content $fileName -Value '</Configuration>'
+        $uri = 'https://github.com/bonben365/office-installer/raw/main/setup.exe'
+        (New-Object Net.WebClient).DownloadFile($uri, "$env:temp\c2r\ClickToRun.exe")
+    
+        Start-Process -FilePath .\ClickToRun.exe -ArgumentList "/configure .\configuration.xml" -NoNewWindow -Wait
         
         $sync.Form.Dispatcher.Invoke([action] { $sync.image.Visibility = "Hidden" })
         $sync.Form.Dispatcher.Invoke([action] { $sync.buttonSubmit.Visibility = 'Visible' })
