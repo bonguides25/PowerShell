@@ -160,7 +160,7 @@ $Link1.Add_PreviewMouseDown({[system.Diagnostics.Process]::start('https://bongui
 # Download links
     $uri = "https://github.com/bonben365/office-installer/raw/main/setup.exe"
     $uri2013 = "https://github.com/bonben365/office-installer/raw/main/bin2013.exe"
-    $uninstall = 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/MSGANG/scripts/office/uninstall.bat'
+    # $uninstall = 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/MSGANG/scripts/office/uninstall.bat'
     $readme = 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/MSGANG/scripts/office/Readme.txt'
 
 # Prepiaration for download and install
@@ -397,7 +397,7 @@ $Link1.Add_PreviewMouseDown({[system.Diagnostics.Process]::start('https://bongui
         Add-Content $fileName -Value '</Configuration>'
         $uri = 'https://github.com/bonben365/office-installer/raw/main/setup.exe'
         (New-Object Net.WebClient).DownloadFile($uri, "$env:temp\c2r\ClickToRun.exe")
-    
+        
         Start-Process -FilePath .\ClickToRun.exe -ArgumentList "/configure .\configuration.xml" -NoNewWindow -Wait
         
         $sync.Form.Dispatcher.Invoke([action] { $sync.image.Visibility = "Hidden" })
