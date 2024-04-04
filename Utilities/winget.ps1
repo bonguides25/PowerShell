@@ -8,6 +8,7 @@ YouTube      : https://www.youtube.com/@BonGuides
 Script Highlights:
 ~~~~~~~~~~~~~~~~~
 #. Install Windows Package Manager (winget).
+# Works on all Windows editons included Windows LTSC and Windows Sandbox
 ============================================================================================#>
 
 if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
