@@ -19,7 +19,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
 
 # Install Windows Package Manager on Windows Sandbox only
 if (Test-Path 'C:\Users\WDAGUtilityAccount') {
-    Write-Host "`nYou're using Windows Sandbox." -ForegroundColor Yellow
+    Write-Host "`nYou're using Windows Sandbox" -ForegroundColor Yellow
     irm bonguides.com/wsb/winget | iex
 } else {
 
