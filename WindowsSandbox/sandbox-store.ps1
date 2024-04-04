@@ -15,17 +15,16 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     break
 }
 
-# Create temporary directory
-    $null = New-Item -Path $env:temp\temp -ItemType Directory -Force
-    Set-Location $env:temp\temp
-    $progressPreference = 'silentlyContinue'
-    Write-Host "`nInstalling Microsoft Store..." -ForegroundColor Green
+
+Write-Host "`nInstalling Microsoft Store..." -ForegroundColor Green
 
 # Install C++ Runtime framework packages for Desktop Bridge
     $ProgressPreference='Silent'
-    $url = 'https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx'
-    (New-Object Net.WebClient).DownloadFile($url, "$env:temp\temp\Microsoft.VCLibs.x64.14.00.Desktop.appx")
-    Add-AppxPackage -Path Microsoft.VCLibs.x64.14.00.Desktop.appx -ErrorAction SilentlyContinue | Out-Null
+    irm https://raw.githubusercontent.com/bonguides25/PowerShell/main/Utilities/msvclibs.ps1 | iex
+
+# Install Microsoft.UI.Xaml through Nuget.
+    $ProgressPreference='Silent'
+    irm https://raw.githubusercontent.com/bonguides25/PowerShell/main/Utilities/microsoft.ui.xaml.ps1 | iex
 
 # Install Microsoft.UI.Xaml
     $ProgressPreference='Silent'
