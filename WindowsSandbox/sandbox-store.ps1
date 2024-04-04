@@ -16,7 +16,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
 }
 
 Set-Location "$env:temp"
-Write-Host "`nInstalling Microsoft Store..." -ForegroundColor Green
+Write-Host "`nInstalling Microsoft Store..." -ForegroundColor Yellow
 
 # Install C++ Runtime framework packages for Desktop Bridge
     $ProgressPreference='Silent'
@@ -39,7 +39,7 @@ Write-Host "`nInstalling Microsoft Store..." -ForegroundColor Green
     Add-AppxPackage 'Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
     
 Get-AppxPackage | Where-Object { $_.name -like "*Store*" -or $_.name -like "*UI.Xaml*" -or $_.name -like "*DesktopAppInstaller*" } | Select-Object Name, Version -ErrorAction SilentlyContinue
-Write-Host "Done.`n" -ForegroundColor Green
+Write-Host "Done.`n" -ForegroundColor Yellow
 
 # Open the Microsoft Store
 start ms-windows-store:
