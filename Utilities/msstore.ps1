@@ -26,7 +26,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
 # Installing the Microsoft Store on Windows LTSC only
     $edition = (Get-CimInstance Win32_OperatingSystem).Caption
     if ($edition -like "*LTSC*"){
-        Write-Host "`nYou're using $edition." -ForegroundColor Yellow
+        Write-Host "`nYou're using $edition" -ForegroundColor Yellow
         irm https://raw.githubusercontent.com/bonguides25/PowerShell/main/WindowsLTSC/ltsc-store.ps1 | iex
         exit
     }
