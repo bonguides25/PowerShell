@@ -41,3 +41,6 @@ Write-Host "`nInstalling Microsoft Store..." -ForegroundColor Green
 Get-AppxPackage | Where-Object { $_.name -like "*Store*" -or $_.name -like "*UI.Xaml*" -or $_.name -like "*DesktopAppInstaller*" } | Select-Object Name, Version -ErrorAction SilentlyContinue
 Write-Host "Done.`n" -ForegroundColor Green
 
+# Open the Microsoft Store
+start ms-windows-store:
+
