@@ -16,13 +16,18 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
 }
 
 # Create temporary directory
-$null = New-Item -Path $env:temp\temp -ItemType Directory -Force
-Set-Location $env:temp\temp
+    $null = New-Item -Path $env:temp\temp -ItemType Directory -Force
+    Set-Location $env:temp\temp
+    $progressPreference = 'silentlyContinue'
+    Write-Host "`nInstalling Microsoft Store..." -ForegroundColor Green
 
-$progressPreference = 'silentlyContinue'
-Write-Host "`nInstalling Microsoft Store..." -ForegroundColor Green
+# Install C++ Runtime framework packages for Desktop Bridge
+    $ProgressPreference='Silent'
+    $url = 'https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx'
+    (New-Object Net.WebClient).DownloadFile($url, "$env:temp\temp\Microsoft.VCLibs.x64.14.00.Desktop.appx")
+    Add-AppxPackage -Path Microsoft.VCLibs.x64.14.00.Desktop.appx -ErrorAction SilentlyContinue | Out-Null
 
-Invoke-WebRequest -Uri 'https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx' -OutFile 'Microsoft.VCLibs.x64.14.00.Desktop.appx'
+
 # Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.7.3/Microsoft.UI.Xaml.2.7.x64.appx' -OutFile 'Microsoft.UI.Xaml.2.7.x64.appx'
 # Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.5/Microsoft.UI.Xaml.2.8.x64.appx' -OutFile 'Microsoft.UI.Xaml.2.8.x64.appx'
 Invoke-WebRequest -Uri https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.6/Microsoft.UI.Xaml.2.8.x64.appx -OutFile Microsoft.UI.Xaml.2.8.x64.appx
@@ -33,7 +38,6 @@ Invoke-WebRequest -Uri 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/Files/StoreAp
 Invoke-WebRequest -Uri 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/Files/StoreApps/Microsoft.NET.Native.Framework.1.6_1.6.24903.0_x64__8wekyb3d8bbwe.Appx' -OutFile 'Microsoft.NET.Native.Framework.1.6_1.6.24903.0_x64__8wekyb3d8bbwe.Appx'
 Invoke-WebRequest -Uri 'https://aka.ms/getwinget' -OutFile 'Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
 
-Add-AppxPackage 'Microsoft.VCLibs.x64.14.00.Desktop.appx'
 # Add-AppxPackage 'Microsoft.UI.Xaml.2.7.x64.appx'
 Add-AppxPackage 'Microsoft.UI.Xaml.2.8.x64.appx'
 Add-AppxPackage 'Microsoft.NET.Native.Framework.1.6_1.6.24903.0_x64__8wekyb3d8bbwe.Appx'
