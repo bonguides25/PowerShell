@@ -7,7 +7,7 @@ YouTube      : https://www.youtube.com/@BonGuides
 
 Script Highlights:
 ~~~~~~~~~~~~~~~~~
-#. Install Windows Package Manager (winget).
+# Install Windows Package Manager (winget).
 # Works on all Windows editons included Windows LTSC and Windows Sandbox
 ============================================================================================#>
 
@@ -17,14 +17,13 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
 }
 
 
-# Install Windows Package Manager on Windows Sandbox
-
+# Install Windows Package Manager on Windows Sandbox only
 if (Test-Path 'C:\Users\WDAGUtilityAccount') {
     Write-Host "`nYou're using Windows Sandbox." -ForegroundColor Yellow
     irm bonguides.com/wsb/winget | iex
 } else {
 
-    Write-Host "Installing Windows Package Manager (AppInstaller)..." -ForegroundColor Green
+    Write-Host "Installing Windows Package Manager (AppInstaller)..." -ForegroundColor Yellow
     # Create temporary directory
     $null = New-Item -Path $env:temp\temp -ItemType Directory -Force
     Set-Location $env:temp\temp
@@ -58,7 +57,7 @@ if (Test-Path 'C:\Users\WDAGUtilityAccount') {
         (New-Object Net.WebClient).DownloadFile($licenseUrl, "$env:temp\temp\$licenseName")
     
         Add-AppxProvisionedPackage -Online -PackagePath $fileName -LicensePath $licenseName | Out-Null
-        Write-Host "The Windows Package Manager has been installed." -ForegroundColor Green
+        Write-Host "The Windows Package Manager has been installed." -ForegroundColor Yellow
     
     # Cleanup
         Remove-Item $path\* -Recurse -Force
