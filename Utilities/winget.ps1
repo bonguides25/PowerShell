@@ -7,7 +7,7 @@ YouTube      : https://www.youtube.com/@BonGuides
 
 Script Highlights:
 ~~~~~~~~~~~~~~~~~
-# Install Windows Package Manager (winget).
+# Install Windows Package Manager (winget)
 # Works on all Windows editons included Windows LTSC and Windows Sandbox
 ============================================================================================#>
 
