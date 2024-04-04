@@ -77,8 +77,8 @@ if ([System.Environment]::OSVersion.Version.Build -lt 16299) {
     $packages = @("WindowsStore")
     $report = ForEach ($package in $packages){Get-AppxPackage -Name *$package* | Select-Object Name,Version,Status }
     Write-Host "Installed packages:" -ForegroundColor Yellow
-    $report | Format-List
-    Write-Host "`nDone." -ForegroundColor Yellow
+    $report | Format-Table
+    Write-Host "Done." -ForegroundColor Yellow
 
 # Open the Microsoft Store
     start ms-windows-store:
