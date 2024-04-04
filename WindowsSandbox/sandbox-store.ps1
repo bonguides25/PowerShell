@@ -22,11 +22,11 @@ Write-Host "`nInstalling Microsoft Store..." -ForegroundColor Green
     $ProgressPreference='Silent'
     irm https://raw.githubusercontent.com/bonguides25/PowerShell/main/Utilities/msvclibs.ps1 | iex
 
-# Install Microsoft.UI.Xaml through Nuget.
+# Install Microsoft.UI.Xaml
     $ProgressPreference='Silent'
     irm https://raw.githubusercontent.com/bonguides25/PowerShell/main/Utilities/microsoft.ui.xaml.ps1 | iex
 
-# Install the dependency packages.
+# Install the dependency packages
     $ProgressPreference='Silent'
     irm https://raw.githubusercontent.com/bonguides25/PowerShell/main/Utilities/sideloaddeps.ps1 | iex
 
