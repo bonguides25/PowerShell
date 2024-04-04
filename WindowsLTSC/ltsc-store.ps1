@@ -29,7 +29,7 @@ if ([System.Environment]::OSVersion.Version.Build -lt 16299) {
     Set-Location $env:temp\temp
 
     # Download required files
-    Write-Host "`nDownloading dependency packages..." -ForegroundColor Yellow
+    Write-Host "`nInstalling dependency packages..." -ForegroundColor Yellow
     $uri = "https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/bonben365.com/Zip/microsoftstore-win-ltsc.zip"
     (New-Object Net.WebClient).DownloadFile($uri, "$env:temp\temp\microsoftstore-win-ltsc.zip")
 
@@ -46,7 +46,6 @@ if ([System.Environment]::OSVersion.Version.Build -lt 16299) {
         }
 
     # Installing dependency packages
-        Write-Host "`Installing dependency packages..." -ForegroundColor Yellow
         $progressPreference = 'silentlyContinue'
         if ($arch -eq "x86") {
             $depens = Get-ChildItem | Where-Object {($_.Name -match '^*Microsoft.NET.Native*|^*VCLibs*') -and ($_.Name -like '*x86*')}
