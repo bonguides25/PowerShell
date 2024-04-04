@@ -44,3 +44,6 @@ Write-Host "`nInstalling Microsoft Windows Terminal..." -ForegroundColor Green
     Add-AppxPackage WindowsTerminal.msixbundle
 
  Get-AppxPackage | Where-Object { $_.Name -like "*terminal*"} | select Name, Architecture, Version, PublisherId -ErrorAction SilentlyContinue
+
+# Start Windows Terminal
+Start-Process wt
