@@ -16,7 +16,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
 }
 
 Set-Location "$env:temp"
-Write-Host "`nInstalling Microsoft Windows Terminal..." -ForegroundColor Green
+Write-Host "`nInstalling Microsoft Windows Terminal..." -ForegroundColor Yellow
 
 # Install C++ Runtime framework packages for Desktop Bridge
     $ProgressPreference='Silent'
