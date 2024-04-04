@@ -24,10 +24,7 @@ if (Test-Path 'C:\Users\WDAGUtilityAccount') {
 } else {
 
     Write-Host "Installing Windows Package Manager (AppInstaller)..." -ForegroundColor Yellow
-    # Create temporary directory
-    $null = New-Item -Path $env:temp\temp -ItemType Directory -Force
-    Set-Location $env:temp\temp
-    $path = "$env:temp\temp"
+    Set-Location "$env:temp"
 
     # Install C++ Runtime framework packages for Desktop Bridge
         $ProgressPreference='Silent'
@@ -38,7 +35,6 @@ if (Test-Path 'C:\Users\WDAGUtilityAccount') {
         irm https://raw.githubusercontent.com/bonguides25/PowerShell/main/Utilities/microsoft.ui.xaml.ps1 | iex
     
     # Download winget and license file the install it
-        
         function getLink($match) {
             $uri = "https://api.github.com/repos/microsoft/winget-cli/releases/latest"
             $get = Invoke-RestMethod -uri $uri -Method Get -ErrorAction stop
@@ -53,14 +49,11 @@ if (Test-Path 'C:\Users\WDAGUtilityAccount') {
         $fileName = 'winget.msixbundle'
         $licenseName = 'license1.xml'
     
-        (New-Object Net.WebClient).DownloadFile($url, "$env:temp\temp\$fileName")
-        (New-Object Net.WebClient).DownloadFile($licenseUrl, "$env:temp\temp\$licenseName")
+        (New-Object Net.WebClient).DownloadFile($url, "$env:temp\$fileName")
+        (New-Object Net.WebClient).DownloadFile($licenseUrl, "$env:temp\$licenseName")
     
         Add-AppxProvisionedPackage -Online -PackagePath $fileName -LicensePath $licenseName | Out-Null
         Write-Host "The Windows Package Manager has been installed." -ForegroundColor Yellow
-    
-    # Cleanup
-        Remove-Item $path\* -Recurse -Force
 }
 
 
