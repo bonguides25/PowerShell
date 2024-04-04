@@ -35,15 +35,8 @@ if (Test-Path 'C:\Users\WDAGUtilityAccount') {
         irm https://raw.githubusercontent.com/bonguides25/PowerShell/main/Utilities/msvclibs.ps1 | iex
     
     # Install Microsoft.UI.Xaml through Nuget.
-      
         $ProgressPreference='Silent'
-        # Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.7.3/Microsoft.UI.Xaml.2.7.x64.appx' -OutFile 'Microsoft.UI.Xaml.2.7.x64.appx'
-        # Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.5/Microsoft.UI.Xaml.2.8.x64.appx' -OutFile 'Microsoft.UI.Xaml.2.8.x64.appx'
-        Invoke-WebRequest -Uri https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.6/Microsoft.UI.Xaml.2.8.x64.appx -OutFile Microsoft.UI.Xaml.2.8.x64.appx
-    
-        # Add-AppxPackage Microsoft.UI.Xaml.2.7.x64.appx
-        # Add-AppxPackage Microsoft.UI.Xaml.2.8.x64.appx
-        Add-AppxPackage Microsoft.UI.Xaml.2.8.x64.appx
+        irm https://raw.githubusercontent.com/bonguides25/PowerShell/main/Utilities/microsoft.ui.xaml.ps1 | iex
     
     # Download winget and license file the install it
         
