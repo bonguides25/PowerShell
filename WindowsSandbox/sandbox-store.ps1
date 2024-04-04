@@ -44,5 +44,7 @@ Add-AppxPackage 'Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
 # Set-Location "$env:temp"
 # Remove-Item $env:temp\temp -Recurse -Force
 
+Get-AppxPackage | Where-Object { $_.name -like "*Store*" -or $_.name -like "*UI.Xaml*" -or $_.name -like "*DesktopAppInstaller*" } | Select-Object Name, Version -ErrorAction SilentlyContinue
+
 Write-Host "Done.`n" -ForegroundColor Green
 
