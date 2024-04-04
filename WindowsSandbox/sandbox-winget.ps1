@@ -18,6 +18,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
 
 Write-Host "`nInstalling Windows Package Manager (winget)..." -ForegroundColor Yellow
 
+
 # Install C++ Runtime framework packages for Desktop Bridge
     $ProgressPreference='Silent'
     irm https://raw.githubusercontent.com/bonguides25/PowerShell/main/Utilities/msvclibs.ps1 | iex
