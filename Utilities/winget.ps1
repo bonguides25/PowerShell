@@ -18,11 +18,13 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
 
 
 # Install Windows Package Manager on Windows Sandbox
+
 if (Test-Path 'C:\Users\WDAGUtilityAccount') {
     Write-Host "`nYou're using Windows Sandbox." -ForegroundColor Yellow
     irm bonguides.com/wsb/winget | iex
 } else {
 
+    Write-Host "Installing Windows Package Manager (AppInstaller)..." -ForegroundColor Green
     # Create temporary directory
     $null = New-Item -Path $env:temp\temp -ItemType Directory -Force
     Set-Location $env:temp\temp
@@ -35,16 +37,18 @@ if (Test-Path 'C:\Users\WDAGUtilityAccount') {
         Add-AppxPackage -Path Microsoft.VCLibs.x64.14.00.Desktop.appx -ErrorAction SilentlyContinue | Out-Null
     
     # Install Microsoft.UI.Xaml through Nuget.
-        Write-Host "Downloading Windows Package Manager..." -ForegroundColor Green
+      
         $ProgressPreference='Silent'
-        Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.7.3/Microsoft.UI.Xaml.2.7.x64.appx' -OutFile 'Microsoft.UI.Xaml.2.7.x64.appx'
+        # Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.7.3/Microsoft.UI.Xaml.2.7.x64.appx' -OutFile 'Microsoft.UI.Xaml.2.7.x64.appx'
         # Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.5/Microsoft.UI.Xaml.2.8.x64.appx' -OutFile 'Microsoft.UI.Xaml.2.8.x64.appx'
+        Invoke-WebRequest -Uri https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.6/Microsoft.UI.Xaml.2.8.x64.appx -OutFile Microsoft.UI.Xaml.2.8.x64.appx
     
-        Add-AppxPackage Microsoft.UI.Xaml.2.7.x64.appx
+        # Add-AppxPackage Microsoft.UI.Xaml.2.7.x64.appx
         # Add-AppxPackage Microsoft.UI.Xaml.2.8.x64.appx
+        Add-AppxPackage Microsoft.UI.Xaml.2.8.x64.appx
     
     # Download winget and license file the install it
-        Write-Host "Installing Windows Package Manager..." -ForegroundColor Green
+        
         function getLink($match) {
             $uri = "https://api.github.com/repos/microsoft/winget-cli/releases/latest"
             $get = Invoke-RestMethod -uri $uri -Method Get -ErrorAction stop
