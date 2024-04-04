@@ -24,12 +24,11 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     $ProgressPreference='Silent'
     irm https://raw.githubusercontent.com/bonguides25/PowerShell/main/Utilities/microsoft.ui.xaml.ps1 | iex
 
-Set-Location $env:temp
-$progressPreference = 'silentlyContinue'
-Write-Host "`nInstalling Windows Package Manager (winget)..." -ForegroundColor Yellow
-Invoke-WebRequest -Uri 'https://aka.ms/getwinget' -OutFile 'Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
-
-Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
+# Install Windows Package Managet for install apps from Microsoft Store.
+    $progressPreference = 'silentlyContinue'
+    Write-Host "`nInstalling Windows Package Manager (winget)..." -ForegroundColor Yellow
+    Invoke-WebRequest -Uri 'https://aka.ms/getwinget' -OutFile 'Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
+    Add-AppxPackage Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle
 
 Write-Host "Winget version: $(winget -v)"
 winget
