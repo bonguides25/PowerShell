@@ -7,7 +7,7 @@ YouTube      : https://www.youtube.com/@BonGuides
 
 Script Highlights:
 ~~~~~~~~~~~~~~~~~
-#. Install Microsoft Windows Terminal on Windows.
+# Install Microsoft Windows Terminal on Windows.
 ============================================================================================#>
 
 if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
