@@ -4,6 +4,10 @@ Website      : www.bonguides.com
 Telegram     : https://t.me/bonguides
 Discord      : https://discord.gg/fUVjuqexJg
 YouTube      : https://www.youtube.com/@BonGuides
+
+Script Highlights:
+~~~~~~~~~~~~~~~~~
+#. Install Microsoft Store on Windows LTSC systems.
 ============================================================================================#>
 
 if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
@@ -25,7 +29,7 @@ if ([System.Environment]::OSVersion.Version.Build -lt 16299) {
     Set-Location $env:temp\temp
 
     # Download required files
-    Write-Host "`nDownloading dependency packages..." -ForegroundColor Green
+    Write-Host "`nDownloading dependency packages..." -ForegroundColor Yellow
     $uri = "https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/bonben365.com/Zip/microsoftstore-win-ltsc.zip"
     (New-Object Net.WebClient).DownloadFile($uri, "$env:temp\temp\microsoftstore-win-ltsc.zip")
 
@@ -33,52 +37,47 @@ if ([System.Environment]::OSVersion.Version.Build -lt 16299) {
     $null = Expand-Archive .\microsoftstore-win-ltsc.zip -Force -ErrorAction:SilentlyContinue
     Set-Location "$env:temp\temp\microsoftstore-win-ltsc"
 
-    if ([System.Environment]::Is64BitOperatingSystem -like "True") {
-        $arch = "x64"
-    } else {
-        $arch = "x86"
-    }
+    
+    # Geeting the Windows architecture
+        if ([System.Environment]::Is64BitOperatingSystem -like "True") {
+            $arch = "x64"
+        } else {
+            $arch = "x86"
+        }
 
-    if (!(Get-ChildItem "*WindowsStore*")) {    
-        Write-Host "Error: Required files are missing in the current directory"
-        Write-Host "Exitting..."
-        Start-Sleep -Seconds 3
-        exit
-    }
-
-    Write-Host "`Installing dependency packages..." -ForegroundColor Green
-    if ($arch -eq "x86") {
-        $depens = Get-ChildItem | Where-Object {($_.Name -match '^*Microsoft.NET.Native*|^*VCLibs*') -and ($_.Name -like '*x86*')}
-    } 
-    if ($arch -eq "x64") {
-        $depens = Get-ChildItem | Where-Object {$_.Name -match '^*Microsoft.NET.Native*|^*VCLibs*'}
-    }
-
-    $progressPreference = 'silentlyContinue'
-    foreach ($depen in $depens) {
-        Add-AppxPackage -Path "$depen" -ErrorAction:SilentlyContinue
-    }
+    # Installing dependency packages
+        Write-Host "`Installing dependency packages..." -ForegroundColor Yellow
+        $progressPreference = 'silentlyContinue'
+        if ($arch -eq "x86") {
+            $depens = Get-ChildItem | Where-Object {($_.Name -match '^*Microsoft.NET.Native*|^*VCLibs*') -and ($_.Name -like '*x86*')}
+        } 
+        if ($arch -eq "x64") {
+            $depens = Get-ChildItem | Where-Object {$_.Name -match '^*Microsoft.NET.Native*|^*VCLibs*'}
+        }
+    
+        foreach ($depen in $depens) {
+            Add-AppxPackage -Path "$depen" -ErrorAction:SilentlyContinue
+        }
 
     # Install Microsoft Store
-    Write-Host "Installing Microsoft Store..." -ForegroundColor Green
-    $null = Add-AppxProvisionedPackage -Online -PackagePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*WindowsStore*') -and ($_.Name -like '*AppxBundle*') })" -LicensePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*WindowsStore*') -and ($_.Name -like '*xml*') })"
+        Write-Host "Installing Microsoft Store..." -ForegroundColor Yellow
+        $null = Add-AppxProvisionedPackage -Online -PackagePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*WindowsStore*') -and ($_.Name -like '*AppxBundle*') })" -LicensePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*WindowsStore*') -and ($_.Name -like '*xml*') })"
 
-    if ((Get-ChildItem "*StorePurchaseApp*")) {    
-    $null = Add-AppxProvisionedPackage -Online -PackagePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*StorePurchaseApp*') -and ($_.Name -like '*AppxBundle*') })" -LicensePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*StorePurchaseApp*') -and ($_.Name -like '*xml*') })"
-    }
+        if ((Get-ChildItem "*StorePurchaseApp*")) {    
+            $null = Add-AppxProvisionedPackage -Online -PackagePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*StorePurchaseApp*') -and ($_.Name -like '*AppxBundle*') })" -LicensePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*StorePurchaseApp*') -and ($_.Name -like '*xml*') })"
+        }
+
+        if ((Get-ChildItem "*XboxIdentityProvider*")) {    
+            Add-AppxProvisionedPackage -Online -PackagePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*XboxIdentityProvider*') -and ($_.Name -like '*AppxBundle*') })" -LicensePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*XboxIdentityProvider*') -and ($_.Name -like '*xml*') })"
+        }
 
     # Install Windows Package Manager (winget)
-
-    Invoke-RestMethod bonguides.com/winget | Invoke-Expression
-
-    if ((Get-ChildItem "*XboxIdentityProvider*")) {    
-    Add-AppxProvisionedPackage -Online -PackagePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*XboxIdentityProvider*') -and ($_.Name -like '*AppxBundle*') })" -LicensePath "$(Get-ChildItem | Where-Object { ($_.Name -like '*XboxIdentityProvider*') -and ($_.Name -like '*xml*') })"
-    }
+        Invoke-RestMethod bonguides.com/winget | Invoke-Expression
 
 # Installed apps
     $packages = @("WindowsStore")
     $report = ForEach ($package in $packages){Get-AppxPackage -Name *$package* | Select-Object Name,Version,Status }
-    Write-Host "Installed packages:" -ForegroundColor Green
+    Write-Host "Installed packages:" -ForegroundColor Yellow
     $report | Format-List
     Write-Host "`nDone." -ForegroundColor Green
 
