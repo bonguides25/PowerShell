@@ -20,7 +20,7 @@ $null = New-Item -Path $env:temp\temp -ItemType Directory -Force
 Set-Location $env:temp\temp
 
 $progressPreference = 'silentlyContinue'
-Write-Host "`nInstalling Microsoft Store and its dependencies..." -ForegroundColor Green
+Write-Host "`nInstalling Microsoft Store..." -ForegroundColor Green
 
 Invoke-WebRequest -Uri 'https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx' -OutFile 'Microsoft.VCLibs.x64.14.00.Desktop.appx'
 # Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.7.3/Microsoft.UI.Xaml.2.7.x64.appx' -OutFile 'Microsoft.UI.Xaml.2.7.x64.appx'
@@ -43,8 +43,8 @@ Add-AppxPackage 'Microsoft.WindowsStore_11809.1001.713.0_neutral_~_8wekyb3d8bbwe
 Add-AppxPackage 'Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
 
 # Cleanup
-Set-Location "$env:temp"
-Remove-Item $env:temp\temp -Recurse -Force
+# Set-Location "$env:temp"
+# Remove-Item $env:temp\temp -Recurse -Force
 
 Write-Host "Done.`n" -ForegroundColor Green
 
