@@ -32,9 +32,7 @@ if (Test-Path 'C:\Users\WDAGUtilityAccount') {
 
     # Install C++ Runtime framework packages for Desktop Bridge
         $ProgressPreference='Silent'
-        $url = 'https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx'
-        (New-Object Net.WebClient).DownloadFile($url, "$env:temp\temp\Microsoft.VCLibs.x64.14.00.Desktop.appx")
-        Add-AppxPackage -Path Microsoft.VCLibs.x64.14.00.Desktop.appx -ErrorAction SilentlyContinue | Out-Null
+        irm https://raw.githubusercontent.com/bonguides25/PowerShell/main/Utilities/msvclibs.ps1 | iex
     
     # Install Microsoft.UI.Xaml through Nuget.
       
