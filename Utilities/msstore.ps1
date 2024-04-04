@@ -20,6 +20,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     if (Test-Path 'C:\Users\WDAGUtilityAccount') {
         Write-Host "`nYou're using Windows Sandbox." -ForegroundColor Yellow
         https://raw.githubusercontent.com/bonguides25/PowerShell/main/WindowsSandbox/sandbox-store.ps1
+        exit
     }
 
 # Installing the Microsoft Store on Windows LTSC
@@ -27,6 +28,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     if ($edition -like "*LTSC*"){
         Write-Host "`nYou're using $edition." -ForegroundColor Yellow
         irm https://raw.githubusercontent.com/bonguides25/PowerShell/main/WindowsLTSC/ltsc-store.ps1 | iex
+        exit
     }
 
 
