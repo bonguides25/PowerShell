@@ -7,7 +7,7 @@ YouTube      : https://www.youtube.com/@BonGuides
 
 Script Highlights:
 ~~~~~~~~~~~~~~~~~
-#. Install Microsoft Store on Windows Sandbox (winget).
+#. Install Microsoft Store on Windows Sandbox.
 ============================================================================================#>
 
 if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
