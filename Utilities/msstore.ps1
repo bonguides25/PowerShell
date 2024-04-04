@@ -31,7 +31,6 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
         exit
     }
 
-
 # Installing the Microsoft Store on Windows systems
     Set-Location "$env:temp"
     Write-Host "`nInstalling Microsoft Store..." -ForegroundColor Green
