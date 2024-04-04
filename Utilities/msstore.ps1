@@ -19,8 +19,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
 # Installing the Microsoft Store on Windows Sandbox only
     if (Test-Path 'C:\Users\WDAGUtilityAccount') {
         Write-Host "`nYou're using Windows Sandbox." -ForegroundColor Yellow
-        https://raw.githubusercontent.com/bonguides25/PowerShell/main/WindowsSandbox/sandbox-store.ps1
-        exit
+        irm https://raw.githubusercontent.com/bonguides25/PowerShell/main/WindowsSandbox/sandbox-store.ps1 | iex
     }
 
 # Installing the Microsoft Store on Windows LTSC only
