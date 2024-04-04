@@ -80,3 +80,6 @@ if ([System.Environment]::OSVersion.Version.Build -lt 16299) {
     $report | Format-List
     Write-Host "`nDone." -ForegroundColor Green
 
+# Open the Microsoft Store
+    start ms-windows-store:
+
