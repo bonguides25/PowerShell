@@ -37,7 +37,7 @@ Write-Host "`nInstalling Microsoft Store..." -ForegroundColor Green
 # Downlaod and install Windows Package Manager to install Store apps
     Invoke-WebRequest -Uri 'https://aka.ms/getwinget' -OutFile 'Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
     Add-AppxPackage 'Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
-
-Get-AppxPackage | Where-Object { $_.Name -like "*terminal*"} | select Name, Architecture, Version, PublisherId -ErrorAction SilentlyContinue
+    
+Get-AppxPackage | Where-Object { $_.name -like "*Store*" -or $_.name -like "*UI.Xaml*" -or $_.name -like "*DesktopAppInstaller*" } | Select-Object Name, Version -ErrorAction SilentlyContinue
 Write-Host "Done.`n" -ForegroundColor Green
 
