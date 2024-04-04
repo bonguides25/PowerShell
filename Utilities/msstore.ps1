@@ -16,14 +16,14 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     break
 }
 
-# Installing the Microsoft Store on Windows Sandbox
+# Installing the Microsoft Store on Windows Sandbox only
     if (Test-Path 'C:\Users\WDAGUtilityAccount') {
         Write-Host "`nYou're using Windows Sandbox." -ForegroundColor Yellow
         https://raw.githubusercontent.com/bonguides25/PowerShell/main/WindowsSandbox/sandbox-store.ps1
         exit
     }
 
-# Installing the Microsoft Store on Windows LTSC
+# Installing the Microsoft Store on Windows LTSC only
     $edition = (Get-CimInstance Win32_OperatingSystem).Caption
     if ($edition -like "*LTSC*"){
         Write-Host "`nYou're using $edition." -ForegroundColor Yellow
@@ -32,38 +32,32 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     }
 
 
-
-# Create temporary directory
-$null = New-Item -Path $env:temp\temp -ItemType Directory -Force
-Set-Location $env:temp\temp
-
-$progressPreference = 'silentlyContinue'
-Write-Host "`nInstalling Microsoft Store..." -ForegroundColor Green
-
-Invoke-WebRequest -Uri 'https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx' -OutFile 'Microsoft.VCLibs.x64.14.00.Desktop.appx'
-# Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.7.3/Microsoft.UI.Xaml.2.7.x64.appx' -OutFile 'Microsoft.UI.Xaml.2.7.x64.appx'
-Invoke-WebRequest -Uri 'https://github.com/microsoft/microsoft-ui-xaml/releases/download/v2.8.5/Microsoft.UI.Xaml.2.8.x64.appx' -OutFile 'Microsoft.UI.Xaml.2.8.x64.appx'
-
-Invoke-WebRequest -Uri 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/Files/StoreApps/Microsoft.WindowsStore_11809.1001.713.0_neutral_~_8wekyb3d8bbwe.AppxBundle' -OutFile 'Microsoft.WindowsStore_11809.1001.713.0_neutral_~_8wekyb3d8bbwe.AppxBundle'
-Invoke-WebRequest -Uri 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/Files/StoreApps/Microsoft.NET.Native.Runtime.1.6_1.6.24903.0_x64__8wekyb3d8bbwe.Appx' -OutFile 'Microsoft.NET.Native.Runtime.1.6_1.6.24903.0_x64__8wekyb3d8bbwe.Appx'
-Invoke-WebRequest -Uri 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/Files/StoreApps/Microsoft.NET.Native.Framework.1.6_1.6.24903.0_x64__8wekyb3d8bbwe.Appx' -OutFile 'Microsoft.NET.Native.Framework.1.6_1.6.24903.0_x64__8wekyb3d8bbwe.Appx'
-Invoke-WebRequest -Uri 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/Files/StoreApps/Microsoft.VCLibs.140.00_14.0.32530.0_x64__8wekyb3d8bbwe.Appx' -OutFile 'Microsoft.VCLibs.140.00_14.0.32530.0_x64__8wekyb3d8bbwe.Appx'
-
-
-Invoke-WebRequest -Uri 'https://aka.ms/getwinget' -OutFile 'Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
-
-Add-AppxPackage 'Microsoft.VCLibs.x64.14.00.Desktop.appx'
-Add-AppxPackage 'Microsoft.VCLibs.140.00_14.0.32530.0_x64__8wekyb3d8bbwe.Appx'
-# Add-AppxPackage 'Microsoft.UI.Xaml.2.7.x64.appx'
-Add-AppxPackage 'Microsoft.UI.Xaml.2.8.x64.appx'
-Add-AppxPackage 'Microsoft.NET.Native.Framework.1.6_1.6.24903.0_x64__8wekyb3d8bbwe.Appx'
-Add-AppxPackage 'Microsoft.NET.Native.Runtime.1.6_1.6.24903.0_x64__8wekyb3d8bbwe.Appx'
-Add-AppxPackage 'Microsoft.WindowsStore_11809.1001.713.0_neutral_~_8wekyb3d8bbwe.AppxBundle'
-
-Add-AppxPackage 'Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
-
-# Cleanup
-Set-Location "$env:temp"
-Remove-Item $env:temp\temp -Recurse -Force
-
-Write-Host "Done.`n" -ForegroundColor Green
+# Installing the Microsoft Store on Windows systems
+    Set-Location "$env:temp"
+    Write-Host "`nInstalling Microsoft Store..." -ForegroundColor Green
+    
+    # Install C++ Runtime framework packages for Desktop Bridge
+        $ProgressPreference='Silent'
+        irm https://raw.githubusercontent.com/bonguides25/PowerShell/main/Utilities/msvclibs.ps1 | iex
+    
+    # Install Microsoft.UI.Xaml
+        $ProgressPreference='Silent'
+        irm https://raw.githubusercontent.com/bonguides25/PowerShell/main/Utilities/microsoft.ui.xaml.ps1 | iex
+    
+    # Install the dependency packages
+        $ProgressPreference='Silent'
+        irm https://raw.githubusercontent.com/bonguides25/PowerShell/main/Utilities/sideloaddeps.ps1 | iex
+    
+    # Installe Microsoft Store
+        Invoke-WebRequest -Uri 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/Files/StoreApps/Microsoft.WindowsStore_11809.1001.713.0_neutral_~_8wekyb3d8bbwe.AppxBundle' -OutFile 'Microsoft.WindowsStore_11809.1001.713.0_neutral_~_8wekyb3d8bbwe.AppxBundle'
+        Add-AppxPackage 'Microsoft.WindowsStore_11809.1001.713.0_neutral_~_8wekyb3d8bbwe.AppxBundle'
+    
+    # Downlaod and install Windows Package Manager to install Store apps
+        Invoke-WebRequest -Uri 'https://aka.ms/getwinget' -OutFile 'Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
+        Add-AppxPackage 'Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
+        
+    Get-AppxPackage | Where-Object { $_.name -like "*Store*" -or $_.name -like "*UI.Xaml*" -or $_.name -like "*DesktopAppInstaller*" } | Select-Object Name, Version -ErrorAction SilentlyContinue
+    Write-Host "Done.`n" -ForegroundColor Green
+    
+    # Open the Microsoft Store
+    start ms-windows-store:
