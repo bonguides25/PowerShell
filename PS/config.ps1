@@ -169,11 +169,12 @@ if ($edition -like "*Windows 11*") {
   irm bonguides.com/winget | iex
 
   $wpath = "C:\Program Files\WindowsApps"
-  $winget = Get-ChildItem $wpath -Recurse -File -ErrorAction SilentlyContinue | `
-  Where-Object { $_.name -like "AppInstallerCLI.exe" -or $_.name -like "WinGet.exe" } | `
-  Select-Object -ExpandProperty fullname -ErrorAction SilentlyContinue
+  $winget = Get-ChildItem $wpath -Recurse -File -ErrorAction SilentlyContinue | Where-Object { $_.Name -like "AppInstallerCLI.exe" -or $_.Name -like "WinGet.exe" } | Select-Object -ExpandProperty fullname -ErrorAction SilentlyContinue
 
-  If ($winget.count -gt 1){ $winget = $winget[-1] }
+  if ($winget.count -gt 1){ 
+    $winget = $winget[-1]
+  }
+    
   $wingetPath = [string]((Get-Item $winget).Directory.FullName)
 
   # $id = 'Microsoft.WindowsTerminal'
