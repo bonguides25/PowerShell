@@ -148,18 +148,23 @@
   Write-Host "10. Creating shortcuts to desktop..." -ForegroundColor Green
   Copy-Item "$env:userprofile\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\System Tools\Control Panel.lnk" "$env:userprofile\Desktop\"
 
-# 11. Change to the Light theme
-  # Write-Host "11. Changing to the Light theme..." -ForegroundColor Green
-  # Start-Process -Filepath "C:\Windows\Resources\Themes\light.theme"
-  # Start-Sleep -Seconds 3
-  # Get-Process -ProcessName 'SystemSettings' | Stop-Process
+# 11. Change to the Light theme (Windows 10)
+if ($edition -like "*Windows 10*") {
+  Write-Host "11. Changing to the Light theme..." -ForegroundColor Green
+  Start-Process -Filepath "C:\Windows\Resources\Themes\light.theme"
+  Start-Sleep -Seconds 3
+  Get-Process -ProcessName 'SystemSettings' | Stop-Process
+}
 
-# 12. Configure Terminal
-  #Write-Host "12. Configure Terminal..." -ForegroundColor Green
-  #$filePath = "$env:userprofile\Appdata\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
-  #Remove-Item -Path $filePath -Force
-  #$uri = 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/Temp/settings.json'
-  #(New-Object Net.WebClient).DownloadFile($uri, $filePath)
+# 12. Configure Terminal (Windows 11)
+if ($edition -like "*Windows 11*") {
+  Write-Host "12. Configure Terminal..." -ForegroundColor Green
+  $filePath = "C:\Users\$($userName)\Appdata\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
+  Remove-Item -Path $filePath -Force
+  $uri = 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/Temp/settings.json'
+  (New-Object Net.WebClient).DownloadFile($uri, $filePath)
+
+}
 
   irm bonguides.com/winget | iex
 
