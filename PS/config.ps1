@@ -188,6 +188,13 @@ irm bonguides.com/winget | iex
 
 # cmd.exe /c "winget.exe install Microsoft.WindowsTerminal --exact --silent --scope machine --accept-source-agreements --accept-package-agreements"
 
+# Disable Windows automatic update
+# $reg_path = "HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU"
+# if (-Not (Test-Path $reg_path)) { New-Item $reg_path -Force }
+# Set-ItemProperty $reg_path -Name NoAutoUpdate -Value 1
+# Set-ItemProperty $reg_path -Name AUOptions -Value 3
+
+
 Write-Host "Completed..." -ForegroundColor Yellow
 Write-Host "Restarting..." -ForegroundColor Yellow
 Start-Sleep -Second 2
