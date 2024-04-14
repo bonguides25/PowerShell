@@ -132,7 +132,10 @@
   RefreshEnv
   oh-my-posh font install JetBrainsMono | Out-Null
 
-  $filePath = "$env:userprofile\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\Windows PowerShell.lnk"
+  $userName = Get-LocalUser | Where-Object {$_.Enabled -match 'true'} | select -ExpandProperty Name
+
+  # $filePath = "$env:userprofile\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\Windows PowerShell.lnk"
+  $filePath = "C:\Users\$($userName)\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\Windows PowerShell.lnk"
   Remove-Item -Path $filePath -Force
   $uri = 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/Temp/Windows%20PowerShell.lnk'
   (New-Object Net.WebClient).DownloadFile($uri, $filePath)
