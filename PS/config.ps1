@@ -5,6 +5,7 @@ break
 }
 
 $edition = (Get-CimInstance Win32_OperatingSystem).Caption
+$userName = Get-LocalUser | Where-Object {$_.Enabled -match 'true'} | select -ExpandProperty Name
 
 # Build a runspace
 $runspace = [runspacefactory]::CreateRunspace()
@@ -132,8 +133,6 @@ Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1
 RefreshEnv
 oh-my-posh font install JetBrainsMono | Out-Null
 
-$userName = Get-LocalUser | Where-Object {$_.Enabled -match 'true'} | select -ExpandProperty Name
-
 # $filePath = "$env:userprofile\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\Windows PowerShell.lnk"
 $filePath = "C:\Users\$($userName)\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\Windows PowerShell.lnk"
 Remove-Item -Path $filePath -Force
@@ -172,26 +171,24 @@ $uri = 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/Temp/settings.json'
 (New-Object Net.WebClient).DownloadFile($uri, $filePath)
 }
 
+# Install Windows Package Manager
 irm bonguides.com/winget | iex
-
 $wpath = "C:\Program Files\WindowsApps"
 $winget = Get-ChildItem $wpath -Recurse -File -ErrorAction SilentlyContinue | Where-Object { $_.Name -like "AppInstallerCLI.exe" -or $_.Name -like "WinGet.exe" } | Select-Object -ExpandProperty fullname -ErrorAction SilentlyContinue
 
-if ($winget.count -gt 1){ 
-$winget = $winget[-1]
+if ($winget.count -gt 1){
+    $winget = $winget[-1]
 }
-
 $wingetPath = [string]((Get-Item $winget).Directory.FullName)
 
-
-Write-Host "Configure Terminal..." -ForegroundColor Yellow
-$id = 'Microsoft.WindowsTerminal'
+# Write-Host "Configure Terminal..." -ForegroundColor Yellow
+# $id = 'Microsoft.WindowsTerminal'
 
 <# If (-not (Test-Path -Path $wingetPath)) {
 & "$wingetPath\winget.exe" install $id --exact --silent --scope machine --accept-source-agreements --accept-package-agreements
 } #>
 
-cmd.exe /c "winget.exe install Microsoft.WindowsTerminal --exact --silent --scope machine --accept-source-agreements --accept-package-agreements"
+# cmd.exe /c "winget.exe install Microsoft.WindowsTerminal --exact --silent --scope machine --accept-source-agreements --accept-package-agreements"
 
 Write-Host "Completed..." -ForegroundColor Yellow
 Write-Host "Restarting..." -ForegroundColor Yellow
