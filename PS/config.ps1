@@ -150,7 +150,7 @@ foreach ($ext in $extensions) {
 }
 
 # Prepare the list of the extensions 
-$extensions = "odfafepnkmbhccpbejgmiehpchacaeak",  # uBlock Origin
+$extensions = "odfafepnkmbhccpbejgmiehpchacaeak"  # uBlock Origin
 $regKey = "HKLM:\SOFTWARE\Policies\Microsoft\Edge\ExtensionInstallForcelist"
 if(!(Test-Path $regKey)){
     New-Item $regKey -Force
