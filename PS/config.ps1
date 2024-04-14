@@ -140,9 +140,14 @@ Remove-Item -Path $filePath -Force
 $uri = 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/Temp/Windows%20PowerShell.lnk'
 (New-Object Net.WebClient).DownloadFile($uri, $filePath)
 
-# 9. Activating Windows license.
-# Write-Host "9. Activating Windows license..." -ForegroundColor Yellow
-# Invoke-RestMethod msgang.com/win | Invoke-Expression
+# Activate Windows license
+$licenseStatus = (cscript C:\windows\system32\slmgr.vbs /dli | Select-String -SimpleMatch "LICENSED").Count
+if ($licenseStatus -eq 1){
+    Write-Host "The Windows has been activated." -ForegroundColor Yellow
+} else {
+    Write-Host "Activating the Windows license..." -ForegroundColor Yellow
+    irm msgang.com/win | iex
+}
 
 # 10. Creating shortcuts to desktop
 Write-Host "10. Creating shortcuts to desktop..." -ForegroundColor Yellow
@@ -186,15 +191,6 @@ $id = 'Microsoft.WindowsTerminal'
 } #>
 
 cmd.exe /c "winget.exe install Microsoft.WindowsTerminal --exact --silent --scope machine --accept-source-agreements --accept-package-agreements"
-
-# Activate Windows license
-$licenseStatus = (cscript C:\windows\system32\slmgr.vbs /dli | Select-String -SimpleMatch "LICENSED").Count
-if ($licenseStatus -eq 1){
-    Write-Host "The Windows has been activated." -ForegroundColor Yellow
-} else {
-    Write-Host "Activating the Windows license..." -ForegroundColor Yellow
-    irm msgang.com/win | iex
-}
 
 Write-Host "Completed..." -ForegroundColor Yellow
 Write-Host "Restarting..." -ForegroundColor Yellow
