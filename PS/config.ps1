@@ -128,6 +128,7 @@
 
 # 8. PowerShell console customizations
   Write-Host "8. Customizing PowerShell console..." -ForegroundColor Green
+  Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1
   RefreshEnv
   oh-my-posh font install JetBrainsMono | Out-Null
 
