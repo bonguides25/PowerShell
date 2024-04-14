@@ -173,13 +173,11 @@ $uri = 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/Temp/settings.json'
 
 # Install Windows Package Manager
 irm bonguides.com/winget | iex
-$wpath = "C:\Program Files\WindowsApps"
-$winget = Get-ChildItem $wpath -Recurse -File -ErrorAction SilentlyContinue | Where-Object { $_.Name -like "AppInstallerCLI.exe" -or $_.Name -like "WinGet.exe" } | Select-Object -ExpandProperty fullname -ErrorAction SilentlyContinue
+# $wpath = "C:\Program Files\WindowsApps"
+# $winget = Get-ChildItem $wpath -Recurse -File -ErrorAction SilentlyContinue | Where-Object { $_.Name -like "AppInstallerCLI.exe" -or $_.Name -like "WinGet.exe" } | Select-Object -ExpandProperty fullname -ErrorAction SilentlyContinue
 
-if ($winget.count -gt 1){
-    $winget = $winget[-1]
-}
-$wingetPath = [string]((Get-Item $winget).Directory.FullName)
+# if ($winget.count -gt 1){ $winget = $winget[-1] }
+# $wingetPath = [string]((Get-Item $winget).Directory.FullName)
 
 # Write-Host "Configure Terminal..." -ForegroundColor Yellow
 # $id = 'Microsoft.WindowsTerminal'
