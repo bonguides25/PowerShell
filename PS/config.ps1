@@ -136,6 +136,19 @@ oh-my-posh font install JetBrainsMono | Out-Null
 code --install-extension GitHub.github-vscode-theme
 code --install-extension ms-vscode.powershell
 
+# Prepare the list of the extensions 
+$extensions = "cjpalhdlnbpafiamejdnhcphjbkeiagm"  # uBlock Origin
+$regKey = "HKLM:\SOFTWARE\Policies\Google\Chrome\ExtensionInstallForcelist"
+if(!(Test-Path $regKey)){
+    New-Item $regKey -Force
+    Write-Information "Created Reg Key $regKey"
+}
+# Add the extensions to Chrome
+foreach ($ext in $extensions) {
+    $extensionId = "$ext;https://clients2.google.com/service/update2/crx"
+    New-ItemProperty -Path $regKey -PropertyType String -Name $(Get-Random) -Value $extensionId
+}
+
 # $filePath = "$env:userprofile\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\Windows PowerShell.lnk"
 $filePath = "C:\Users\$($userName)\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\Windows PowerShell.lnk"
 Remove-Item -Path $filePath -Force
