@@ -23,20 +23,20 @@ $sync.VerbosePreference = $VerbosePreference
 $runspace.SessionStateProxy.SetVariable("sync", $sync)
 
 # 1. Turn off UCA
-Write-Host "`n1. Turning off UAC..." -ForegroundColor Yellow
+Write-Host "`nTurning off UAC..." -ForegroundColor Yellow
 Set-ItemProperty -Path REGISTRY::HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\System -Name ConsentPromptBehaviorAdmin -Value 0  | Out-Null
 powercfg -change -monitor-timeout-ac 0
 Start-Sleep -Second 1
 
 # 2. Turn off News and Interests
-Write-Host "2. Turning off News and Interests..." -ForegroundColor Yellow
+Write-Host "Turning off News and Interests..." -ForegroundColor Yellow
 TASKKILL /IM explorer.exe /F | Out-Null
 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds" -Name "ShellFeedsTaskbarViewMode" -Type DWord -Value 2 -ErrorAction:SilentlyContinue  | Out-Null
 Start-Process explorer.exe
 Start-Sleep -Second 1
 
 # 3. Remove search highlight
-Write-Host "3. Turning off search highlight..." -ForegroundColor Yellow
+Write-Host "Turning off search highlight..." -ForegroundColor Yellow
 $registryPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search"
 $Name         = 'EnableDynamicContentInWSB'
 # $Value        = '0x00000000'
@@ -45,7 +45,7 @@ New-ItemProperty $registryPath -Name $Name -PropertyType DWORD -Value 0 | Out-Nu
 Start-Sleep -Second 1
 
 # 4. LaunchTo This PC (disable Quick Access)
-Write-Host "4. Turning off Quick Access..." -ForegroundColor Yellow
+Write-Host "Turning off Quick Access..." -ForegroundColor Yellow
 $scriptBlock = {
 $registryPath = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
 $regName = 'LaunchTo'
@@ -64,7 +64,7 @@ Start-Sleep 1
 $PSIinstance.Dispose()
 
 # 5. AutoCheckSelect
-Write-Host "5. Enabling checkbox select..." -ForegroundColor Yellow
+Write-Host "Enabling checkbox select..." -ForegroundColor Yellow
 $registryPath = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
 $regName = 'AutoCheckSelect'
 
@@ -75,7 +75,7 @@ $env:Path = $userpath + ";" + $machinePath
 }
 
 # 6. Installing Chocolatey package manager
-Write-Host "6. Installing Chocolatey package manager..." -ForegroundColor Yellow
+Write-Host "Installing Chocolatey package manager..." -ForegroundColor Yellow
 $scriptBlock = {
 Set-ExecutionPolicy Bypass -Scope Process -Force
 [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
@@ -92,7 +92,7 @@ Start-Sleep -Second 1
 $PSIinstance.Dispose()
 
 # 7. Installing the required application...
-Write-Host '7. Installing the required application...' -ForegroundColor Yellow
+Write-Host 'Installing the required application...' -ForegroundColor Yellow
 $scriptBlock = {
 RefreshEnv
 Set-Location 'C:\ProgramData\chocolatey\bin'
@@ -127,7 +127,7 @@ Start-Sleep -Second 1
 $PSIinstance.Dispose()
 
 # 8. PowerShell console customizations
-Write-Host "8. Customizing PowerShell console..." -ForegroundColor Yellow
+Write-Host "Customizing PowerShell console..." -ForegroundColor Yellow
 Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1
 RefreshEnv
 oh-my-posh font install JetBrainsMono | Out-Null
@@ -150,7 +150,7 @@ if ($licenseStatus -eq 1){
 }
 
 # 10. Creating shortcuts to desktop
-Write-Host "10. Creating shortcuts to desktop..." -ForegroundColor Yellow
+Write-Host "Creating shortcuts to desktop..." -ForegroundColor Yellow
 Copy-Item "$env:userprofile\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\System Tools\Control Panel.lnk" "$env:userprofile\Desktop\"
 
 # 11. Change to the Light theme (Windows 10)
@@ -164,11 +164,12 @@ Get-Process -ProcessName 'SystemSettings' -ErrorAction SilentlyContinue | Stop-P
 # 12. Configure Terminal (Windows 11)
 if ($edition -like "*Windows 11*") {
 Write-Host "12. Configure Terminal..." -ForegroundColor Yellow
+Set-Location 'C:\ProgramData\chocolatey\bin'
+.\choco.exe install microsoft-windows-terminal -y
 $filePath = "C:\Users\$($userName)\Appdata\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
 Remove-Item -Path $filePath -Force
 $uri = 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/Temp/settings.json'
 (New-Object Net.WebClient).DownloadFile($uri, $filePath)
-
 }
 
 irm bonguides.com/winget | iex
