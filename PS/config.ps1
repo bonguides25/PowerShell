@@ -133,6 +133,9 @@ Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1
 RefreshEnv
 oh-my-posh font install JetBrainsMono | Out-Null
 
+code --install-extension GitHub.github-vscode-theme
+code --install-extension ms-vscode.powershell
+
 # $filePath = "$env:userprofile\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\Windows PowerShell.lnk"
 $filePath = "C:\Users\$($userName)\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\Windows PowerShell.lnk"
 Remove-Item -Path $filePath -Force
