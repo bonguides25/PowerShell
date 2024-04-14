@@ -142,7 +142,7 @@ $uri = 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/Temp/Windows%20PowerShell.lnk
 
 # 9. Activating Windows license.
 # Write-Host "9. Activating Windows license..." -ForegroundColor Yellow
-Invoke-RestMethod msgang.com/win | Invoke-Expression
+# Invoke-RestMethod msgang.com/win | Invoke-Expression
 
 # 10. Creating shortcuts to desktop
 Write-Host "10. Creating shortcuts to desktop..." -ForegroundColor Yellow
@@ -153,7 +153,7 @@ if ($edition -like "*Windows 10*") {
 Write-Host "11. Changing to the Light theme..." -ForegroundColor Yellow
 Start-Process -Filepath "C:\Windows\Resources\Themes\light.theme"
 Start-Sleep -Seconds 3
-Get-Process -ProcessName 'SystemSettings' | Stop-Process
+Get-Process -ProcessName 'SystemSettings' -ErrorAction SilentlyContinue | Stop-Process | Out-Null
 }
 
 # 12. Configure Terminal (Windows 11)
