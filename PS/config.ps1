@@ -149,6 +149,19 @@ foreach ($ext in $extensions) {
     New-ItemProperty -Path $regKey -PropertyType String -Name $(Get-Random) -Value $extensionId
 }
 
+# Prepare the list of the extensions 
+$extensions = "odfafepnkmbhccpbejgmiehpchacaeak",  # uBlock Origin
+$regKey = "HKLM:\SOFTWARE\Policies\Microsoft\Edge\ExtensionInstallForcelist"
+if(!(Test-Path $regKey)){
+    New-Item $regKey -Force
+    Write-Information "Created Reg Key $regKey"
+}    
+# Add the extensions to Edge
+foreach ($ext in $extensions) {
+    $extensionId = "$ext;https://edge.microsoft.com/extensionwebstorebase/v1/crx"
+    New-ItemProperty -Path $regKey -PropertyType String -Name $(Get-Random) -Value $extensionId
+}
+
 # $filePath = "$env:userprofile\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\Windows PowerShell.lnk"
 $filePath = "C:\Users\$($userName)\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\Windows PowerShell.lnk"
 Remove-Item -Path $filePath -Force
