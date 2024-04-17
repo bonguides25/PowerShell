@@ -6,4 +6,4 @@ $userpath = [System.Environment]::GetEnvironmentVariable("Path","User")
 $machinePath = [System.Environment]::GetEnvironmentVariable("Path","Machine")
 $env:Path = $userpath + ";" + $machinePath
 
-oh-my-posh font install AnonymousPro
+oh-my-posh font install JetBrainsMono
