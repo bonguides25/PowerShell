@@ -100,6 +100,7 @@ Set-Location 'C:\ProgramData\chocolatey\bin'
 .\choco.exe feature enable -n allowGlobalConfirmation
 .\choco.exe install oh-my-posh -y
 .\choco.exe install GoogleChrome -y
+.\choco install VisualStudioCode -y
 
 #.\choco install winscp -y
 # .\choco install VisualStudioCode -y
