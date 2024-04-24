@@ -99,7 +99,7 @@ RefreshEnv
 Set-Location 'C:\ProgramData\chocolatey\bin'
 .\choco.exe feature enable -n allowGlobalConfirmation
 .\choco.exe install oh-my-posh -y | Out-Null
-.\choco.exe install GoogleChrome -y | Out-Null
+.\choco.exe install GoogleChrome -y --ignore-checksums | Out-Null
 Write-Host "Installing Google Chrome..." -ForegroundColor Yellow
 # .\choco.exe install adblockpluschrome -y
 #.\choco install winscp -y
