@@ -98,12 +98,13 @@ $scriptBlock = {
 RefreshEnv
 Set-Location 'C:\ProgramData\chocolatey\bin'
 .\choco.exe feature enable -n allowGlobalConfirmation
-.\choco.exe install oh-my-posh -y
-.\choco.exe install GoogleChrome -y
+.\choco.exe install oh-my-posh -y | Out-Null
+.\choco.exe install GoogleChrome -y | Out-Null
+Write-Host "Installing Google Chrome..." -ForegroundColor Yellow
 # .\choco.exe install adblockpluschrome -y
 #.\choco install winscp -y
 #.\choco install microsoft-windows-terminal -y
-.\choco install VisualStudioCode -y
+.\choco install VisualStudioCode -y | Out-Null
 <#     .\choco install teamviewer.host	-y
 $apps = @(
 'GoogleChrome', 
