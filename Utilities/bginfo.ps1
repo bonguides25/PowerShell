@@ -8,7 +8,7 @@ $bgInfoUrl = "https://download.sysinternals.com/files/BGInfo.zip"
 $bgInfoZip = "C:\BgInfo\BGInfo.zip"
 $bgInfoEula = "C:\BgInfo\Eula.txt"
 $logonBgiUrl = "https://raw.githubusercontent.com/bonguides25/PowerShell/main/Utilities/Files/logon.bgi"
-$logonBgiZip = "C:\BgInfo\LogonBgi.zip"
+$logonBgiZip = "C:\BgInfo\logon.bgi"
 $bgInfoRegPath = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run"
 $bgInfoRegKey = "BgInfo"
 $bgInfoRegType = "String"
@@ -30,30 +30,25 @@ $isAdministrator = $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltIn
 
 if ($isAdministrator -eq $false) 
 {
-    Write-Host ($writeEmptyLine + "# Please run PowerShell as Administrator" + $writeSeperatorSpaces + $currentTime)`
-    -foregroundcolor $foregroundColor1 $writeEmptyLine
+    Write-Host ($writeEmptyLine + "# Please run PowerShell as Administrator" + $writeSeperatorSpaces + $currentTime) -foregroundcolor $foregroundColor1 $writeEmptyLine
     exit
 }
 
 
 ## Start script execution
-Write-Host ($writeEmptyLine + "# BgInfo deployment script started." + $writeSeperatorSpaces + $currentTime)`
--foregroundcolor $foregroundColor1 $writeEmptyLine 
+Write-Host ($writeEmptyLine + "# BgInfo deployment script started." + $writeSeperatorSpaces + $currentTime) -foregroundcolor $foregroundColor1 $writeEmptyLine 
  
 ## Create BgInfo folder on C: if it not exists, else delete it's content
 If (!(Test-Path -Path $bgInfoFolder))
 {
    New-Item -ItemType $itemType -Force -Path $bgInfoFolder
-   Write-Host ($writeEmptyLine + "# BgInfo folder created" + $writeSeperatorSpaces + $currentTime)`
-   -foregroundcolor $foregroundColor2 $writeEmptyLine
+   Write-Host ($writeEmptyLine + "# BgInfo folder created" + $writeSeperatorSpaces + $currentTime) -foregroundcolor $foregroundColor2 $writeEmptyLine
 }
 Else
 {
-   Write-Host ($writeEmptyLine + "# BgInfo folder already exists" + $writeSeperatorSpaces + $currentTime)`
-   -foregroundcolor $foregroundColor2 $writeEmptyLine
+   Write-Host ($writeEmptyLine + "# BgInfo folder already exists" + $writeSeperatorSpaces + $currentTime) -foregroundcolor $foregroundColor2 $writeEmptyLine
    Remove-Item $bgInfoFolderContent -Force -Recurse -ErrorAction SilentlyContinue
-   Write-Host ($writeEmptyLine + "# Content existing BgInfo folder deleted" + $writeSeperatorSpaces + $currentTime)`
-   -foregroundcolor $foregroundColor2 $writeEmptyLine
+   Write-Host ($writeEmptyLine + "# Content existing BgInfo folder deleted" + $writeSeperatorSpaces + $currentTime) -foregroundcolor $foregroundColor2 $writeEmptyLine
 }
 
 ## Download, save and extract latest BGInfo software to C:\BgInfo
@@ -67,7 +62,7 @@ Write-Host ($writeEmptyLine + "# bginfo.exe available" + $writeSeperatorSpaces +
 
 ## Download, save and extract logon.bgi file to C:\BgInfo
 Invoke-WebRequest -Uri $logonBgiUrl -OutFile $logonBgiZip
-Expand-Archive -LiteralPath $logonBgiZip -DestinationPath $bgInfoFolder -Force
+# Expand-Archive -LiteralPath $logonBgiZip -DestinationPath $bgInfoFolder -Force
 Remove-Item $logonBgiZip
 
 Write-Host ($writeEmptyLine + "# logon.bgi available" + $writeSeperatorSpaces + $currentTime) -foregroundcolor $foregroundColor2 $writeEmptyLine
