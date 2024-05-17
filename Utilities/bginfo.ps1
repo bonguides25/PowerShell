@@ -61,7 +61,7 @@ Write-Host ($writeEmptyLine + "# bginfo.exe available" + $writeSeperatorSpaces +
 ## Download, save and extract logon.bgi file to C:\BgInfo
 Invoke-WebRequest -Uri $logonBgiUrl -OutFile $logonBgiZip
 # Expand-Archive -LiteralPath $logonBgiZip -DestinationPath $bgInfoFolder -Force
-Remove-Item $logonBgiZip
+# Remove-Item $logonBgiZip
 
 Write-Host ($writeEmptyLine + "# logon.bgi available" + $writeSeperatorSpaces + $currentTime) -foregroundcolor $foregroundColor2 $writeEmptyLine
 
