@@ -43,9 +43,7 @@ If (!(Test-Path -Path $bgInfoFolder))
 {
    New-Item -ItemType $itemType -Force -Path $bgInfoFolder
    Write-Host ($writeEmptyLine + "# BgInfo folder created" + $writeSeperatorSpaces + $currentTime) -foregroundcolor $foregroundColor2 $writeEmptyLine
-}
-Else
-{
+} Else {
    Write-Host ($writeEmptyLine + "# BgInfo folder already exists" + $writeSeperatorSpaces + $currentTime) -foregroundcolor $foregroundColor2 $writeEmptyLine
    Remove-Item $bgInfoFolderContent -Force -Recurse -ErrorAction SilentlyContinue
    Write-Host ($writeEmptyLine + "# Content existing BgInfo folder deleted" + $writeSeperatorSpaces + $currentTime) -foregroundcolor $foregroundColor2 $writeEmptyLine
@@ -74,9 +72,7 @@ Write-Host ($writeEmptyLine + "# logon.bgi available" + $writeSeperatorSpaces + 
 If ($regKeyExists -eq $True)
 {
    Write-Host ($writeEmptyLine + "# BgInfo regkey exists, script wil go on" + $writeSeperatorSpaces + $currentTime) -foregroundcolor $foregroundColor1 $writeEmptyLine
-}
-Else
-{
+} Else {
    New-ItemProperty -Path $bgInfoRegPath -Name $bgInfoRegkey -PropertyType $bgInfoRegType -Value $bgInfoRegkeyValue
 
    Write-Host ($writeEmptyLine + "# BgInfo regkey added" + $writeSeperatorSpaces + $currentTime) -foregroundcolor $foregroundColor2 $writeEmptyLine
