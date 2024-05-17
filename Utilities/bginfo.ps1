@@ -28,19 +28,16 @@ $writeSeperatorSpaces = " - "
 $currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
 $isAdministrator = $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 
-if ($isAdministrator -eq $false) 
-{
+if ($isAdministrator -eq $false)  {
     Write-Host ($writeEmptyLine + "# Please run PowerShell as Administrator" + $writeSeperatorSpaces + $currentTime) -foregroundcolor $foregroundColor1 $writeEmptyLine
     exit
 }
-
 
 ## Start script execution
 Write-Host ($writeEmptyLine + "# BgInfo deployment script started." + $writeSeperatorSpaces + $currentTime) -foregroundcolor $foregroundColor1 $writeEmptyLine 
  
 ## Create BgInfo folder on C: if it not exists, else delete it's content
-If (!(Test-Path -Path $bgInfoFolder))
-{
+If (!(Test-Path -Path $bgInfoFolder)) {
    New-Item -ItemType $itemType -Force -Path $bgInfoFolder
    Write-Host ($writeEmptyLine + "# BgInfo folder created" + $writeSeperatorSpaces + $currentTime) -foregroundcolor $foregroundColor2 $writeEmptyLine
 } Else {
@@ -60,38 +57,23 @@ Write-Host ($writeEmptyLine + "# bginfo.exe available" + $writeSeperatorSpaces +
 
 ## Download, save and extract logon.bgi file to C:\BgInfo
 Invoke-WebRequest -Uri $logonBgiUrl -OutFile $logonBgiZip
-# Expand-Archive -LiteralPath $logonBgiZip -DestinationPath $bgInfoFolder -Force
-# Remove-Item $logonBgiZip
-
 Write-Host ($writeEmptyLine + "# logon.bgi available" + $writeSeperatorSpaces + $currentTime) -foregroundcolor $foregroundColor2 $writeEmptyLine
-
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Create BgInfo Registry Key to AutoStart
 
-If ($regKeyExists -eq $True)
-{
+If ($regKeyExists -eq $True) {
    Write-Host ($writeEmptyLine + "# BgInfo regkey exists, script wil go on" + $writeSeperatorSpaces + $currentTime) -foregroundcolor $foregroundColor1 $writeEmptyLine
 } Else {
    New-ItemProperty -Path $bgInfoRegPath -Name $bgInfoRegkey -PropertyType $bgInfoRegType -Value $bgInfoRegkeyValue
-
    Write-Host ($writeEmptyLine + "# BgInfo regkey added" + $writeSeperatorSpaces + $currentTime) -foregroundcolor $foregroundColor2 $writeEmptyLine
 }
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 ## Run BgInfo
-
 C:\BgInfo\Bginfo64.exe C:\BgInfo\logon.bgi /timer:0 /nolicprompt
-
 Write-Host ($writeEmptyLine + "# BgInfo has ran for the first time" + $writeSeperatorSpaces + $currentTime) -foregroundcolor $foregroundColor2 $writeEmptyLine 
 
-## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 ## Exit PowerShell window 3 seconds after completion
-
 Write-Host ($writeEmptyLine + "# Script completed, the PowerShell window will close in 3 seconds" + $writeSeperatorSpaces + $currentTime) -foregroundcolor $foregroundColor1 $writeEmptyLine
 Start-Sleep 3 
-stop-process -Id $PID 
 
 ## ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
