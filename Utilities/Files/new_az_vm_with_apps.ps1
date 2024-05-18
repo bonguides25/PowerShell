@@ -13,8 +13,8 @@ Set-Location 'C:\ProgramData\chocolatey\bin'
 # .\choco.exe install mremoteng -y
 .\choco.exe install zoom -y
 # .\choco.exe install discord -y
-.\choco.exe install skype -y
-.\choco.exe install thunderbird -y
-.\choco.exe install fscapture -y
-.\choco.exe install teamviewer -y
+# .\choco.exe install skype -y
+# .\choco.exe install thunderbird -y
+# .\choco.exe install fscapture -y
+# .\choco.exe install teamviewer -y
 # .\choco.exe install VisualStudioCode -y
