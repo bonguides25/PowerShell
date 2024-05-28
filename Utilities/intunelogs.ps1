@@ -111,3 +111,5 @@ function Show-IntuneManagementExtensionLog {
         Get-IntuneLogContent -FilePath C:\ProgramData\Microsoft\IntuneManagementExtension\Logs\Sensor.log
     }
 }
+
+Show-IntuneManagementExtensionLog
