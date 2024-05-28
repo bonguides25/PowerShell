@@ -74,7 +74,11 @@ function Show-IntuneManagementExtensionLog {
     #Warn if not parameter specified
     if (-not ($AgentExecutor.IsPresent -or $All.IsPresent -or $ClientHealth.IsPresent -or $IntuneManagementExtension.IsPresent -or $Sensor.IsPresent)) {
         Write-Warning ("No parameter specified, please use the AgentExecutor, All, ClientHealth, IntuneManagementExtension or Sensor parameter to display the log(s)...")
-        return
+        Write-Host ("Processing all logs...") -ForegroundColor Green
+        $AgentExecutor = $true
+        $ClientHealth = $true
+        $IntuneManagementExtension = $true
+        $Sensor = $true
     }
 
     #If all parameter is set, set all switches to True
