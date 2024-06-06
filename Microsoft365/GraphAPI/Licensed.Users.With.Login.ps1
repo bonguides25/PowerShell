@@ -40,7 +40,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
 
     Write-Host "Connecting to Microsoft Graph PowerShell..." -ForegroundColor Yellow
     Connect-MgGraph -Scopes "Directory.Read.All", 'AuditLog.Read.All' -ErrorAction Stop
-    $users  = Get-MgUser -All -Property UserPrincipalName, DisplayName, SignInActivity, accountEnabled
+    $users  = Get-MgUser -All -Filter "userType ne 'Guest'" -CountVariable CountVar  -ConsistencyLevel eventual -Property UserPrincipalName, DisplayName, SignInActivity, accountEnabled 
 
 # Get licenses assigned to user accounts
     $report = @()
