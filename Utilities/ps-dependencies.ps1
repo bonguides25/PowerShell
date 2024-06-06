@@ -6,7 +6,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
 }
 
 # Configure Execution Policy
-Set-ExecutionPolicy Bypass -Scope Process -Force | Out-Null
+Set-ExecutionPolicy RemoteSigned -Scope -Force | Out-Null
 
 # Update the NuGet Provider if needed
 $nuGetPath = "C:\Program Files\PackageManagement\ProviderAssemblies\nuget\*\Microsoft.PackageManagement.NuGetProvider.dll"
