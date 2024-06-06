@@ -40,8 +40,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
 
     Write-Host "Connecting to Microsoft Graph PowerShell..." -ForegroundColor Yellow
     Connect-MgGraph -Scopes "Directory.Read.All", 'AuditLog.Read.All' -ErrorAction Stop
-    $users  = Get-MgUser -All -Filter "userType ne 'Guest'" -CountVariable CountVar  -ConsistencyLevel eventual -Property UserPrincipalName, DisplayName, SignInActivity, accountEnabled 
-
+    $users  = Get-MgUser -All -Filter "userType ne 'Guest'" -CountVariable CountVar -ConsistencyLevel eventual -Property UserPrincipalName, DisplayName, SignInActivity, accountEnabled, CreatedDateTime
 # Get licenses assigned to user accounts
     $report = @()
     Invoke-WebRequest -Uri "https://download.microsoft.com/download/e/3/e/e3e9faf2-f28b-490a-9ada-c6089a1fc5b0/Product%20names%20and%20service%20plan%20identifiers%20for%20licensing.csv" -OutFile "$env:temp\LicenseNames.csv"
@@ -69,13 +68,22 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
             }
         }
 
+        $LastSignInDateTime = $user.SignInActivity.LastSignInDateTime
+        if ($null -eq $LastSignInDateTime) {
+            $LastSignInDateTime = 'Never Loged in'
+        } else {
+            $LastSignInDateTime = $user.SignInActivity.LastSignInDateTime.ToString("M/d/yyyy")
+        }
+
         # Creating the custom report
         $report += [PSCustomObject]@{
             'DisplayName' = $user.DisplayName
             'UserPrincipalName' = $user.UserPrincipalName
             'Enabled' = $user.accountEnabled
             'Assignedlicenses' = (@($assignedLicense)-join ',')
-            'LastSignInDateTime' = $user.SignInActivity.LastSignInDateTime.ToString("M/d/yyyy")
+            'LastSignInDateTime' = $LastSignInDateTime
+            'CreatedDateTime' = $user.CreatedDateTime.ToString("M/d/yyyy")
+
         }
         $i++
     }
