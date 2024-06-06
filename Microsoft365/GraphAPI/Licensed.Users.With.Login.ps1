@@ -1,4 +1,3 @@
-
 <#=============================================================================================
 Script by    : Leo Nguyen
 Website      : www.bonguides.com
@@ -37,7 +36,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
     }
 
 # Connect to Microsoft Graph PowerShell
-    Disconnect-MgGraph -ErrorAction:SilentlyContinue | Out-Null
+    # Disconnect-MgGraph -ErrorAction:SilentlyContinue | Out-Null
 
     Write-Host "Connecting to Microsoft Graph PowerShell..." -ForegroundColor Yellow
     Connect-MgGraph -Scopes "Directory.Read.All", 'AuditLog.Read.All' -ErrorAction Stop
