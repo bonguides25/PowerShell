@@ -70,7 +70,7 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
 
         $LastSignInDateTime = $user.SignInActivity.LastSignInDateTime
         if ($null -eq $LastSignInDateTime) {
-            $LastSignInDateTime = 'Never Loged in'
+            $LastSignInDateTime = 'Never Logged in'
         } else {
             $LastSignInDateTime = $user.SignInActivity.LastSignInDateTime.ToString("M/d/yyyy")
         }
