@@ -31,8 +31,8 @@ Write-Host "`nInstalling Microsoft Store..." -ForegroundColor Yellow
     irm https://raw.githubusercontent.com/bonguides25/PowerShell/main/Utilities/sideloaddeps.ps1 | iex
 
 # Installe Microsoft Store
-    Invoke-WebRequest -Uri 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/Files/StoreApps/Microsoft.WindowsStore_11809.1001.713.0_neutral_~_8wekyb3d8bbwe.AppxBundle' -OutFile 'Microsoft.WindowsStore_11809.1001.713.0_neutral_~_8wekyb3d8bbwe.AppxBundle'
-    Add-AppxPackage 'Microsoft.WindowsStore_11809.1001.713.0_neutral_~_8wekyb3d8bbwe.AppxBundle'
+    Invoke-WebRequest -Uri 'https://s3.amazonaws.com/s3.bonben365.com/files/shared/StoreApps/Microsoft.WindowsStore_12107.1001.15.0_neutral_~_8wekyb3d8bbwe.AppxBundle' -OutFile 'Microsoft.WindowsStore_12107.1001.15.0_neutral_~_8wekyb3d8bbwe.AppxBundle'
+    Add-AppxPackage 'Microsoft.WindowsStore_12107.1001.15.0_neutral_~_8wekyb3d8bbwe.AppxBundle'
 
 # Downlaod and install Windows Package Manager to install Store apps
     Invoke-WebRequest -Uri 'https://aka.ms/getwinget' -OutFile 'Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
