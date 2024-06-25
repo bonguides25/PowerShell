@@ -30,7 +30,7 @@ if ([System.Environment]::OSVersion.Version.Build -lt 16299) {
 
     # Download required files
     Write-Host "`nInstalling dependency packages..." -ForegroundColor Yellow
-    $uri = "https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/bonben365.com/Zip/microsoftstore-win-ltsc.zip"
+    $uri = "https://github.com/bonguides25/PowerShell/raw/main/Utilities/Files/microsoftstore-win-ltsc.zip"
     (New-Object Net.WebClient).DownloadFile($uri, "$env:temp\temp\microsoftstore-win-ltsc.zip")
 
     # Extract downloaded file then run the script
