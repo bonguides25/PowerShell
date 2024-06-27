@@ -161,7 +161,7 @@ $Link1.Add_PreviewMouseDown({[system.Diagnostics.Process]::start('https://bongui
     $uri = "https://github.com/bonben365/office-installer/raw/main/setup.exe"
     $uri2013 = "https://github.com/bonben365/office-installer/raw/main/bin2013.exe"
     # $uninstall = 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/MSGANG/scripts/office/uninstall.bat'
-    $readme = 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/MSGANG/scripts/office/Readme.txt'
+    # $readme = 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/MSGANG/scripts/office/Readme.txt'
 
 # Prepiaration for download and install
     function PreparingOffice {
