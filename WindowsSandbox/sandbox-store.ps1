@@ -38,7 +38,7 @@ Write-Host "`nInstalling Microsoft Store..." -ForegroundColor Yellow
     Invoke-WebRequest -Uri 'https://aka.ms/getwinget' -OutFile 'Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
     Add-AppxPackage 'Microsoft.DesktopAppInstaller_8wekyb3d8bbwe.msixbundle'
     
-Get-AppxPackage | Where-Object { $_.name -like "*Store*" -or $_.name -like "*UI.Xaml*" -or $_.name -like "*DesktopAppInstaller*" -or $_.name -like "*Native.Framework*"} | Select-Object Name, Version -ErrorAction SilentlyContinue
+Get-AppxPackage | Where-Object { $_.name -like "*Store*" -or $_.name -like "*UI.Xaml*" -or $_.name -like "*DesktopAppInstaller*" -or $_.name -like "*Native.Framework*" -or $_.name -like "*Native.Runtime*" } | Select-Object Name, Version -ErrorAction SilentlyContinue
 Write-Host "Done.`n" -ForegroundColor Yellow
 
 # Open the Microsoft Store
