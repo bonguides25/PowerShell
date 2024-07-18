@@ -22,4 +22,4 @@ $hash = $sha1.ComputeHash($passwordBytes)
 $hashedpasswd = [convert]::ToBase64String($hash)
 
 # Generate htpasswd entry
-"${username}:{SHA}${hashedpasswd}"
+Wite-Host "The generated htpasswd entry: "${username}:{SHA}${hashedpasswd}""
