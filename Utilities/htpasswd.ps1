@@ -22,3 +22,4 @@ $hashedpasswd = [convert]::ToBase64String($hash)
 
 # Generate htpasswd entry
 Wite-Host "The generated htpasswd entry: "${username}:{SHA}${hashedpasswd}""
+
