@@ -17,7 +17,6 @@ $hash = $sha1.ComputeHash($passwordBytes)
 #
 # ... we would have gotten "a94a8fe5ccb19ba61c4c0873d391e987982fbbd3"
 
-
 # Convert resulting bytes to base64
 $hashedpasswd = [convert]::ToBase64String($hash)
 
