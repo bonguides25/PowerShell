@@ -1,11 +1,8 @@
-param (
-    [Parameter(Mandatory=$true)]
-    [ValidateNotNullOrEmpty()]
-    [System.IO.FileInfo] $path,
+    $path = Read-Host "Enter the path"
+    $path = ($path).trim('"')
+    $path = ($path).trim("'")
 
     [string[]] $properties = @('ProductCode', 'ProductVersion', 'ProductName', 'Manufacturer', 'ProductLanguage')
-)
-
     $windowsInstaller = (New-Object -ComObject WindowsInstaller.Installer)
 
     $table = @{}
