@@ -27,5 +27,6 @@ param (
     $view = $null
     return $table
 
+
     [System.Runtime.Interopservices.Marshal]::ReleaseComObject($windowsInstaller) | Out-Null
     [System.GC]::Collect()
