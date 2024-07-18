@@ -1,10 +1,10 @@
 $username = Read-Host "Enter the username"
-$username = ($path).trim('"')
-$username = ($path).trim("'")
+$username = ($username).trim('"')
+$username = ($username).trim("'")
 
 $password = Read-Host "Enter the password"
-$password = ($path).trim('"')
-$password = ($path).trim("'")
+$password = ($password).trim('"')
+$password = ($password).trim("'")
 
 # Compute hash over password
 $passwordBytes = [System.Text.Encoding]::ASCII.GetBytes($password)
