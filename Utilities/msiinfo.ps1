@@ -5,10 +5,9 @@ param (
 
     [string[]] $properties = @('ProductCode', 'ProductVersion', 'ProductName', 'Manufacturer', 'ProductLanguage')
 )
-begin {
+
     $windowsInstaller = (New-Object -ComObject WindowsInstaller.Installer)
-}
-process {
+
     $table = @{}
     $msi = $windowsInstaller.GetType().InvokeMember('OpenDatabase', 'InvokeMethod', $null, $windowsInstaller, @($Path.FullName, 0))
     foreach ($property in $properties) {
@@ -27,8 +26,6 @@ process {
     $msi = $null
     $view = $null
     return $table
-}
-end {
+
     [System.Runtime.Interopservices.Marshal]::ReleaseComObject($windowsInstaller) | Out-Null
     [System.GC]::Collect()
-}
