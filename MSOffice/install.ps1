@@ -191,7 +191,7 @@ $Link1.Add_PreviewMouseDown({[system.Diagnostics.Process]::start('https://bongui
         Add-content $batchFile -Value "ClickToRun.exe /configure $configurationFile"
 
         (New-Object Net.WebClient).DownloadFile($uri, "$workingDir\ClickToRun.exe")
-        (New-Object Net.WebClient).DownloadFile($readme, "$workingDir\01.Readme.txt")
+        # (New-Object Net.WebClient).DownloadFile($readme, "$workingDir\01.Readme.txt")
 
         $sync.configurationFile = $configurationFile
         $sync.workingDir = $workingDir
