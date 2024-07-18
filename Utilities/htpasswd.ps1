@@ -1,3 +1,4 @@
+#
 $username = Read-Host "Enter the username"
 $username = ($username).trim('"')
 $username = ($username).trim("'")
