@@ -42,4 +42,6 @@ Where-Object {![String]::IsNullOrWhiteSpace($_.title)} |
 Select-Object Result, Date, Title, SupportUrl, Product, UpdateId, RevisionNumber
 }
 
-Get-WuaHistory | Format-Table
+# Get-WuaHistory | Format-Table
+Get-WuaHistory | Out-GridView
+
