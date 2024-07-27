@@ -19,4 +19,4 @@ Expand-Archive .\7za920.zip $env:TEMP\vmware
 
 .\7za.exe e .\VMware-workstation-17.5.2-23775571.exe.tar
 
-.\VMware-workstation-17.5.2-23775571.exe /s
+.\VMware-workstation-17.5.2-23775571.exe /s /v/qn REBOOT=ReallySuppress EULAS_AGREED=1
