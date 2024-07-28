@@ -10,9 +10,6 @@ function Autodesk-Uninstaller {
 
     Write-Host "Found $($apps.Count) installed Autodesk products" -ForegroundColor Yellow
 
-    $apps | Select-Object DisplayName, Publisher, PSChildName, UninstallString
-
-
     foreach ($app in $apps) {
         # Uninstall Autodesk Access
         if ($app.DisplayName -match "Autodesk Access"){
@@ -46,7 +43,7 @@ function Autodesk-Uninstaller {
 }
 
 $i = 0
-for ($i = 1; $i -lt 4; $i++) {
+for ($i = 1; $i -lt 5; $i++) {
     Autodesk-Uninstaller
 }
 
