@@ -5,7 +5,7 @@ function Autodesk-Uninstaller {
     $apps += Get-ItemProperty -Path "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*"
     $apps += $apps | Where-Object {($_.DisplayName -like "*Autodesk*") -or ($_.Publisher -like "*Autodesk*") -or ($_.DisplayName -like "*AutoCAD*")}
 
-    $apps = $apps | Where-Object {($_.Publisher -Like "*autodesk*") -or ($_.DisplayName -like "*Autodesk*") -or ($_.DisplayName -like "*AutoCAD*")}
+    $apps = $apps | Where-Object {($_.Publisher -Like "*autodesk*") -or ($_.Publisher -Like "*NREL*") -or ($_.DisplayName -like "*Autodesk*") -or ($_.DisplayName -like "*AutoCAD*")}
     $apps = $apps | Select-Object DisplayName, Publisher, PSChildName, UninstallString -Unique
 
     Write-Host "Found $($apps.Count) installed Autodesk products" -ForegroundColor Yellow
