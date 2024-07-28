@@ -45,3 +45,7 @@ for ($i = 1; $i -lt 5; $i++) {
     Autodesk-Uninstaller
 }
 
+# Uncomment the below line to delete the C:\Autodesk folder.
+# Remove-Item -Path 'C:\Autodesk' -Recurse -Force
+
+
