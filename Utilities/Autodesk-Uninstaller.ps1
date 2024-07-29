@@ -29,7 +29,13 @@ function Autodesk-Uninstaller {
             Remove-Item "$Env:ALLUSERSPROFILE\Autodesk\Adlm\ProductInformation.pit" -Force
             Remove-Item "$Env:userprofile\AppData\Local\Autodesk\Genuine Autodesk Service\id.dat" -Force
             msiexec.exe /x "{21DE6405-91DE-4A69-A8FB-483847F702C6}" /qn
-        } 
+        }
+
+        # Uninstall Carbon Insights for Revit
+        if ($app.DisplayName -like "*Carbon Insights for Revit*"){
+            Write-Host "Uninstalling Carbon Insights for Revit..." -ForegroundColor Yellow
+            Start-Process -FilePath "C:\Program Files\Autodesk\AdODIS\V1\Installer.exe" -ArgumentList "-q -i uninstall --trigger_point system -m C:\ProgramData\Autodesk\ODIS\metadata\`"$($app.PSChildName)`"\pkg.RTCA.xml -x `"C:\Program Files\Autodesk\AdODIS\V1\SetupRes\manifest.xsd`" --manifest_type package" -NoNewWindow -Wait
+        }
         
         if ($app.UninstallString -like "*installer.exe*"){
             Write-Host "Uninstalling $($app.DisplayName)..." -ForegroundColor Yellow
