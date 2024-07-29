@@ -29,12 +29,19 @@ function Autodesk-Uninstaller {
             Remove-Item "$Env:ALLUSERSPROFILE\Autodesk\Adlm\ProductInformation.pit" -Force
             Remove-Item "$Env:userprofile\AppData\Local\Autodesk\Genuine Autodesk Service\id.dat" -Force
             msiexec.exe /x "{21DE6405-91DE-4A69-A8FB-483847F702C6}" /qn
-        } else {
+        } 
+        
+        if ($app.UninstallString -like "*installer.exe*"){
+            Write-Host "Uninstalling $($app.DisplayName)..." -ForegroundColor Yellow
+            Start-Process -FilePath "C:\Program Files\Autodesk\AdODIS\V1\Installer.exe" -ArgumentList "-q -i uninstall --trigger_point system -m C:\ProgramData\Autodesk\ODIS\metadata\$($app.PSChildName)\bundleManifest.xml -x C:\ProgramData\Autodesk\ODIS\metadata\$($app.PSChildName)\SetupRes\manifest.xsd" -NoNewWindow -Wait
+            Start-Sleep -Seconds 3
+        }
+        else {
             # Uninstall apps and libraris using product code.
             Write-Host "Uninstalling $($app.DisplayName)..." -ForegroundColor Yellow
             Start-Process -FilePath msiexec.exe -ArgumentList "/x `"$($app.PSChildName)`" /qn" -NoNewWindow -Wait
             Start-Sleep -Seconds 3
-        }
+        } 
     }
 }
 
@@ -47,6 +54,6 @@ for ($i = 1; $i -lt 5; $i++) {
 # Uncomment the below line to delete the C:\Autodesk folder.
 # Remove-Item -Path 'C:\Autodesk' -Recurse -Force
 
-# Uncomment the below line to restart the computer automatically when complete
+# Uncomment the below line to restart the computer automatically when complete.
 # Restart-Computer -Force
 
