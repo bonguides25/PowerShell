@@ -34,7 +34,7 @@ function Autodesk-Uninstaller {
         # Uninstall Carbon Insights for Revit
         if ($app.DisplayName -like "*Carbon Insights for Revit*"){
             Write-Host "Uninstalling Carbon Insights for Revit..." -ForegroundColor Yellow
-            Start-Process -FilePath "C:\Program Files\Autodesk\AdODIS\V1\Installer.exe" -ArgumentList "-q -i uninstall --trigger_point system -m C:\ProgramData\Autodesk\ODIS\metadata\`"$($app.PSChildName)`"\pkg.RTCA.xml -x `"C:\Program Files\Autodesk\AdODIS\V1\SetupRes\manifest.xsd`" --manifest_type package" -NoNewWindow -Wait
+            Start-Process -FilePath "C:\Program Files\Autodesk\AdODIS\V1\Installer.exe" -ArgumentList "-q -i uninstall --trigger_point system -m C:\ProgramData\Autodesk\ODIS\metadata\{006E0C25-2C15-39A8-8590-AA5AD7D395D4}\pkg.RTCA.xml -x `"C:\Program Files\Autodesk\AdODIS\V1\SetupRes\manifest.xsd`" --manifest_type package" -NoNewWindow -Wait
         }
         
         if ($app.UninstallString -like "*installer.exe*"){
@@ -65,5 +65,4 @@ for ($i = 1; $i -lt 5; $i++) {
 
 Clear-Host
 Write-Host "The uninstallation process has been completed. It is recommended to restart the computer." -ForegroundColor Green
-
 
