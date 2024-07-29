@@ -37,7 +37,7 @@ function Autodesk-Uninstaller {
             Start-Sleep -Seconds 3
         }
         else {
-            # Uninstall apps and libraris using product code.
+            # Uninstall apps and libraries using product code.
             Write-Host "Uninstalling $($app.DisplayName)..." -ForegroundColor Yellow
             Start-Process -FilePath msiexec.exe -ArgumentList "/x `"$($app.PSChildName)`" /qn" -NoNewWindow -Wait
             Start-Sleep -Seconds 3
@@ -45,7 +45,7 @@ function Autodesk-Uninstaller {
     }
 }
 
-# Some apps are the depending apps of others. So run the function three time to make sure all apps got removed.
+# Some apps are the depending apps of others. So, run the function three times to make sure all apps got removed.
 $i = 0
 for ($i = 1; $i -lt 5; $i++) {
     Autodesk-Uninstaller
@@ -56,4 +56,8 @@ for ($i = 1; $i -lt 5; $i++) {
 
 # Uncomment the below line to restart the computer automatically when complete.
 # Restart-Computer -Force
+
+Clear-Host
+Write-Host "The uninstallation process has been completed. It is recommended to restart the computer." -ForegroundColor Green
+
 
