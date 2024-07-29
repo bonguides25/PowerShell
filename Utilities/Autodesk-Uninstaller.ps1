@@ -30,12 +30,11 @@ function Autodesk-Uninstaller {
             Remove-Item "$Env:userprofile\AppData\Local\Autodesk\Genuine Autodesk Service\id.dat" -Force
             msiexec.exe /x "{21DE6405-91DE-4A69-A8FB-483847F702C6}" /qn    }
         } else {
-            # Uninstall apps and libraris using product code.
+            # Uninstall apps and libraries using product code.
             Write-Host "Uninstalling $($app.DisplayName)..." -ForegroundColor Yellow
             Start-Process -FilePath msiexec.exe -ArgumentList "/x `"$($app.PSChildName)`" /qn" -NoNewWindow -Wait
             Start-Sleep -Seconds 3
         } 
-    }
 }
 
 # Some apps are the depending apps of others. So run the function three time to make sure all apps got removed.
