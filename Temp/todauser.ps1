@@ -27,3 +27,5 @@ function Set-DriveName($Drive, $Name){
 }
 
 powershell -c "(New-Object -ComObject Shell.Application).NameSpace('X:').Self.Name = 'TVCHanServer'"
+
+net use
