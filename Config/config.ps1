@@ -73,7 +73,7 @@ Set-ExecutionPolicy Bypass -Scope Process -Force
 iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 # Invoke-WebRequest -Uri 'https://community.chocolatey.org/install.ps1' -OutFile $env:temp\install.ps1
 Start-Sleep -Second 3
-Start-Process -FilePath $env:TEMP\install.ps1 -Wait 
+# Start-Process -FilePath $env:TEMP\install.ps1 -Wait 
 
 # 7.Installing the required application...
 Write-Host 'Installing the required application...' -ForegroundColor Yellow
