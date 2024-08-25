@@ -80,6 +80,9 @@ $PSIinstance.Dispose()
 
 New-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced' -Name 'ShowSystrayDateTimeValueName' -Value '1' -Type 'DWORD' -Force
 
+New-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\Shell\Bags\1\Desktop' -Name 'FFlags' -Value '1210057253' -Type 'DWORD' -Force
+
+
 # 5.AutoCheckSelect
 Write-Host "Enabling checkbox select..." -ForegroundColor Yellow
 $registryPath = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
