@@ -73,22 +73,20 @@ Invoke-WebRequest -Uri 'https://community.chocolatey.org/install.ps1' -OutFile $
 Start-Sleep -Second 3
 Start-Process -FilePath $env:TEMP\install.ps1 -Wait 
 
-# 7. Installing the required application...
+# 7.Installing the required application...
 Write-Host 'Installing the required application...' -ForegroundColor Yellow
 RefreshEnv
 Set-Location 'C:\ProgramData\chocolatey\bin'
 .\choco.exe feature enable -n allowGlobalConfirmation
-.\choco.exe install oh-my-posh -y | Out-Null
 .\choco.exe install GoogleChrome -y --ignore-checksums | Out-Null
 Write-Host "Installing Google Chrome..." -ForegroundColor Yellow
 .\choco install VisualStudioCode -y | Out-Null
 
-# 8. PowerShell console customizations
+# 8.PowerShell console customizations
 Write-Host "Customizing PowerShell console..." -ForegroundColor Yellow
 Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1
 RefreshEnv
 oh-my-posh font install JetBrainsMono | Out-Null
-
 code --install-extension GitHub.github-vscode-theme
 code --install-extension ms-vscode.powershell
 
