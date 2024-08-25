@@ -22,6 +22,22 @@ break
 
 $edition = (Get-CimInstance Win32_OperatingSystem).Caption
 
+# Build a runspace
+$runspace = [runspacefactory]::CreateRunspace()
+$runspace.ApartmentState = 'STA'
+$runspace.ThreadOptions = 'ReuseThread'
+$runspace.Open()
+
+# Share info between runspaces
+$sync = [hashtable]::Synchronized(@{})
+$sync.runspace = $runspace
+$sync.host = $host
+$sync.DebugPreference = $DebugPreference
+$sync.VerbosePreference = $VerbosePreference
+
+# Add shared data to the runspace
+$runspace.SessionStateProxy.SetVariable("sync", $sync)
+
 # 1.Turn off UCA
 Write-Host "`nTurning off UAC..." -ForegroundColor Yellow
 Set-ItemProperty -Path REGISTRY::HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\System -Name ConsentPromptBehaviorAdmin -Value 0  | Out-Null
@@ -43,18 +59,24 @@ New-Item "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search" -Force | Out
 New-ItemProperty $registryPath -Name $Name -PropertyType DWORD -Value 0 | Out-Null
 Start-Sleep -Second 1
 
-# 4.LaunchTo This PC (disable Quick Access)
+# 4. LaunchTo This PC (disable Quick Access)
 Write-Host "Turning off Quick Access..." -ForegroundColor Yellow
-$registryPath = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
-$regName = 'LaunchTo'
-$ProgressPreference='Silent'
-$regValue = Get-ItemPropertyValue -Path $registryPath -Name $regName -ErrorAction SilentlyContinue | Out-Null
+$scriptBlock = {
+    $registryPath = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
+    $regName = 'LaunchTo'
+    $regValue = Get-ItemPropertyValue -Path $registryPath -Name $regName -ErrorAction SilentlyContinue | Out-Null
 
-If ($regValue -eq $Null) {
-    New-ItemProperty -Path $registryPath -Name $regName -Value '1' -Type 'DWORD' -Force -ErrorAction SilentlyContinue | Out-Null
-} else {
-    Set-Itemproperty -Path $registryPath -Name $regName -Value '1' -Type 'DWORD' -ErrorAction SilentlyContinue | Out-Null
+    If ($regValue -eq $Null) {
+        New-ItemProperty -Path $registryPath -Name $regName -Value '1' -Type 'DWORD' -Force | Out-Null
+    } else {
+        Set-Itemproperty -Path $registryPath -Name $regName -Value '1' -Type 'DWORD' | Out-Null
+    }
 }
+$PSIinstance = [powershell]::Create().AddScript($scriptBlock)
+$PSIinstance.Runspace = $runspace
+$PSIinstance.BeginInvoke()
+Start-Sleep 2
+$PSIinstance.Dispose()
 
 # 5.AutoCheckSelect
 Write-Host "Enabling checkbox select..." -ForegroundColor Yellow
