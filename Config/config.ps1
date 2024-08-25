@@ -15,67 +15,45 @@ Write-Warning "You need to have Administrator rights to run this script!`nPlease
 break
 }
 
+# Activate Windows license
+    irm https://raw.githubusercontent.com/bonguides25/PowerShell/main/Config/activate.ps1 | iex
+
 $edition = (Get-CimInstance Win32_OperatingSystem).Caption
-$userName = Get-LocalUser | Where-Object {$_.Enabled -match 'true'} | select -ExpandProperty Name
 
-# Build a runspace
-$runspace = [runspacefactory]::CreateRunspace()
-$runspace.ApartmentState = 'STA'
-$runspace.ThreadOptions = 'ReuseThread'
-$runspace.Open()
-
-# Share info between runspaces
-$sync = [hashtable]::Synchronized(@{})
-$sync.runspace = $runspace
-$sync.host = $host
-$sync.DebugPreference = $DebugPreference
-$sync.VerbosePreference = $VerbosePreference
-
-# Add shared data to the runspace
-$runspace.SessionStateProxy.SetVariable("sync", $sync)
-
-# 1. Turn off UCA
+# 1.Turn off UCA
 Write-Host "`nTurning off UAC..." -ForegroundColor Yellow
 Set-ItemProperty -Path REGISTRY::HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Policies\System -Name ConsentPromptBehaviorAdmin -Value 0  | Out-Null
 powercfg -change -monitor-timeout-ac 0
 Start-Sleep -Second 1
 
-# 2. Turn off News and Interests
+# 2.Turn off News and Interests
 Write-Host "Turning off News and Interests..." -ForegroundColor Yellow
 TASKKILL /IM explorer.exe /F | Out-Null
 Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds" -Name "ShellFeedsTaskbarViewMode" -Type DWord -Value 2 -ErrorAction:SilentlyContinue  | Out-Null
 Start-Process explorer.exe
 Start-Sleep -Second 1
 
-# 3. Remove search highlight
+# 3.Remove search highlight
 Write-Host "Turning off search highlight..." -ForegroundColor Yellow
 $registryPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search"
 $Name         = 'EnableDynamicContentInWSB'
-# $Value        = '0x00000000'
 New-Item "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search" -Force | Out-Null
 New-ItemProperty $registryPath -Name $Name -PropertyType DWORD -Value 0 | Out-Null
 Start-Sleep -Second 1
 
-# 4. LaunchTo This PC (disable Quick Access)
+# 4.LaunchTo This PC (disable Quick Access)
 Write-Host "Turning off Quick Access..." -ForegroundColor Yellow
-$scriptBlock = {
 $registryPath = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
 $regName = 'LaunchTo'
 $regValue = Get-ItemPropertyValue -Path $registryPath -Name $regName -ErrorAction SilentlyContinue | Out-Null
 
 If ($regValue -eq $Null) {
-New-ItemProperty -Path $registryPath -Name $regName -Value '1' -Type 'DWORD' -Force | Out-Null
+    New-ItemProperty -Path $registryPath -Name $regName -Value '1' -Type 'DWORD' -Force | Out-Null
 } else {
-Set-Itemproperty -Path $registryPath -Name $regName -Value '1' -Type 'DWORD' | Out-Null
+    Set-Itemproperty -Path $registryPath -Name $regName -Value '1' -Type 'DWORD' | Out-Null
 }
-}
-$PSIinstance = [powershell]::Create().AddScript($scriptBlock)
-$PSIinstance.Runspace = $runspace
-$result = $PSIinstance.BeginInvoke()
-Start-Sleep 1
-$PSIinstance.Dispose()
 
-# 5. AutoCheckSelect
+# 5.AutoCheckSelect
 Write-Host "Enabling checkbox select..." -ForegroundColor Yellow
 $registryPath = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
 $regName = 'AutoCheckSelect'
@@ -86,58 +64,24 @@ $machinePath = [System.Environment]::GetEnvironmentVariable("Path","Machine")
 $env:Path = $userpath + ";" + $machinePath 
 }
 
-# 6. Installing Chocolatey package manager
+# 6.Installing Chocolatey package manager
 Write-Host "Installing Chocolatey package manager..." -ForegroundColor Yellow
-$scriptBlock = {
 Set-ExecutionPolicy Bypass -Scope Process -Force
 [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
 iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-}
-$PSIinstance = [powershell]::Create().AddScript($scriptBlock)
-$PSIinstance.Runspace = $runspace
-$result = $PSIinstance.BeginInvoke()
-
-do { 
-Start-Sleep -Second 1 
-} until ($result.IsCompleted -eq "true")
-
-$PSIinstance.Dispose()
+Invoke-WebRequest -Uri 'https://community.chocolatey.org/install.ps1' -OutFile $env:temp\install.ps1
+Start-Sleep -Second 3
+Start-Process -FilePath $env:TEMP\install.ps1 -Wait 
 
 # 7. Installing the required application...
 Write-Host 'Installing the required application...' -ForegroundColor Yellow
-$scriptBlock = {
 RefreshEnv
 Set-Location 'C:\ProgramData\chocolatey\bin'
 .\choco.exe feature enable -n allowGlobalConfirmation
 .\choco.exe install oh-my-posh -y | Out-Null
 .\choco.exe install GoogleChrome -y --ignore-checksums | Out-Null
 Write-Host "Installing Google Chrome..." -ForegroundColor Yellow
-# .\choco.exe install adblockpluschrome -y
-#.\choco install winscp -y
-#.\choco install microsoft-windows-terminal -y
 .\choco install VisualStudioCode -y | Out-Null
-<#     .\choco install teamviewer.host	-y
-$apps = @(
-'GoogleChrome', 
-'VisualStudioCode', 
-'audacity', 
-'pdfsam', 
-'github-desktop'
-)
-
-foreach ($app in $apps) {
-.\choco install $app -y
-} #>
-}
-
-$PSIinstance = [powershell]::Create().AddScript($scriptBlock)
-$PSIinstance.Runspace = $runspace
-$result = $PSIinstance.BeginInvoke()
-do { 
-Start-Sleep -Second 1 
-} until ($result.IsCompleted -eq "true")
-
-$PSIinstance.Dispose()
 
 # 8. PowerShell console customizations
 Write-Host "Customizing PowerShell console..." -ForegroundColor Yellow
