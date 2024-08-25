@@ -142,6 +142,7 @@ if ($edition -like "*Windows 11*") {
     Write-Host "Configure Terminal..." -ForegroundColor Yellow
     Set-Location 'C:\ProgramData\chocolatey\bin'
     .\choco.exe install microsoft-windows-terminal -y
+    Start-Sleep -Seconds 3
     $filePath = "C:\Users\$($env:username)\Appdata\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
     Remove-Item -Path $filePath -Force
     $uri = 'https://github.com/bonguides25/PowerShell/raw/main/Config/settings.json'
