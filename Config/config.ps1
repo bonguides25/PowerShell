@@ -47,6 +47,7 @@ Start-Sleep -Second 1
 Write-Host "Turning off Quick Access..." -ForegroundColor Yellow
 $registryPath = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced'
 $regName = 'LaunchTo'
+$ProgressPreference='Silent'
 $regValue = Get-ItemPropertyValue -Path $registryPath -Name $regName -ErrorAction SilentlyContinue | Out-Null
 
 If ($regValue -eq $Null) {
