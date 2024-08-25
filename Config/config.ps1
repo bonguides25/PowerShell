@@ -78,8 +78,8 @@ Write-Host 'Installing the required application...' -ForegroundColor Yellow
 RefreshEnv
 Set-Location 'C:\ProgramData\chocolatey\bin'
 .\choco.exe feature enable -n allowGlobalConfirmation
-.\choco.exe install GoogleChrome -y --ignore-checksums | Out-Null
 Write-Host "Installing Google Chrome..." -ForegroundColor Yellow
+msiexec.exe /i https://dl.google.com/dl/chrome/install/googlechromestandaloneenterprise64.msi /qn
 .\choco install VisualStudioCode -y | Out-Null
 
 # 8.PowerShell console customizations
