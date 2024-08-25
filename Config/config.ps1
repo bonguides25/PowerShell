@@ -51,7 +51,7 @@ Set-ItemProperty -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Feeds" -
 Start-Process explorer.exe
 Start-Sleep -Second 1
 
-# 3.Remove search highlight
+# 3. Remove search highlight
 Write-Host "Turning off search highlight..." -ForegroundColor Yellow
 $registryPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search"
 $Name         = 'EnableDynamicContentInWSB'
@@ -78,9 +78,9 @@ $PSIinstance.BeginInvoke()
 Start-Sleep 2
 $PSIinstance.Dispose()
 
-New-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced' -Name 'ShowSystrayDateTimeValueName' -Value '1' -Type 'DWORD' -Force
+New-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced' -Name 'ShowSystrayDateTimeValueName' -Value '0' -Type 'DWORD' -Force
 
-New-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\Shell\Bags\1\Desktop' -Name 'FFlags' -Value '1210057253' -Type 'DWORD' -Force
+# New-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\Shell\Bags\1\Desktop' -Name 'FFlags' -Value '1210057253' -Type 'DWORD' -Force
 
 if(($env:username) -match 'admin'){
     Invoke-WebRequest -Uri 'https://github.com/bonguides25/PowerShell/raw/main/Config/admin.reg' -OutFile $env:TEMP\admin.reg
