@@ -116,63 +116,42 @@ foreach ($ext in $extensions) {
     New-ItemProperty -Path $regKey -PropertyType String -Name $(Get-Random) -Value $extensionId
 }
 
-# $filePath = "$env:userprofile\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\Windows PowerShell.lnk"
-$filePath = "C:\Users\$($userName)\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\Windows PowerShell.lnk"
+$filePath = "C:\Users\$($env:username)\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Windows PowerShell\Windows PowerShell.lnk"
+
 Remove-Item -Path $filePath -Force
-$uri = 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/Temp/Windows%20PowerShell.lnk'
+$uri = 'https://github.com/bonguides25/PowerShell/raw/main/Config/Windows%20PowerShell.lnk'
 (New-Object Net.WebClient).DownloadFile($uri, $filePath)
 
 
-
-# 10. Creating shortcuts to desktop
+# 10.Creating shortcuts to desktop
 Write-Host "Creating shortcuts to desktop..." -ForegroundColor Yellow
 Copy-Item "$env:userprofile\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\System Tools\Control Panel.lnk" "$env:userprofile\Desktop\"
 
-# 11. Change to the Light theme (Windows 10)
+# 11.Change to the Light theme (Windows 10)
 if ($edition -like "*Windows 10*") {
-Write-Host "11. Changing to the Light theme..." -ForegroundColor Yellow
-Start-Process -Filepath "C:\Windows\Resources\Themes\light.theme"
-Start-Sleep -Seconds 3
-Get-Process -ProcessName 'SystemSettings' -ErrorAction SilentlyContinue | Stop-Process | Out-Null
+    Write-Host "Changing to the Light theme..." -ForegroundColor Yellow
+    Start-Process -Filepath "C:\Windows\Resources\Themes\light.theme"
+    Start-Sleep -Seconds 3
+    Get-Process -ProcessName 'SystemSettings' -ErrorAction SilentlyContinue | Stop-Process | Out-Null
 }
 
-# 12. Configure Terminal (Windows 11)
+# 12.Configure Terminal (Windows 11)
 if ($edition -like "*Windows 11*") {
-Write-Host "12. Configure Terminal..." -ForegroundColor Yellow
-Set-Location 'C:\ProgramData\chocolatey\bin'
-.\choco.exe install microsoft-windows-terminal -y
-$filePath = "C:\Users\$($userName)\Appdata\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
-Remove-Item -Path $filePath -Force
-$uri = 'https://filedn.com/lOX1R8Sv7vhpEG9Q77kMbn0/Temp/settings.json'
-(New-Object Net.WebClient).DownloadFile($uri, $filePath)
+    Write-Host "Configure Terminal..." -ForegroundColor Yellow
+    Set-Location 'C:\ProgramData\chocolatey\bin'
+    .\choco.exe install microsoft-windows-terminal -y
+    $filePath = "C:\Users\$($env:username)\Appdata\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
+    Remove-Item -Path $filePath -Force
+    $uri = 'https://github.com/bonguides25/PowerShell/raw/main/Config/config.ps1'
+    (New-Object Net.WebClient).DownloadFile($uri, $filePath)
 }
 
 # Install Windows Package Manager
+Write-Host "Configure Windows Package Manager..." -ForegroundColor Yellow
 irm bonguides.com/winget | iex
-# $wpath = "C:\Program Files\WindowsApps"
-# $winget = Get-ChildItem $wpath -Recurse -File -ErrorAction SilentlyContinue | Where-Object { $_.Name -like "AppInstallerCLI.exe" -or $_.Name -like "WinGet.exe" } | Select-Object -ExpandProperty fullname -ErrorAction SilentlyContinue
-
-# if ($winget.count -gt 1){ $winget = $winget[-1] }
-# $wingetPath = [string]((Get-Item $winget).Directory.FullName)
-
-# Write-Host "Configure Terminal..." -ForegroundColor Yellow
-# $id = 'Microsoft.WindowsTerminal'
-
-<# If (-not (Test-Path -Path $wingetPath)) {
-& "$wingetPath\winget.exe" install $id --exact --silent --scope machine --accept-source-agreements --accept-package-agreements
-} #>
-
-# cmd.exe /c "winget.exe install Microsoft.WindowsTerminal --exact --silent --scope machine --accept-source-agreements --accept-package-agreements"
-
-# Disable Windows automatic update
-# $reg_path = "HKLM:\Software\Policies\Microsoft\Windows\WindowsUpdate\AU"
-# if (-Not (Test-Path $reg_path)) { New-Item $reg_path -Force }
-# Set-ItemProperty $reg_path -Name NoAutoUpdate -Value 1
-# Set-ItemProperty $reg_path -Name AUOptions -Value 3
-
 
 Write-Host "Completed..." -ForegroundColor Yellow
 Write-Host "Restarting..." -ForegroundColor Yellow
-Start-Sleep -Second 2
-Restart-Computer
+Start-Sleep -Second 5
+Restart-Computer -Force
 
