@@ -69,7 +69,7 @@ Write-Host "Installing Chocolatey package manager..." -ForegroundColor Yellow
 Set-ExecutionPolicy Bypass -Scope Process -Force
 [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072
 iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
-Invoke-WebRequest -Uri 'https://community.chocolatey.org/install.ps1' -OutFile $env:temp\install.ps1
+# Invoke-WebRequest -Uri 'https://community.chocolatey.org/install.ps1' -OutFile $env:temp\install.ps1
 Start-Sleep -Second 3
 Start-Process -FilePath $env:TEMP\install.ps1 -Wait 
 
