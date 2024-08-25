@@ -82,6 +82,10 @@ New-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer
 
 New-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\Shell\Bags\1\Desktop' -Name 'FFlags' -Value '1210057253' -Type 'DWORD' -Force
 
+if(($env:username) -match 'admin'){
+    Invoke-WebRequest -Uri 'https://github.com/bonguides25/PowerShell/raw/main/Config/admin.reg' -OutFile $env:TEMP\admin.reg
+    reg import "$env:TEMP\admin.reg"
+}
 
 # 5.AutoCheckSelect
 Write-Host "Enabling checkbox select..." -ForegroundColor Yellow
