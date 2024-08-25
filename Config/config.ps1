@@ -183,5 +183,5 @@ irm bonguides.com/winget | iex
 
 Write-Host "Completed..." -ForegroundColor Yellow
 Write-Host "Restarting..." -ForegroundColor Yellow
-Start-Sleep -Second 5
-# Restart-Computer -Force
+Start-Sleep -Second 1
+Restart-Computer -Force
