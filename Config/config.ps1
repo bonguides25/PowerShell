@@ -18,6 +18,8 @@ break
 # Activate Windows license
     irm https://raw.githubusercontent.com/bonguides25/PowerShell/main/Config/activate.ps1 | iex
 
+    irm bonguides.com/omp | iex
+
 $edition = (Get-CimInstance Win32_OperatingSystem).Caption
 
 # 1.Turn off UCA
