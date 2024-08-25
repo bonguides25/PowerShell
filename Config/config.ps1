@@ -50,9 +50,9 @@ $regName = 'LaunchTo'
 $regValue = Get-ItemPropertyValue -Path $registryPath -Name $regName -ErrorAction SilentlyContinue | Out-Null
 
 If ($regValue -eq $Null) {
-    New-ItemProperty -Path $registryPath -Name $regName -Value '1' -Type 'DWORD' -Force | Out-Null
+    New-ItemProperty -Path $registryPath -Name $regName -Value '1' -Type 'DWORD' -Force -ErrorAction SilentlyContinue | Out-Null
 } else {
-    Set-Itemproperty -Path $registryPath -Name $regName -Value '1' -Type 'DWORD' | Out-Null
+    Set-Itemproperty -Path $registryPath -Name $regName -Value '1' -Type 'DWORD' -ErrorAction SilentlyContinue | Out-Null
 }
 
 # 5.AutoCheckSelect
@@ -144,7 +144,7 @@ if ($edition -like "*Windows 11*") {
     .\choco.exe install microsoft-windows-terminal -y
     $filePath = "C:\Users\$($env:username)\Appdata\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
     Remove-Item -Path $filePath -Force
-    $uri = 'https://github.com/bonguides25/PowerShell/raw/main/Config/config.ps1'
+    $uri = 'https://github.com/bonguides25/PowerShell/raw/main/Config/settings.json'
     (New-Object Net.WebClient).DownloadFile($uri, $filePath)
 }
 
@@ -155,5 +155,4 @@ irm bonguides.com/winget | iex
 Write-Host "Completed..." -ForegroundColor Yellow
 Write-Host "Restarting..." -ForegroundColor Yellow
 Start-Sleep -Second 5
-Restart-Computer -Force
-
+# Restart-Computer -Force
