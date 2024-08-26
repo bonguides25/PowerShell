@@ -1,0 +1,8 @@
+{
+    "workbench.startupEditor": "none",
+    "editor.lightbulb.enabled": "off",
+    "powershell.startAutomatically": false,
+    "editor.minimap.enabled": false,
+    "editor.foldingStrategy": "indentation",
+    "editor.stickyScroll.scrollWithEditor": false
+}
