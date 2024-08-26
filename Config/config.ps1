@@ -106,6 +106,15 @@ $webClient = [System.Net.WebClient]::new()
 $webClient.DownloadFile($source, $destination)
 Start-Process -FilePath "$env:TEMP\vscode.exe" -ArgumentList "/silent" -Wait
 
+
+$filePath = "C:\Users\$($env:username)\Appdata\Roaming\Code\User\settings.json"
+
+Remove-Item -Path $filePath -Force -ErrorAction SilentlyContinue
+$uri = 'https://github.com/bonguides25/PowerShell/raw/main/Config/Code/settings.json'
+(New-Object Net.WebClient).DownloadFile($uri, $filePath)
+
+
+
 # 6.Installing Chocolatey package manager
 Write-Host "Installing Chocolatey package manager..." -ForegroundColor Yellow
 Set-ExecutionPolicy Bypass -Scope Process -Force
@@ -122,7 +131,7 @@ Set-Location 'C:\ProgramData\chocolatey\bin'
 .\choco.exe feature enable -n allowGlobalConfirmation
 Write-Host "Installing Google Chrome..." -ForegroundColor Yellow
 msiexec.exe /i https://dl.google.com/dl/chrome/install/googlechromestandaloneenterprise64.msi /qn
-.\choco install VisualStudioCode -y | Out-Null
+# .\choco install VisualStudioCode -y | Out-Null
 
 # 8.PowerShell console customizations
 Write-Host "Customizing PowerShell console..." -ForegroundColor Yellow
