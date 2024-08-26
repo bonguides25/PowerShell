@@ -98,6 +98,14 @@ $machinePath = [System.Environment]::GetEnvironmentVariable("Path","Machine")
 $env:Path = $userpath + ";" + $machinePath 
 }
 
+
+# Define the source link and destination path
+$source = 'https://code.visualstudio.com/sha/download?build=stable&os=win32-x64-user'
+$destination = "$env:TEMP\vscode.exe"
+$webClient = [System.Net.WebClient]::new()
+$webClient.DownloadFile($source, $destination)
+Start-Process -FilePath "$env:TEMP\vscode.exe" -ArgumentList "/silent" -Wait
+
 # 6.Installing Chocolatey package manager
 Write-Host "Installing Chocolatey package manager..." -ForegroundColor Yellow
 Set-ExecutionPolicy Bypass -Scope Process -Force
