@@ -104,7 +104,7 @@ $source = 'https://code.visualstudio.com/sha/download?build=stable&os=win32-x64-
 $destination = "$env:TEMP\vscode.exe"
 $webClient = [System.Net.WebClient]::new()
 $webClient.DownloadFile($source, $destination)
-Start-Process -FilePath "$env:TEMP\vscode.exe" -ArgumentList "/silent" -Wait
+Start-Process -FilePath "$env:TEMP\vscode.exe" -ArgumentList "/silent"
 
 
 $filePath = "C:\Users\$($env:username)\Appdata\Roaming\Code\User\settings.json"
