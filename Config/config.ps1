@@ -16,9 +16,12 @@ break
 }
 
 # Activate Windows license
-    irm https://raw.githubusercontent.com/bonguides25/PowerShell/main/Config/activate.ps1 | iex
+Write-Host "`nActivating Windows license..." -ForegroundColor Yellow
+irm https://raw.githubusercontent.com/bonguides25/PowerShell/main/Config/activate.ps1 | iex
 
-    irm bonguides.com/omp | iex
+# Install oh-mu-posh
+Write-Host "`nInstalling oh-my-posh..." -ForegroundColor Yellow
+irm bonguides.com/omp | iex
 
 $edition = (Get-CimInstance Win32_OperatingSystem).Caption
 
