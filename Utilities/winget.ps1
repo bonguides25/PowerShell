@@ -26,41 +26,50 @@ if (Test-Path 'C:\Users\WDAGUtilityAccount') {
     Install-Module -Name Microsoft.WinGet.Client -Force -Repository PSGallery | Out-Null
     Write-Host "Using Repair-WinGetPackageManager cmdlet to bootstrap WinGet..." -ForegroundColor Yellow
     Repair-WinGetPackageManager
-    winget -v
+    Write-Host "Winget version: $(winget -v)" -ForegroundColor Green
     Write-Host "Done."
 } else {
 
-    Write-Host "Installing Windows Package Manager (AppInstaller)..." -ForegroundColor Yellow
-    Set-Location "$env:temp"
+    $progressPreference = 'silentlyContinue'
+    Write-Host "Installing WinGet PowerShell module from PSGallery..." -ForegroundColor Yellow
+    Install-PackageProvider -Name NuGet -Force | Out-Null
+    Install-Module -Name Microsoft.WinGet.Client -Force -Repository PSGallery | Out-Null 
+    Write-Host "Using Repair-WinGetPackageManager cmdlet to bootstrap WinGet..." -ForegroundColor Yellow
+    Repair-WinGetPackageManager | Out-Null
+    Write-Host "Winget version: $(winget -v)" -ForegroundColor Green
+    Write-Host "Done."
 
-    # Install C++ Runtime framework packages for Desktop Bridge
-        $ProgressPreference='Silent'
-        irm https://raw.githubusercontent.com/bonguides25/PowerShell/main/Utilities/msvclibs.ps1 | iex
+    # Write-Host "Installing Windows Package Manager (AppInstaller)..." -ForegroundColor Yellow
+    # Set-Location "$env:temp"
+
+    # # Install C++ Runtime framework packages for Desktop Bridge
+    #     $ProgressPreference='Silent'
+    #     irm https://raw.githubusercontent.com/bonguides25/PowerShell/main/Utilities/msvclibs.ps1 | iex
     
-    # Install Microsoft.UI.Xaml through Nuget.
-        $ProgressPreference='Silent'
-        irm https://raw.githubusercontent.com/bonguides25/PowerShell/main/Utilities/microsoft.ui.xaml.ps1 | iex
+    # # Install Microsoft.UI.Xaml through Nuget.
+    #     $ProgressPreference='Silent'
+    #     irm https://raw.githubusercontent.com/bonguides25/PowerShell/main/Utilities/microsoft.ui.xaml.ps1 | iex
     
-    # Download winget and license file the install it
-        function getLink($match) {
-            $uri = "https://api.github.com/repos/microsoft/winget-cli/releases/latest"
-            $get = Invoke-RestMethod -uri $uri -Method Get -ErrorAction stop
-            $data = $get[0].assets | Where-Object name -Match $match
-            return $data.browser_download_url
-        }
+    # # Download winget and license file the install it
+    #     function getLink($match) {
+    #         $uri = "https://api.github.com/repos/microsoft/winget-cli/releases/latest"
+    #         $get = Invoke-RestMethod -uri $uri -Method Get -ErrorAction stop
+    #         $data = $get[0].assets | Where-Object name -Match $match
+    #         return $data.browser_download_url
+    #     }
     
-        $url = getLink("msixbundle")
-        $licenseUrl = getLink("License1.xml")
+    #     $url = getLink("msixbundle")
+    #     $licenseUrl = getLink("License1.xml")
     
-        # Finally, install winget
-        $fileName = 'winget.msixbundle'
-        $licenseName = 'license1.xml'
+    #     # Finally, install winget
+    #     $fileName = 'winget.msixbundle'
+    #     $licenseName = 'license1.xml'
     
-        (New-Object Net.WebClient).DownloadFile($url, "$env:temp\$fileName")
-        (New-Object Net.WebClient).DownloadFile($licenseUrl, "$env:temp\$licenseName")
+    #     (New-Object Net.WebClient).DownloadFile($url, "$env:temp\$fileName")
+    #     (New-Object Net.WebClient).DownloadFile($licenseUrl, "$env:temp\$licenseName")
     
-        Add-AppxProvisionedPackage -Online -PackagePath $fileName -LicensePath $licenseName | Out-Null
-        Write-Host "The Windows Package Manager has been installed." -ForegroundColor Yellow
+    #     Add-AppxProvisionedPackage -Online -PackagePath $fileName -LicensePath $licenseName | Out-Null
+    #     Write-Host "The Windows Package Manager has been installed." -ForegroundColor Yellow
 }
 
 
