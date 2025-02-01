@@ -20,7 +20,14 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
 # Install Windows Package Manager on Windows Sandbox only
 if (Test-Path 'C:\Users\WDAGUtilityAccount') {
     Write-Host "`nYou're using Windows Sandbox" -ForegroundColor Yellow
-    irm bonguides.com/wsb/winget | iex
+    $progressPreference = 'silentlyContinue'
+    Write-Host "Installing WinGet PowerShell module from PSGallery..."
+    Install-PackageProvider -Name NuGet -Force | Out-Null
+    Install-Module -Name Microsoft.WinGet.Client -Force -Repository PSGallery | Out-Null
+    Write-Host "Using Repair-WinGetPackageManager cmdlet to bootstrap WinGet..."
+    Repair-WinGetPackageManager
+    winget -v
+    Write-Host "Done."
 } else {
 
     Write-Host "Installing Windows Package Manager (AppInstaller)..." -ForegroundColor Yellow
