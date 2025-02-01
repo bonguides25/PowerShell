@@ -21,10 +21,10 @@ if (-not([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdenti
 if (Test-Path 'C:\Users\WDAGUtilityAccount') {
     Write-Host "`nYou're using Windows Sandbox" -ForegroundColor Yellow
     $progressPreference = 'silentlyContinue'
-    Write-Host "Installing WinGet PowerShell module from PSGallery..."
+    Write-Host "Installing WinGet PowerShell module from PSGallery..." -ForegroundColor Yellow
     Install-PackageProvider -Name NuGet -Force | Out-Null
     Install-Module -Name Microsoft.WinGet.Client -Force -Repository PSGallery | Out-Null
-    Write-Host "Using Repair-WinGetPackageManager cmdlet to bootstrap WinGet..."
+    Write-Host "Using Repair-WinGetPackageManager cmdlet to bootstrap WinGet..." -ForegroundColor Yellow
     Repair-WinGetPackageManager
     winget -v
     Write-Host "Done."
