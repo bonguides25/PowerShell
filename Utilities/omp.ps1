@@ -22,4 +22,6 @@ $env:Path = $userpath + ";" + $machinePath
 
 Start-Sleep -Seconds 1
 
-oh-my-posh font install JetBrainsMono
+. "$env:USERPROFILE\AppData\Local\Programs\oh-my-posh\bin\oh-my-posh.exe" font install JetBrainsMono
+
+# oh-my-posh font install JetBrainsMono
