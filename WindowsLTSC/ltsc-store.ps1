@@ -71,7 +71,7 @@ if ([System.Environment]::OSVersion.Version.Build -lt 16299) {
         }
 
     # Install Windows Package Manager (winget)
-        Invoke-RestMethod bonguides.com/winget | Invoke-Expression
+        # Invoke-RestMethod bonguides.com/winget | Invoke-Expression
 
 # Installed apps
     $packages = @("WindowsStore")
