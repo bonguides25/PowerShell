@@ -26,8 +26,8 @@ function Autodesk-Uninstaller {
         # Uninstall Autodesk Genuine Service
         if ($app.DisplayName -match "Autodesk Genuine Service"){
             Write-Host "Uninstalling Autodesk Genuine Service..." -ForegroundColor Yellow
-            Remove-Item "$Env:ALLUSERSPROFILE\Autodesk\Adlm\ProductInformation.pit" -Force
-            Remove-Item "$Env:userprofile\AppData\Local\Autodesk\Genuine Autodesk Service\id.dat" -Force
+            Remove-Item "$Env:ALLUSERSPROFILE\Autodesk\Adlm\ProductInformation.pit" -Force -ErrorAction:SilentlyContinue
+            Remove-Item "$Env:userprofile\AppData\Local\Autodesk\Genuine Autodesk Service\id.dat" -Force -ErrorAction:SilentlyContinue
             msiexec.exe /x "{21DE6405-91DE-4A69-A8FB-483847F702C6}" /qn
         }
 
