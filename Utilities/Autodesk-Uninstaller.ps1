@@ -58,7 +58,7 @@ for ($i = 1; $i -lt 5; $i++) {
 }
 
 # Uncomment the below line to delete the C:\Autodesk folder.
-# Remove-Item -Path 'C:\Autodesk' -Recurse -Force
+Remove-Item -Path 'C:\Autodesk' -Recurse -Force
 
 # Uncomment the below line to restart the computer automatically when complete.
 # Restart-Computer -Force
