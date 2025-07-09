@@ -26,6 +26,27 @@ $yamlUrl = $installerFile.download_url
 $yamlContent = Invoke-RestMethod -Uri $yamlUrl -Headers @{ 'User-Agent' = 'PowerShell' }
 $installerUrl = ($yamlContent -join "`n") -match "InstallerUrl:\s+(http.*)" | ForEach-Object { $Matches[1] }
 
-# Output result
-Write-Host "Latest CapCut Version: $latestVersion"
-Write-Host "Installer URL: $installerUrl"
+$regPaths = @(
+    "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall",
+    "HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall"
+)
+
+foreach ($regPath in $regPaths) {
+    $apps = Get-ChildItem $regPath -ErrorAction SilentlyContinue
+    foreach ($app in $apps) {
+        $props = Get-ItemProperty $app.PSPath
+        if ($props.DisplayName -like "*WinRAR*") {
+            $installedVersion = $($props.DisplayVersion)
+        }
+    }
+}
+
+if ($installedVersion -lt $latestVersion) {
+    # Download the file
+    $webClient = [System.Net.WebClient]::new()
+    $webClient.DownloadFile($installerUrl, "$env:TEMP\setup.exe")
+    Write-Host "Updating from $installedVersion to $latestVersion"
+    Start-Process -FilePath "$env:TEMP\setup.exe" -ArgumentList '-s1' -Wait
+} else {
+    Write-Host "The latest version already installed."
+}
