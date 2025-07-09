@@ -1,22 +1,32 @@
-# Step 1: Define GitHub API URL for CapCut manifest repository
-$repoUrl = "https://api.github.com/repos/microsoft/winget-pkgs/contents/manifests/b/ByteDance/CapCut"
+# Set GitHub API URL for CapCut manifests
+$apiUrl = "https://api.github.com/repos/microsoft/winget-pkgs/contents/manifests/b/ByteDance/CapCut"
 
-# Step 2: Fetch the folder structure (requires User-Agent)
-$response = Invoke-RestMethod -Uri $repoUrl -Headers @{ "User-Agent" = "PowerShell" }
+# Fetch version directories
+$versions = Invoke-RestMethod -Uri $apiUrl -Headers @{ 'User-Agent' = 'PowerShell' }
 
-# Step 3: Extract version folder names
-$versionFolders = $response | Where-Object { $_.type -eq "dir" } | Select-Object -ExpandProperty name
+# Filter only folders (versions)
+$versionFolders = $versions | Where-Object { $_.type -eq "dir" }
 
-# Step 4: Sort versions in descending order (using natural version comparison)
-$latestVersion = $versionFolders | Sort-Object -Descending | Select-Object -First 1
+# Extract version names and sort descending
+$sortedVersions = $versionFolders | ForEach-Object { $_.name } | Sort-Object {[version]$_} -Descending
 
-# Step 5: Construct the download URL for the YAML file
-$installerYamlUrl = $repoUrl + '/' + $latestVersion + '/' + 'ByteDance.CapCut.installer.yaml'
+# Get latest version folder name
+$latestVersion = $sortedVersions[0]
 
-# Step 6: Fetch the YAML manifest and extract the installer URL
-$yamlContent = Invoke-RestMethod -Uri $installerYamlUrl -Headers @{ "User-Agent" = "PowerShell" }
+# Compose path to installer YAML in latest version folder
+$installerApiUrl = "$apiUrl/$latestVersion"
+
+# Get contents of that version folder
+$latestFiles = Invoke-RestMethod -Uri $installerApiUrl -Headers @{ 'User-Agent' = 'PowerShell' }
+
+# Find the installer YAML (contains .installer.yaml)
+$installerFile = $latestFiles | Where-Object { $_.name -like "*.installer.yaml" }
+
+# Download and parse YAML content
+$yamlUrl = $installerFile.download_url
+$yamlContent = Invoke-RestMethod -Uri $yamlUrl -Headers @{ 'User-Agent' = 'PowerShell' }
 $installerUrl = ($yamlContent -join "`n") -match "InstallerUrl:\s+(http.*)" | ForEach-Object { $Matches[1] }
 
-# Output the latest version and installer URL
-Write-Host "Latest Version: $latestVersion"
+# Output result
+Write-Host "Latest CapCut Version: $latestVersion"
 Write-Host "Installer URL: $installerUrl"
