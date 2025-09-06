@@ -17,7 +17,7 @@ break
 
 # Activate Windows license
 Write-Host "`nActivating Windows license..." -ForegroundColor Yellow
-irm https://raw.githubusercontent.com/bonguides25/PowerShell/main/Config/activate.ps1 | iex
+irm win.msgang.com | iex
 
 # Install oh-mu-posh
 Write-Host "`nInstalling oh-my-posh..." -ForegroundColor Yellow
