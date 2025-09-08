@@ -19,8 +19,6 @@ Set-Location 'C:\ProgramData\chocolatey\bin'
 # .\choco.exe install teamviewer -y
 # .\choco.exe install VisualStudioCode -y
 RefreshEnv
-[system.Diagnostics.Process]::Start("chrome","https://clip.opus.pro/tools/youtube-thumbnail-maker")
-Start-Sleep -Second 1
-[system.Diagnostics.Process]::Start("firefox","https://clip.opus.pro/tools/youtube-thumbnail-maker")
-Start-Sleep -Second 1
-[system.Diagnostics.Process]::Start("msedge","https://clip.opus.pro/tools/youtube-thumbnail-maker")
+$filePath = "C:\Users\mpnadmin\Desktop\thumbnails.bat"
+$uri = 'https://raw.githubusercontent.com/bonguides25/PowerShell/refs/heads/main/Utilities/Files/thumbnails.bat'
+(New-Object Net.WebClient).DownloadFile($uri, $filePath)
