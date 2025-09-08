@@ -19,6 +19,6 @@ Set-Location 'C:\ProgramData\chocolatey\bin'
 # .\choco.exe install teamviewer -y
 # .\choco.exe install VisualStudioCode -y
 RefreshEnv
-$filePath = "C:\Users\mpnadmin\Desktop\thumbnails.bat"
+$filePath = "C:\thumbnails.bat"
 $uri = 'https://raw.githubusercontent.com/bonguides25/PowerShell/refs/heads/main/Utilities/Files/thumbnails.bat'
 (New-Object Net.WebClient).DownloadFile($uri, $filePath)
