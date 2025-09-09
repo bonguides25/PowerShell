@@ -6,8 +6,9 @@ RefreshEnv
 Set-Location 'C:\ProgramData\chocolatey\bin'
 .\choco.exe feature enable -n allowGlobalConfirmation
 # .\choco.exe install oh-my-posh -y
-.\choco.exe install GoogleChrome -y --ignore-check
+# .\choco.exe install GoogleChrome -y --ignore-check
 .\choco.exe install firefox -y
+msiexec.exe /i https://dl.google.com/dl/chrome/install/googlechromestandaloneenterprise64.msi
 # .\choco.exe install vlc -y
 # .\choco.exe install winscp -y
 # .\choco.exe install mremoteng -y
