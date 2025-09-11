@@ -1,5 +1,6 @@
 # Installing Chocolatey package manager
 Set-ExecutionPolicy Bypass -Scope Process -Force
+Set-ItemProperty -Path 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects' -Name 'VisualFXSetting' -Value 2
 # irm https://community.chocolatey.org/install.ps1 | iex
 
 # RefreshEnv
