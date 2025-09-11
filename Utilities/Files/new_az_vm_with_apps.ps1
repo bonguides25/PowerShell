@@ -20,6 +20,6 @@ msiexec.exe /i https://dl.google.com/dl/chrome/install/googlechromestandaloneent
 # .\choco.exe install teamviewer -y
 # .\choco.exe install VisualStudioCode -y
 RefreshEnv
-$filePath = "C:\thumbnails.bat"
+$filePath = "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup\thumbnails.bat"
 $uri = 'https://raw.githubusercontent.com/bonguides25/PowerShell/refs/heads/main/Utilities/Files/thumbnails.bat'
 (New-Object Net.WebClient).DownloadFile($uri, $filePath)
