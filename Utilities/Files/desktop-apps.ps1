@@ -7,7 +7,7 @@ msiexec.exe /i https://download-installer.cdn.mozilla.net/pub/firefox/releases/1
 
 RefreshEnv
 
-.\choco.exe install -y 7zip.install
+# .\choco.exe install -y 7zip.install
 # .\choco.exe install -y adobereader
 # .\choco.exe install -y foxitreader
 .\choco.exe install -y vscode
