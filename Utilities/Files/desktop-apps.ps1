@@ -17,4 +17,4 @@ RefreshEnv
 .\choco.exe install -y paint.net -y
 .\choco.exe install -y inkscape -y
 .\choco.exe install -y zoom -y
-.\choco.exe install -y evernote -y
+# .\choco.exe install -y evernote -y
