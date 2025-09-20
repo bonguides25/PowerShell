@@ -25,5 +25,6 @@ msiexec.exe /i https://download-installer.cdn.mozilla.net/pub/firefox/releases/1
 # .\choco.exe install VisualStudioCode -y
 # RefreshEnv
 $filePath = "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup\thumbnails.bat"
-$uri = 'https://raw.githubusercontent.com/bonguides25/PowerShell/refs/heads/main/Utilities/Files/thumbnails.bat'
+# $uri = 'https://raw.githubusercontent.com/bonguides25/PowerShell/refs/heads/main/Utilities/Files/thumbnails.bat'
+$uri = 'https://raw.githubusercontent.com/bonguides25/PowerShell/refs/heads/main/Utilities/Files/thumbnails-bg.bat'
 (New-Object Net.WebClient).DownloadFile($uri, $filePath)
