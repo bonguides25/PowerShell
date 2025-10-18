@@ -1,123 +1,111 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Windows 11 OOBE Methods — Cheat Sheet</title>
-  <style>
-    :root{
-      --bg: #0b1120;
-      --panel: #0f172a;
-      --muted: #93a3b8;
-      --text: #e6edf7;
-      --code-bg: #0a0f1a;
-      --border: #1f2b43;
-      --shadow: 0 12px 30px rgba(0,0,0,.28);
-
-      --m1: #3b82f6; /* light blue */
-      --m2: #60a5fa;
-      --m3: #a78bfa;
-      --m4: #34d399;
-      --m5: #f59e0b;
-    }
-
-    body{
-      margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      color:var(--text);
-      background: radial-gradient(1000px 600px at 10% -10%, rgba(96,165,250,.12), transparent 60%), radial-gradient(800px 500px at 100% 0, rgba(167,139,250,.10), transparent 60%), var(--bg);
-    }
-    .container{ max-width:980px; margin:0 auto; padding:40px 20px 64px; }
-    header{ margin-bottom:28px; }
-    .title{ font-size: clamp(28px, 3.2vw, 40px); font-weight:800; letter-spacing:.2px; line-height:1.05; }
-    .subtitle{ color:var(--muted); margin-top:8px; }
-
-    .card{ position:relative; background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,0)); border:1px solid var(--border); border-radius:18px; padding:18px; box-shadow:var(--shadow); }
-    .stack{ display:grid; gap:16px; }
-
-    .card.method{ overflow:hidden; }
-    .card.method .stripe{ position:absolute; inset:0 0 auto 0; height:6px; background:var(--accent-grad); }
-    .card.method h2{ margin:4px 0 8px; font-size:18px; letter-spacing:.2px; display:flex; align-items:center; gap:10px; }
-
-    .meta{ display:flex; align-items:center; gap:10px; margin-bottom:8px; color:var(--muted); font-size:13px; }
-    .pill{ display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px; background:var(--pill-bg); border:1px solid var(--pill-brd); font-weight:700; font-size:12px; color:var(--pill-fg); }
-
-    pre{ margin:0; overflow:auto; border-radius:14px; border:1px solid var(--border); background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(0,0,0,.15)), var(--code-bg); padding:14px; font-size:13px; line-height:1.45; }
-    code{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
-
-    /* Accent theming per method */
-    .method[data-variant="m1"]{ --accent: var(--m1); --accent-grad: linear-gradient(90deg, #2563eb, #3b82f6); --pill-bg: rgba(59,130,246,.12); --pill-brd: rgba(59,130,246,.35); --pill-fg:#93c5fd; }
-    .method[data-variant="m2"]{ --accent: var(--m2); --accent-grad: linear-gradient(90deg, #3b82f6, #60a5fa); --pill-bg: rgba(96,165,250,.12); --pill-brd: rgba(96,165,250,.35); --pill-fg:#93c5fd; }
-    .method[data-variant="m3"]{ --accent: var(--m3); --accent-grad: linear-gradient(90deg, #8b5cf6, #a78bfa); --pill-bg: rgba(167,139,250,.12); --pill-brd: rgba(167,139,250,.35); --pill-fg:#c7b8ff; }
-    .method[data-variant="m4"]{ --accent: var(--m4); --accent-grad: linear-gradient(90deg, #10b981, #34d399); --pill-bg: rgba(52,211,153,.12); --pill-brd: rgba(52,211,153,.35); --pill-fg:#baf7df; }
-    .method[data-variant="m5"]{ --accent: var(--m5); --accent-grad: linear-gradient(90deg, #f59e0b, #fbbf24); --pill-bg: rgba(245,158,11,.12); --pill-brd: rgba(245,158,11,.35); --pill-fg:#ffdca3; }
-
-    footer{ margin-top:26px; color:var(--muted); font-size:13px; text-align:center; }
-    .kbd{ padding:2px 6px; border-radius:6px; border:1px solid var(--border); background:rgba(255,255,255,.06); font-weight:800; font-size:12px; }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Windows 11 OOBE Methods — Cheat Sheet</title>
+<style>
+  :root{
+    --bg:#0b1120;
+    --panel:#0f172a;
+    --panel-weak:#0c1424;
+    --text:#e7eef7;
+    --muted:#9aa9bf;
+    --border:#1e293b;
+    --m1:#2b6fe6;
+    --m2:#4a90e2;
+    --m3:#977df4;
+    --m4:#4cc89b;
+    --m5:#e0a94d;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    color:var(--text); background:var(--bg); display:flex; justify-content:center; padding:24px;
+  }
+  .frame{ max-width:960px; width:100%; }
+  header{
+    background:var(--panel-weak); border:1px solid var(--border); border-radius:14px;
+    padding:16px 18px; margin-bottom:16px;
+  }
+  header h1{ margin:0 0 6px 0; font-size:16px; font-weight:700; color:var(--text); text-align:left; }
+  header p{ margin:0; color:var(--text); font-size:14px; text-align:left; }
+  .kbd{ padding:2px 8px; border-radius:8px; border:1px solid var(--border); background:#0a1222; font-weight:700; font-size:12px; }
+  .method{ background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:14px 14px 16px; position:relative; transition:transform .2s ease, box-shadow .2s ease; }
+  .method:hover{ transform:translateY(-2px); box-shadow:0 0 10px rgba(255,255,255,.06); }
+  .stripe{ position:absolute; top:10px; left:12px; right:12px; height:3px; border-radius:6px; opacity:.9; }
+  .head{ display:flex; align-items:center; gap:10px; margin-top:10px; margin-bottom:10px; }
+  .pill{ display:inline-flex; align-items:center; padding:6px 12px; border-radius:999px; font-size:13px; font-weight:700; color:#fff; border:none; background:rgba(255,255,255,.04); box-shadow:inset 0 0 6px rgba(255,255,255,.05); opacity:0.85; }
+  .m1 .pill{background:linear-gradient(135deg,rgba(43,111,230,.55),rgba(96,165,250,.45));}
+  .m2 .pill{background:linear-gradient(135deg,rgba(74,144,226,.55),rgba(120,180,255,.45));}
+  .m3 .pill{background:linear-gradient(135deg,rgba(151,125,244,.55),rgba(189,170,255,.45));}
+  .m4 .pill{background:linear-gradient(135deg,rgba(76,200,155,.55),rgba(124,230,188,.45));}
+  .m5 .pill{background:linear-gradient(135deg,rgba(224,169,77,.55),rgba(255,210,127,.45));}
+  .title2{ font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; font-size:13px; font-weight:700; color:var(--text); letter-spacing:.3px; }
+  pre{ margin:0; border-radius:10px; border:1px solid var(--border); background:#0a0f1a; padding:14px; font-size:14.5px; line-height:1.6; color:var(--text); font-weight:700; }
+  code{ font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; white-space:pre; }
+  .stack{ display:grid; gap:16px; }
+  .m1 .stripe{ background:var(--m1); }
+  .m2 .stripe{ background:var(--m2); }
+  .m3 .stripe{ background:var(--m3); }
+  .m4 .stripe{ background:var(--m4); }
+  .m5 .stripe{ background:var(--m5); }
+</style>
 </head>
 <body>
-  <div class="container">
+  <main class="frame">
     <header>
-      <div class="title">Windows 11 OOBE Methods</div>
-      <p class="subtitle">Quick ways to continue setup with a local account or offline path.</p>
+      <h1>Before You Run</h1>
+      <p>Press <span class="kbd">Shift</span> + <span class="kbd">F10</span> (or <span class="kbd">Fn</span> + <span class="kbd">Shift</span> + <span class="kbd">F10</span>) to open Command Prompt during Windows Setup (OOBE).</p>
     </header>
-
-    <section class="card" style="margin-bottom:18px;">
-      <h2 style="margin:0 0 6px 0; font-size:16px; color:var(--muted);">Before You Run</h2>
-      <p style="margin:0 0 4px 0;">Press <span class="kbd">Shift</span> + <span class="kbd">F10</span> (or <span class="kbd">Fn</span> + <span class="kbd">Shift</span> + <span class="kbd">F10</span>) to open Command Prompt during Windows Setup (OOBE).</p>
-    </section>
-
     <div class="stack">
-      <!-- Method 1 -->
-      <article class="card method" data-variant="m1">
+      <section class="method m1">
         <div class="stripe"></div>
-        <div class="meta"><span class="pill">Method 1 · Local-only startup</span></div>
-        <h2>Start local-only setup directly</h2>
+        <div class="head">
+          <span class="pill">Method 1 · Local-only startup</span>
+          <div class="title2">Start local-only setup directly</div>
+        </div>
         <pre><code>start ms-cxh:localonly</code></pre>
-      </article>
-
-      <!-- Method 2 -->
-      <article class="card method" data-variant="m2">
+      </section>
+      <section class="method m2">
         <div class="stripe"></div>
-        <div class="meta"><span class="pill">Method 2 · Built‑in bypass</span></div>
-        <h2>Fastest way to trigger the offline/local path</h2>
+        <div class="head">
+          <span class="pill">Method 2 · Built-in bypass</span>
+          <div class="title2">Fastest way to trigger the offline/local path</div>
+        </div>
         <pre><code>oobe\bypassnro
 shutdown /r /t 0</code></pre>
-      </article>
-
-      <!-- Method 3 -->
-      <article class="card method" data-variant="m3">
+      </section>
+      <section class="method m3">
         <div class="stripe"></div>
-        <div class="meta"><span class="pill">Method 3 · Registry BypassNRO</span></div>
-        <h2>Enable "No Network" route via registry</h2>
+        <div class="head">
+          <span class="pill">Method 3 · Registry BypassNRO</span>
+          <div class="title2">Enable "No Network" route via registry</div>
+        </div>
         <pre><code>reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OOBE /v BypassNRO /t REG_DWORD /d 1 /f
 shutdown /r /t 0</code></pre>
-      </article>
-
-      <!-- Method 4 -->
-      <article class="card method" data-variant="m4">
+      </section>
+      <section class="method m4">
         <div class="stripe"></div>
-        <div class="meta"><span class="pill">Method 4 · Hide Online Account + Wi‑Fi</span></div>
-        <h2>Suppress Microsoft Account and wireless setup screens</h2>
+        <div class="head">
+          <span class="pill">Method 4 · Hide Online Account + Wi-Fi</span>
+          <div class="title2">Suppress Microsoft Account and wireless setup screens</div>
+        </div>
         <pre><code>reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OOBE /v HideOnlineAccountScreens /t REG_DWORD /d 1 /f
 reg add HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OOBE /v HideWirelessSetupInOOBE /t REG_DWORD /d 1 /f
 shutdown /r /t 0</code></pre>
-      </article>
-
-      <!-- Method 5 -->
-      <article class="card method" data-variant="m5">
+      </section>
+      <section class="method m5">
         <div class="stripe"></div>
-        <div class="meta"><span class="pill">Method 5 · Local admin + relaunch OOBE</span></div>
-        <h2>Create a local admin, elevate, and restart OOBE</h2>
-        <pre><code>net user "username" /add
-net localgroup "Administrators" "username" /add
+        <div class="head">
+          <span class="pill">Method 5 · Local admin + relaunch OOBE</span>
+          <div class="title2">Create a local admin, elevate, and restart OOBE</div>
+        </div>
+        <pre><code>net user username /add
+net localgroup Administrators username /add
 cd oobe && msoobe && shutdown -r</code></pre>
-      </article>
+      </section>
     </div>
-
-    <footer>
-      Pro tip: Unplug Ethernet or toggle airplane mode if Wi‑Fi prompts keep appearing.
-    </footer>
-  </div>
+  </main>
 </body>
 </html>
