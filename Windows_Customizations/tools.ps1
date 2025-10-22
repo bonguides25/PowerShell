@@ -11,7 +11,7 @@ $xamlInput = @'
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:unattended"
         mc:Ignorable="d"
-        Title="Installation Tool"  ResizeMode="NoResize" WindowStartupLocation="CenterScreen" ScrollViewer.CanContentScroll="True">
+        Title="Installation Tool"  ResizeMode="NoResize" WindowStartupLocation="CenterScreen" ScrollViewer.CanContentScroll="True" d:DesignHeight="333.92" d:DesignWidth="453.333">
     <Grid Margin="20,20,20,20">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="27*"/>
@@ -20,14 +20,14 @@ $xamlInput = @'
         <Button x:Name="buttonSubmit" Content="Submit" HorizontalAlignment="Left" Margin="28,21,0,0" VerticalAlignment="Top" Width="118" Height="28" Background="#FF168E12" Foreground="White" FontFamily="Roboto" FontSize="13" FontWeight="Bold" UseLayoutRounding="True" BorderBrush="#FF168E12" Grid.Column="1"/>
         <CheckBox x:Name="cb_apps" Content="Desktop Apps" HorizontalAlignment="Left" Margin="27,18,0,0" VerticalAlignment="Top"/>
         <CheckBox x:Name="cb_activate" Content="Activate Windows" HorizontalAlignment="Left" Margin="27,47,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-        <TextBox x:Name="textbox" HorizontalAlignment="Left" Margin="17,144,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="263" Grid.ColumnSpan="2"/>
-        <TextBox x:Name="textbox1" HorizontalAlignment="Left" Margin="17,180,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="263" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="textbox" HorizontalAlignment="Left" Margin="16,197,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="263" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="textbox1" HorizontalAlignment="Left" Margin="16,235,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="263" Grid.ColumnSpan="2"/>
         <CheckBox x:Name="cb_office" Content="Install Office" HorizontalAlignment="Left" Margin="27,75,0,0" VerticalAlignment="Top"/>
         <CheckBox x:Name="cb_config" Content="Configure" HorizontalAlignment="Left" Margin="27,106,0,0" VerticalAlignment="Top"/>
+        <CheckBox x:Name="cb_cursor" Content="Mouse Pointer" HorizontalAlignment="Left" Margin="27,139,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>
-
 '@
 
 # --- Parse XAML ---
@@ -82,6 +82,13 @@ $buttonSubmit.Add_Click({
         $steps += [pscustomobject]@{
             status = 'Customizing Windows...'
             cmd    = 'irm bonguides.com/config | iex'
+        }
+    }
+
+    if ($cb_cursor.IsChecked) {
+        $steps += [pscustomobject]@{
+            status = 'Customizing Windows...'
+            cmd    = 'irm https://github.com/bonguides25/PowerShell/raw/refs/heads/main/Windows_Customizations/Files/Cursors/cursor-add.ps1 | iex'
         }
     }
 
