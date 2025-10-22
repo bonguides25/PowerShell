@@ -11,7 +11,7 @@ $xamlInput = @'
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:unattended"
         mc:Ignorable="d"
-        Title="Installation Tool"  ResizeMode="NoResize" WindowStartupLocation="CenterScreen" ScrollViewer.CanContentScroll="True" d:DesignHeight="333.92" d:DesignWidth="453.333">
+        Title="Installation Tool"  ResizeMode="NoResize" WindowStartupLocation="CenterScreen" ScrollViewer.CanContentScroll="True">
     <Grid Margin="20,20,20,20">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="27*"/>
