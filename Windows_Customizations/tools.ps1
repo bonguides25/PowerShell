@@ -1,6 +1,7 @@
 # --- Assemblies ---
-Add-Type -AssemblyName PresentationCore, PresentationFramework, WindowsBase, System.Xaml
+Add-Type -AssemblyName PresentationCore, PresentationFramework, WindowsBase, System.Xaml, System.Windows.Forms
 [System.Windows.Forms.Application]::EnableVisualStyles() | Out-Null
+
 
 # --- XAML ---
 $xamlInput = @'
