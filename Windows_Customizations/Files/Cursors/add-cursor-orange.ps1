@@ -1,7 +1,7 @@
 # --- Auto-Apply Custom Mouse Pointers ---
 
 $cursors_path = New-Item -Path "C:\Windows\Custom_Cursors" -ItemType Directory -Force
-Invoke-WebRequest -Uri 'https://github.com/bonguides25/PowerShell/raw/refs/heads/main/Windows_Customizations/Files/Cursors/orange.cur' -OutFile "$cursors_path\orange.cur"
+Invoke-WebRequest -Uri 'https://github.com/bonguides25/PowerShell/raw/refs/heads/main/Windows_Customizations/Files/Cursors/Orange.cur' -OutFile "$cursors_path\orange.cur"
 $Cursors = @{
     "Arrow"          = "$cursors_path\orange.cur"
     "Help"           = "$cursors_path\orange.cur"
