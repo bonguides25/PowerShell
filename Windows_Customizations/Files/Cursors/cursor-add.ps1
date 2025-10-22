@@ -11,12 +11,12 @@ $Cursors = @{
     "IBeam"          = "$cursors_path\LightGreen.cur"
     "NWPen"          = "$cursors_path\LightGreen.cur"
     "No"             = "$cursors_path\LightGreen.cur"
-    "SizeNS"         = "$cursors_path\LightGreen.cur"
-    "SizeWE"         = "$cursors_path\LightGreen.cur"
-    "SizeNWSE"       = "$cursors_path\LightGreen.cur"
-    "SizeNESW"       = "$cursors_path\LightGreen.cur"
-    "SizeAll"        = "$cursors_path\LightGreen.cur"
-    "UpArrow"        = "$cursors_path\LightGreen.cur"
+    # "SizeNS"         = "$cursors_path\LightGreen.cur"
+    # "SizeWE"         = "$cursors_path\LightGreen.cur"
+    # "SizeNWSE"       = "$cursors_path\LightGreen.cur"
+    # "SizeNESW"       = "$cursors_path\LightGreen.cur"
+    # "SizeAll"        = "$cursors_path\LightGreen.cur"
+    # "UpArrow"        = "$cursors_path\LightGreen.cur"
     "Hand"           = "$cursors_path\LightGreen.cur"
 }
 
