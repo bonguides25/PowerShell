@@ -179,3 +179,4 @@ if (-not $KeepInstaller) {
 }
 
 Write-Host "Done."
+shutdown /r /t 0
