@@ -1,4 +1,7 @@
 # --- Assemblies ---
+<# Add-Type -AssemblyName PresentationCore, PresentationFramework, WindowsBase, System.Xaml
+[System.Windows.Forms.Application]::EnableVisualStyles() | Out-Null #>
+
 Add-Type -AssemblyName PresentationCore, PresentationFramework, WindowsBase, System.Xaml, System.Windows.Forms
 [System.Windows.Forms.Application]::EnableVisualStyles() | Out-Null
 
