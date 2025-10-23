@@ -343,9 +343,6 @@ if ($edition -like "*Windows 11*") {
     Set-Location 'C:\ProgramData\chocolatey\bin'
     .\choco.exe install microsoft-windows-terminal -y
     Start-Sleep -Seconds 2
-    Start-Process wt.exe
-    Start-Sleep -Seconds 2
-    Get-Process -ProcessName "WindowsTerminal" | Stop-Process
     $filePath = "C:\Users\$($env:username)\Appdata\Local\Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
     Remove-Item -Path $filePath -Force
     $uri = 'https://github.com/bonguides25/PowerShell/raw/refs/heads/main/Windows_Customizations/settings.json'
