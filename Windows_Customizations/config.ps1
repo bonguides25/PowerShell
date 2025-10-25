@@ -16,6 +16,10 @@ powercfg -change -hibernate-timeout-ac 0
 powercfg -change -hibernate-timeout-dc 0
 powercfg -h off
 
+# Disable User Account Control (UAC)
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" `
+                 -Name "EnableLUA" -Value 0
+
 # 2.Turn off News and Interests
 if ($edition -like "*Windows 10*") {
     Write-Host "Turning off News and Interests..." -ForegroundColor Yellow
