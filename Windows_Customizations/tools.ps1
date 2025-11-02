@@ -31,8 +31,11 @@ $xamlInput = @'
         <CheckBox x:Name="cb_cursor" Content="Mouse Pointer (Green)" HorizontalAlignment="Left" Margin="27,139,0,0" VerticalAlignment="Top" Height="15" Width="139"/>
         <CheckBox x:Name="cb_cursor_orange" Content="Mouse Pointer (Orange)" HorizontalAlignment="Left" Margin="185,139,0,0" VerticalAlignment="Top" Height="15" Width="147"/>
         <CheckBox x:Name="cb_cursor_reset" Content="Mouse Pointer (Reset)" Margin="355,139,0,0" VerticalAlignment="Top" Height="15" HorizontalAlignment="Left" Width="139"/>
+        <CheckBox x:Name="cb_wall0" Content="Desktop Wallpaper" HorizontalAlignment="Left" Margin="143,18,0,0" VerticalAlignment="Top" Height="15" Width="123"/>
+
     </Grid>
 </Window>
+
 '@
 
 # --- Parse XAML ---
@@ -104,10 +107,17 @@ $buttonSubmit.Add_Click({
         }
     }
 
-        if ($cb_cursor_reset.IsChecked) {
+    if ($cb_cursor_reset.IsChecked) {
         $steps += [pscustomobject]@{
             status = 'Customizing Windows...'
             cmd    = 'irm https://github.com/bonguides25/PowerShell/raw/refs/heads/main/Windows_Customizations/Files/Cursors/reset-cursor.ps1 | iex'
+        }
+    }
+
+    if ($cb_wall0.IsChecked) {
+        $steps += [pscustomobject]@{
+            status = 'Settings Wallpaper...'
+            cmd    = 'irm https://github.com/bonguides25/PowerShell/raw/refs/heads/main/Windows_Customizations/Scripts/wallpaper.ps1 | iex'
         }
     }
 
