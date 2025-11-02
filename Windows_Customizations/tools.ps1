@@ -28,10 +28,11 @@ $xamlInput = @'
         <TextBox x:Name="textbox1" HorizontalAlignment="Left" Margin="16,235,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="263" Height="18"/>
         <CheckBox x:Name="cb_office" Content="Install Office" HorizontalAlignment="Left" Margin="27,75,0,0" VerticalAlignment="Top" Height="15" Width="86"/>
         <CheckBox x:Name="cb_config" Content="Configure" HorizontalAlignment="Left" Margin="27,106,0,0" VerticalAlignment="Top" Height="15" Width="72"/>
-        <CheckBox x:Name="cb_cursor" Content="Mouse Pointer (Green)" HorizontalAlignment="Left" Margin="27,139,0,0" VerticalAlignment="Top" Height="15" Width="139"/>
-        <CheckBox x:Name="cb_cursor_orange" Content="Mouse Pointer (Orange)" HorizontalAlignment="Left" Margin="185,139,0,0" VerticalAlignment="Top" Height="15" Width="147"/>
-        <CheckBox x:Name="cb_cursor_reset" Content="Mouse Pointer (Reset)" Margin="355,139,0,0" VerticalAlignment="Top" Height="15" HorizontalAlignment="Left" Width="139"/>
+        <CheckBox x:Name="cb_cursor" Content="Mouse Pointer (Green)" HorizontalAlignment="Left" Margin="27,139,0,0" VerticalAlignment="Top" Height="15" Width="139" Background="#FF0ABF36"/>
+        <CheckBox x:Name="cb_cursor_orange" Content="Mouse Pointer (Orange)" HorizontalAlignment="Left" Margin="185,139,0,0" VerticalAlignment="Top" Height="15" Width="147" Background="#FFEC9A09"/>
+        <CheckBox x:Name="cb_cursor_reset" Content="Mouse Pointer (Reset)" Margin="515,139,0,0" VerticalAlignment="Top" Height="15" HorizontalAlignment="Left" Width="139" Grid.ColumnSpan="2"/>
         <CheckBox x:Name="cb_wall0" Content="Desktop Wallpaper" HorizontalAlignment="Left" Margin="143,18,0,0" VerticalAlignment="Top" Height="15" Width="123"/>
+        <CheckBox x:Name="cb_cursor_red" Content="Mouse Pointer (Red)" HorizontalAlignment="Left" Margin="346,139,0,0" VerticalAlignment="Top" Height="15" Width="147" Background="#FFF70A0A"/>
 
     </Grid>
 </Window>
