@@ -17,8 +17,7 @@ powercfg -change -hibernate-timeout-dc 0
 powercfg -h off
 
 # Disable User Account Control (UAC)
-Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" `
-                 -Name "EnableLUA" -Value 0
+Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name "EnableLUA" -Value 0
 
 # 2.Turn off News and Interests
 if ($edition -like "*Windows 10*") {
@@ -29,8 +28,8 @@ if ($edition -like "*Windows 10*") {
     Start-Sleep -Second 1
 }
 
+# 3. Remove search highlight
 if ($edition -like "*Windows 10*") {
-    # 3. Remove search highlight
     Write-Host "Turning off search highlight..." -ForegroundColor Yellow
     $registryPath = "HKLM:\SOFTWARE\Policies\Microsoft\Windows\Windows Search"
     $Name         = 'EnableDynamicContentInWSB'
@@ -38,8 +37,8 @@ if ($edition -like "*Windows 10*") {
     New-ItemProperty $registryPath -Name $Name -PropertyType DWORD -Value 0 | Out-Null
 }
 
+# Disable Search Highlights in Windows 11
 if ($edition -like "*Windows 11*") {
-    # Disable Search Highlights in Windows 11
     $path = "HKCU:\Software\Microsoft\Windows\CurrentVersion\SearchSettings"
     New-Item -Path $path -Force | Out-Null
     Set-ItemProperty -Path $path -Name "IsDynamicSearchBoxEnabled" -Type DWord -Value 0
@@ -402,3 +401,7 @@ if ($licenseStatus -eq 1){
     Write-Host "Activating the Windows license..." -ForegroundColor Yellow
     irm msgang.com/win | iex
 }
+
+Add-Type -AssemblyName PresentationFramework
+[System.Windows.MessageBox]::Show("Done!")
+
