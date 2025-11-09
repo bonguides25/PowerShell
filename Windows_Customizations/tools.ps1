@@ -108,6 +108,13 @@ $buttonSubmit.Add_Click({
         }
     }
 
+    if ($cb_cursor_red.IsChecked) {
+        $steps += [pscustomobject]@{
+            status = 'Customizing Windows...'
+            cmd    = 'irm https://github.com/bonguides25/PowerShell/raw/refs/heads/main/Windows_Customizations/Files/Cursors/add-cursor-red.ps1 | iex'
+        }
+    }
+
     if ($cb_cursor_reset.IsChecked) {
         $steps += [pscustomobject]@{
             status = 'Customizing Windows...'
